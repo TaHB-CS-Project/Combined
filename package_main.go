@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	_ "github.com/lib/pq"
+)
 
-func main() {
-	fmt.Println("Hello, World! Daniel please help me I'm spooked out here")
-}
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "password"
+	dbname   = "postgres"
+)
