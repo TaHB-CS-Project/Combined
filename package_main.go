@@ -36,7 +36,7 @@ func main() {
 	UPDATE Hospital
 	SET hospital_city = $2
 	WHERE hospital_id = $1;`
-	_, err = db.Exec(sqlStatement, 1, "NewFirstCityjfkdl;sajf;dlaksDANIELLL")
+	_, err = db.Exec(sqlStatement, 1, "NewFirstCityChangeTest")
 	if err != nil {
 		panic(err)
 	}
