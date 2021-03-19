@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	host     = "localhost"
+	host     = "ec2-3-12-163-23.us-east-2.compute.amazonaws.com"
 	port     = 5432
 	user     = "postgres"
 	password = "password"
@@ -31,4 +31,13 @@ func main() {
 	}
 
 	fmt.Println("Successfully connected!")
+
+	sqlStatement := `
+	UPDATE Hospital
+	SET hospital_city = $2
+	WHERE hospital_id = $1;`
+	_, err = db.Exec(sqlStatement, 1, "NewFirstCityjfkdl;sajf;dlaksDANIELLL")
+	if err != nil {
+		panic(err)
+	}
 }
