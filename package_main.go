@@ -15,11 +15,59 @@ const (
 	dbname   = "postgres"
 )
 
+//there is a datetime package that can be imported
+//https://pkg.go.dev/google.golang.org/genproto/googleapis/type/datetime
+
 type Hospital struct {
 	hospital_id      int
 	hospital_city    int
 	hospital_address string
 	hospital_name    string
+}
+
+type Medical_Employee struct {
+	medicalemployee_id             int
+	hospital_id                    int
+	medicalemployee_firstname      string
+	medicalemployee_lastname       string
+	medicalemployee_department     string
+	medicalemployee_classification string
+	medicalemployee_supervisor     string
+}
+
+type Patient struct {
+	patient_id                int
+	hospital_id               int
+	medicalemployee_id        int
+	patient_age               int
+	patient_ageclassification string
+	patient_birthday          string
+	patient_sex               string
+	patient_weightlbs         float32
+	patient_weightkilo        float32
+}
+
+type Record struct {
+	record_id          int
+	hospital_id        int
+	medicalemployee_id int
+	patient_id         int
+	procedure_id       int
+	symptom_id         int
+	start_datetime     string
+	end_datetime       string
+	special_notes      string
+	outcome            string
+}
+
+type Procedure struct {
+	procedure_id   int
+	procedure_name string
+}
+
+type Symptom struct {
+	symptom_id   int
+	symptom_name string
 }
 
 func main() {
