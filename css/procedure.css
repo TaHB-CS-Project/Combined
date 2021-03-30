@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+  }
+   
+
+.procedure_search{
+  display:flex;
+  margin-top:3rem;
+  justify-content:space-between;
+}
+
+.procedure_search_left{
+  display:flex;
+}
+
+#procedure_search_left_search{
+margin-top:0.3rem;
+}
+
+.procedure_search_search_box{
+  margin-left: 1.5rem;
+}
+
+.procedure_table{
+  display:flex;
+  justify-content:space-around;
+  margin-top:3rem;
+}
+
+.procedure_table_left{
+  width:500px;
+}
+
+.procedure_table_right{
+  width:500px;
+}

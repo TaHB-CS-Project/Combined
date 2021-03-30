@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+  }
+   
+
+  .dashboard_content_heading{
+      display:flex;
+      margin-bottom:3rem;
+  }
