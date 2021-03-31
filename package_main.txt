@@ -3,9 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"html/template"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
@@ -73,22 +73,46 @@ type Symptom struct {
 }
 
 func main() {
-	record := Record{100, 100, 100, 100, 100, 100, "2020-03-29 01:00:00", "2020-03-29 02:00:00", "These are the special notes.", "Success"}
+	router := gin.Default()
+	router.LoadHTMLGlob("C:/Users/Michael/Documents/GitHub/reimagined-octo-disco/templates/*")
 
-	templates := template.Must(template.ParseFiles("C:/Users/Michael/Documents/GitHub/reimagined-octo-disco/record-list.html"))
+	router.GET("/", func(c *gin.Context) {
 
-	http.Handle("/css/", //final url can be anything
-		http.StripPrefix("/css/",
-			http.FileServer(http.Dir("css"))))
+		// Call the HTML method of the Context to render a template
+		c.HTML(
+			// Set the HTTP status to 200 (OK)
+			http.StatusOK,
+			// Use the index.html template
+			"index.html",
+			// Pass the data that the page uses (in this case, 'title')
+			gin.H{
+				"title": "Home Page",
+			},
+		)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		//If errors show an internal server error message
-		//I also pass the welcome struct to the welcome-template.html file.
-		if err := templates.ExecuteTemplate(w, "record-list.html", record); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
 	})
+	router.Run()
+
+	// record := Record{100, 100, 100, 100, 100, 100, "2020-03-29 01:00:00", "2020-03-29 02:00:00", "These are the special notes.", "Success"}
+
+	// templates := template.Must(template.ParseFiles("C:/Users/Michael/Documents/GitHub/reimagined-octo-disco/record-list.html"))
+
+	// http.Handle("/css/", //final url can be anything
+	// 	http.StripPrefix("/css/",
+	// 		http.FileServer(http.Dir("css"))))
+
+	// http.Handle("/img/", //final url can be anything
+	// 	http.StripPrefix("/img/",
+	// 		http.FileServer(http.Dir("img"))))
+
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+	// 	//If errors show an internal server error message
+	// 	//I also pass the welcome struct to the welcome-template.html file.
+	// 	if err := templates.ExecuteTemplate(w, "record-list.html", record); err != nil {
+	// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	}
+	// })
 
 	fmt.Println("Listening on PORT 8080")
 	//Start the web server, set the port to listen to 8080. Without a path it assumes localhost
