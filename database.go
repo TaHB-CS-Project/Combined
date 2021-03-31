@@ -56,15 +56,16 @@ func makehospital(city, address, name string) {
 	}
 
 	sqlStatement_create := `
-	INSERT INTO Hospital (hospital_id, hospital_city, hospital_address, hospital_name)
-	VALUES (default, $1, $2, $3)
-	RETURNING hospital_id`
-	hospital_id := 0
-	err = db.QueryRow(sqlStatement_create, city, address, name).Scan(&hospital_id)
+	 INSERT INTO hospital3 ( hospital_city, hospital_address, hospital_name)
+	 VALUES ($1, $2, $3)
+	 RETURNING hospital_id`
+
+	var id int64
+	err = db.QueryRow(sqlStatement_create, city, address, name).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("New record ID is: ", hospital_id)
+	fmt.Println("New record ID is: ", id)
 }
 
 func gethospital_city(id int) {
