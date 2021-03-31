@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	_ "github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -32,7 +31,7 @@ type user_entity struct {
 	reset_password_date   string
 }
 
-func Signup(w http.ResponseWriter, r *http.Request) {
+func Signin(w http.ResponseWriter, r *http.Request) {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
@@ -57,10 +56,10 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	// Salt and hash the password using the bcrypt algorithm
 	// The second argument is the cost of hashing, which we arbitrarily set as 8 (this value can be more or less, depending on the computing power you wish to utilize)
-	hashedPassword, error := bcrypt.GenerateFromPassword([]byte(creds.password_hash), 8)
+	//hashedPassword, error := bcrypt.GenerateFromPassword([]byte(creds.password_hash), 8)
 
 	// Next, insert the username, along with the hashed password into the database
-	if _, error = db.Query("insert into users values ($1, $2)", creds.username, string(hashedPassword)); error != nil {
+	if _, error = db.Query("insert into users values ($1, $2)", creds.username, creds.password_hash); error != nil {
 		// If there is any issue with inserting into the database, return a 500 error
 		w.WriteHeader(http.StatusInternalServerError)
 		return
