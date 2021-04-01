@@ -2,27 +2,16 @@ var ctx = document.getElementById('diagnosis_chart').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['A', 'B', 'C', 'D', 'E', 'F'],
+        labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
         datasets: [{
             label: 'Diagnosis',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            backgroundColor: '#bbdefb',
+            borderColor: window.theme.primary,
+            hoverBackgroundColor: window.theme.primary,
+            hoverBorderColor: window.theme.primary,
+            data: [13, 2, 5, 7, 11, 1, 21, 4, 3, 4, 4, 12],
+            barPercentage: .75,
+            categoryPercentage: .5
         }]
     },
     options: {
@@ -43,28 +32,17 @@ var ctx = document.getElementById('procedure_chart').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['appendectomy', 'catarac surgery', 'c-section', 'ct scan', 'echocardiogram', 'heart bypass surgery'],
+        labels: ["Appen", "Cat", "CS", "CT", "CHD", "CABG", "MRI", "X-RAY", "US", "EKG", "EMG", "EEG"],
         datasets: [{
             label: 'Procedure',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
+            backgroundColor: '#9fa8da',
+            borderColor: window.theme.primary,
+            hoverBackgroundColor: window.theme.primary,
+            hoverBorderColor: window.theme.primary,
+            data: [4, 6, 1, 1, 11, 6, 21, 7, 10, 13, 1, 3],
+            barPercentage: .75,
+            categoryPercentage: .5
+            }]
     },
     options: {
         scales: {
@@ -76,3 +54,9 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+
+
+
+
+
