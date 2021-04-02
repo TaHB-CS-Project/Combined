@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -23,11 +22,11 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	http.HandleFunc("/signin", Signin)
-	http.HandleFunc("/signup", Signup)
-	//makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
+	//http.HandleFunc("/signin", Signin)
+	//http.HandleFunc("/signup", Signup)
+	makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
 	//sethospital_city(1, "Test City for Testing")
-	gethospital_city(1)
+	//gethospital_city(1)
 	//deletehospital(150)
 }
 func initDB() {
