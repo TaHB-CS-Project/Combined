@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//Need to figure out birthday (datetime) CRUD and if patient CRUD is even needed...
 type Hospital struct {
 	hospital_id      int
 	hospital_city    string
@@ -20,6 +21,22 @@ type MedicalEmployee struct {
 	medicalemployee_department     string
 	medicalemployee_classification string
 	medicalemployee_supervisor     string
+}
+
+type Patient struct {
+	patient_age               int
+	patient_ageclassification string
+	//patient_birthday string
+	patient_sex        string
+	patient_weightlbs  float32
+	patient_weightkilo float32
+}
+
+type Record struct {
+	//start_datetime string
+	//end_datetime string
+	//special_notes string
+	outcome string
 }
 
 func makehospital(city, address, name string) {
@@ -303,3 +320,47 @@ func setmedicalemployee_supervisor(id int, name string) {
 		panic(err)
 	}
 }
+
+func makepatient_lbs(age, sex, weightlbs string) {
+	sqlStatement_create := `
+	 INSERT INTO patient (patient_age, patient_sex, patient_weightlbs)
+	 VALUES ($1, $2, $3)
+	 RETURNING patient_id`
+
+	var id int64
+	err := db.QueryRow(sqlStatement_create, age, sex, weightlbs).Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("New record ID is: ", id)
+}
+
+func makepatient_kilo(age, sex, weightkilos string) {
+	sqlStatement_create := `
+	 INSERT INTO patient (patient_age, patient_sex, patient_weightkilos)
+	 VALUES ($1, $2, $3)
+	 RETURNING patient_id`
+
+	var id int64
+	err := db.QueryRow(sqlStatement_create, age, sex, weightkilos).Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("New record ID is: ", id)
+}
+
+//Not sure if delete patient needed
+// func deletepatient(id int) {
+// 	sqlStatement_delete := `
+// 	DELETE FROM Patient
+// 	WHERE Patient_id = $1;`
+// 	res, err := db.Exec(sqlStatement_delete, id)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	count, err := res.RowsAffected()
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(count)
+// }
