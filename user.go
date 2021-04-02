@@ -10,14 +10,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const (
-	host     = "ec2-3-12-163-23.us-east-2.compute.amazonaws.com"
-	port     = 5432
-	user     = "postgres"
-	password = "password"
-	dbname   = "postgres"
-)
-
 type user_entity struct {
 	user_id               string
 	medicalemployee_id    int
@@ -32,8 +24,34 @@ type user_entity struct {
 	reset_password_date   string
 }
 
+type Credentials struct {
+	Password string `json:"password", db:"password"`
+	Username string `json:"username", db:"username"`
+}
+
 type login struct {
 	login *bool `json: "login, omitempty"`
+}
+
+func Signup(w http.ResponseWriter, r *http.Request) {
+
+	creds := &Credentials{}
+	err := json.NewDecoder(r.Body).Decode(creds)
+	if err != nil {
+		// If there is something wrong with the request body, return a 400 status
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	// Salt and hash the password using the bcrypt algorithm
+	// The second argument is the cost of hashing
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
+
+	// Next, insert the username, along with the hashed password into the database
+	if _, err = db.Query("insert into users values ($1, $2)", creds.Username, string(hashedPassword)); err != nil {
+		// If there is any issue with inserting into the database, return a 500 error
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func Signin(w http.ResponseWriter, r *http.Request) {
