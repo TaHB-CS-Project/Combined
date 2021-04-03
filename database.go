@@ -41,7 +41,7 @@ type Record struct {
 
 func makehospital(city, address, name string) {
 	sqlStatement_create := `
-	 INSERT INTO hospital ( hospital_city, hospital_address, hospital_name)
+	 INSERT INTO hospital3 ( hospital_city, hospital_address, hospital_name)
 	 VALUES ($1, $2, $3)
 	 RETURNING hospital_id`
 

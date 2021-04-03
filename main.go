@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -22,13 +24,18 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	//http.HandleFunc("/signin", Signin)
-	//http.HandleFunc("/signup", Signup)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	http.HandleFunc("/signin", Signin)
+	http.HandleFunc("/signup", Signup)
 	makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
 	//sethospital_city(1, "Test City for Testing")
 	//gethospital_city(1)
 	//deletehospital(150)
 }
+
+//initalize connection to the DB
 func initDB() {
 	var err error
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
@@ -38,12 +45,5 @@ func initDB() {
 	if err != nil {
 		panic(err)
 	}
-	/* 	defer db.Close()
 
-	   	err = db.Ping()
-	   	if err != nil {
-	   		panic(err)
-	   	} */
-
-	//fmt.Println("Successfully connected!")
 }

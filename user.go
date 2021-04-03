@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	_ "github.com/lib/pq"
@@ -60,20 +59,6 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 
 	*t = true
 	*f = false
-
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
 
 	// Parse and decode the request body into a new `Credentials` instance
 	creds := &user_entity{}
