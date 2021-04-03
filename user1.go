@@ -79,7 +79,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		w.Write(incorrectcredJson)
 	}
 
-	check := storedCreds.username == user.username
+	check := storedCreds.password_hash == user.password_hash
 	if check != true {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(incorrectcredJson)
