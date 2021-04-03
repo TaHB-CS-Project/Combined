@@ -65,26 +65,30 @@ func signin(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Received: %v\n", user)
 
+	// Get the existing entry present in the database for the given username
 	result := db.QueryRow("SELECT password_hash FROM user_entity where username=$1", user.username)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(incorrectcredJson)
 	}
 
+	// We create another instance of `Credentials` to store the credentials we get from the database
 	storedCreds := &user_entity{}
-
+	// Store the obtained password in `storedCreds`
 	err = result.Scan(&storedCreds.password_hash)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(incorrectcredJson)
 	}
 
+	// Compare the stored passwords
 	check := storedCreds.password_hash == user.password_hash
 	if check != true {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(incorrectcredJson)
 	}
 
+	// If we reach this point, that means the users password was correct
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(correctcredJson)
 }
