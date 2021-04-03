@@ -71,6 +71,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(incorrectcredJson)
+			return
 		}
 
 		// We create another instance of `Credentials` to store the credentials we get from the database
@@ -80,6 +81,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(incorrectcredJson)
+			return
 		}
 
 		// Compare the stored passwords
@@ -87,11 +89,33 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		if !check {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(incorrectcredJson)
+			return
 		}
 
 		// If we reach this point, that means the users password was correct
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(correctcredJson)
 	}
-
 }
+
+// //used for testing
+// func server() {
+// 	http.HandleFunc("/", signin)
+// 	http.ListenAndServe(":8088", nil)
+// }
+
+// //used for testing
+// func client() {
+// 	locJson, err := json.Marshal(user_entity{Username: "doctor", Password_hash: "password"})
+// 	req, err := http.NewRequest("POST", "http://localhost:8088", bytes.NewBuffer(locJson))
+// 	req.Header.Set("Content-Type", "application/json")
+
+// 	client := &http.Client{}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	body, err := ioutil.ReadAll(resp.Body)
+// 	fmt.Println("Response: ", string(body))
+// 	resp.Body.Close()
+// }

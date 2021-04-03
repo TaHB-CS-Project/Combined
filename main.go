@@ -3,8 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -24,12 +22,13 @@ func main() {
 
 	//start database instance for use
 	initDB()
-
-	http.HandleFunc("/signin", signin)
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	// go server()
+	// client()
+	// http.HandleFunc("/signin", signin)
+	// err := http.ListenAndServe(":8080", nil)
+	// if err != nil {
+	// 	log.Fatal("ListenAndServe: ", err)
+	// }
 	//http.HandleFunc("/signup", Signup)
 	//makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
 	//sethospital_city(1, "Test City for Testing")
