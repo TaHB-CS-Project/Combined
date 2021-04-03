@@ -25,11 +25,13 @@ func main() {
 	//start database instance for use
 	initDB()
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
-	http.HandleFunc("/signin", Signin)
-	http.HandleFunc("/signup", Signup)
-	makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
+	http.HandleFunc("/signin", signin)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+	//http.HandleFunc("/signup", Signup)
+	//makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
 	//sethospital_city(1, "Test City for Testing")
 	//gethospital_city(1)
 	//deletehospital(150)
