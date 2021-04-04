@@ -22,8 +22,8 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	// go server()
-	// client()
+	server()
+	//client()
 	// http.HandleFunc("/signin", signin)
 	// err := http.ListenAndServe(":8080", nil)
 	// if err != nil {
