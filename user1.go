@@ -33,68 +33,70 @@ type incorrect struct {
 }
 
 func signin(w http.ResponseWriter, r *http.Request) {
-	user := user_entity{}
+	switch r.Method {
+	case "POST":
+		user := user_entity{}
 
-	correctcred := correct{
-		Correctcredentials: true,
-	}
+		correctcred := correct{
+			Correctcredentials: true,
+		}
 
-	incorrectcred := incorrect{
-		Incorrectcredentials: false,
-	}
+		incorrectcred := incorrect{
+			Incorrectcredentials: false,
+		}
 
-	correctcredJson, err := json.Marshal(correctcred)
-	if err != nil {
-		fmt.Fprintf(w, "Error: %s", err)
-	}
+		correctcredJson, err := json.Marshal(correctcred)
+		if err != nil {
+			fmt.Fprintf(w, "Error: %s", err)
+		}
 
-	incorrectcredJson, err := json.Marshal(incorrectcred)
-	if err != nil {
-		fmt.Fprintf(w, "Error: %s", err)
-	}
+		incorrectcredJson, err := json.Marshal(incorrectcred)
+		if err != nil {
+			fmt.Fprintf(w, "Error: %s", err)
+		}
 
-	jsn, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal("Error reading the body", err)
-	}
+		jsn, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Fatal("Error reading the body", err)
+		}
 
-	err = json.Unmarshal(jsn, &user)
-	if err != nil {
-		log.Fatal("Decoding error: ", err)
-	}
+		err = json.Unmarshal(jsn, &user)
+		if err != nil {
+			log.Fatal("Decoding error: ", err)
+		}
 
-	log.Printf("Received: %v\n", user)
+		log.Printf("Received: %v\n", user)
 
-	// Get the existing entry present in the database for the given username
-	result := db.QueryRow("SELECT password_hash FROM user_entity where username=$1", user.Username)
-	if err != nil {
+		// Get the existing entry present in the database for the given username
+		result := db.QueryRow("SELECT password_hash FROM user_entity where username=$1", user.Username)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(incorrectcredJson)
+			return
+		}
+
+		// We create another instance of `Credentials` to store the credentials we get from the database
+		storedCreds := &user_entity{}
+		// Store the obtained password in `storedCreds`
+		err = result.Scan(&storedCreds.Password_hash)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(incorrectcredJson)
+			return
+		}
+
+		// Compare the stored passwords
+		check := storedCreds.Password_hash == user.Password_hash
+		if !check {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(incorrectcredJson)
+			return
+		}
+
+		// If we reach this point, that means the users password was correct
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(incorrectcredJson)
-		return
+		w.Write(correctcredJson)
 	}
-
-	// We create another instance of `Credentials` to store the credentials we get from the database
-	storedCreds := &user_entity{}
-	// Store the obtained password in `storedCreds`
-	err = result.Scan(&storedCreds.Password_hash)
-	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(incorrectcredJson)
-		return
-	}
-
-	// Compare the stored passwords
-	check := storedCreds.Password_hash == user.Password_hash
-	if !check {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(incorrectcredJson)
-		return
-	}
-
-	// If we reach this point, that means the users password was correct
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(correctcredJson)
-
 }
 
 //used for testing
