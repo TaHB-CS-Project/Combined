@@ -60,9 +60,12 @@ func signin(w http.ResponseWriter, r *http.Request) {
 			log.Fatal("Error reading the body", err)
 		}
 
+		fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+
 		err = json.Unmarshal(jsn, &user)
 		if err != nil {
 			log.Fatal("Decoding error: ", err)
+			fmt.Println("Input: ", err)
 		}
 
 		log.Printf("Received: %v\n", user)
