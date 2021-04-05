@@ -71,6 +71,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 			log.Fatal("Decoding error: ", err)
 		}
 
+		//for testing
 		log.Printf("Received: %v\n", user)
 
 		// Get the existing entry present in the database for the given username
