@@ -13,7 +13,9 @@ import (
 
 //used for testing
 func client() {
-	locJson, err := json.Marshal(user_entity{Username: "doctor1", Password_hash: "password"})
+	usernameinput := "doctor"
+	passwordinput := "password1"
+	locJson, err := json.Marshal(user_entity{Username: usernameinput, Password_hash: passwordinput})
 	req, err := http.NewRequest("POST", "http://localhost:8090", bytes.NewBuffer(locJson))
 	req.Header.Set("Content-Type", "application/json")
 	fmt.Println("Input: ", string(locJson))

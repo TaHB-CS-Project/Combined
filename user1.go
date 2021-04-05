@@ -33,6 +33,10 @@ type incorrect struct {
 }
 
 func signin(w http.ResponseWriter, r *http.Request) {
+	//allow for CORS
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	switch r.Method {
 	case "POST":
 		user := user_entity{}
@@ -60,12 +64,11 @@ func signin(w http.ResponseWriter, r *http.Request) {
 			log.Fatal("Error reading the body", err)
 		}
 
-		fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+		//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
 
 		err = json.Unmarshal(jsn, &user)
 		if err != nil {
 			log.Fatal("Decoding error: ", err)
-			fmt.Println("Input: ", err)
 		}
 
 		log.Printf("Received: %v\n", user)
