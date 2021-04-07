@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -17,7 +18,8 @@ type Hospital struct {
 }
 
 type MedicalEmployee struct {
-	hospital_id                    string
+	medicalemployee_id             int
+	hospital_id                    int
 	medicalemployee_firstname      string
 	medicalemployee_lastname       string
 	medicalemployee_department     string
@@ -117,258 +119,277 @@ func sethospital_city(id int, name string) {
 	}
 }
 
-func gethospital_address(id int) {
-	sqlStatement_read := `
-	SELECT hospital_address FROM Hospital
-	WHERE hospital_id = $1;`
-	var hospital Hospital
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&hospital.hospital_address)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(hospital.hospital_address)
-	default:
-		panic(error)
-	}
-}
-
-func sethospital_address(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Hospital
-	SET hospital_address = $2
-	WHERE hospital_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func gethospital_name(id int) {
-	sqlStatement_read := `
-	SELECT hospital_name FROM Hospital
-	WHERE hospital_id = $1;`
-	var hospital Hospital
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&hospital.hospital_name)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(hospital.hospital_name)
-	default:
-		panic(error)
-	}
-}
-
-func sethospital_name(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Hospital
-	SET hospital_name = $2
-	WHERE hospital_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func makemedicalemployee(firstname, lastname, department, classification, supervisor string) {
-	sqlStatement_create := `
-	 INSERT INTO Medical_Employee (medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification, medicalemployee_supervisor)
-	 VALUES ($1, $2, $3, $4, $5)
-	 RETURNING medicalemployee_id`
-
-	var id int64
-	err := db.QueryRow(sqlStatement_create, firstname, lastname, department, classification, supervisor).Scan(&id)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("New record ID is: ", id)
-}
-
-func deletemedicalemployee(id int) {
-	sqlStatement_delete := `
-	DELETE FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
-	res, err := db.Exec(sqlStatement_delete, id)
-	if err != nil {
-		panic(err)
-	}
-	count, err := res.RowsAffected()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(count)
-}
-
-func getmedicalemployee_firstname(id int) {
-	sqlStatement_read := `
-	SELECT medicalemployee_firstname FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
+func getstaff_list(w http.ResponseWriter, r *http.Request) {
+	sqlStatement_get := `
+		SELECT * FROM medical_employee 
+		ORDER BY medicalemployee_id DESC LIMIT 10`
 	var medicalemployee MedicalEmployee
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&medicalemployee.medicalemployee_firstname)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(medicalemployee.medicalemployee_firstname)
-	default:
-		panic(error)
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+
+		err := row.Scan(&medicalemployee.medicalemployee_id, &medicalemployee.medicalemployee_firstname, &medicalemployee.medicalemployee_lastname,
+			&medicalemployee.medicalemployee_department, &medicalemployee.medicalemployee_department, &medicalemployee.medicalemployee_classification,
+			&medicalemployee.medicalemployee_supervisor)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(medicalemployee)
 	}
 }
 
-func setmmedicalemployee_firstname(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Medical_Employee
-	SET medicalemployee_firstname = $2
-	WHERE medicalemployee_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
+// func gethospital_address(id int) {
+// 	sqlStatement_read := `
+// 	SELECT hospital_address FROM Hospital
+// 	WHERE hospital_id = $1;`
+// 	var hospital Hospital
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&hospital.hospital_address)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(hospital.hospital_address)
+// 	default:
+// 		panic(error)
+// 	}
+// }
 
-func getmedicalemployee_lastname(id int) {
-	sqlStatement_read := `
-	SELECT medicalemployee_lastname FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
-	var medicalemployee MedicalEmployee
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&medicalemployee.medicalemployee_lastname)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(medicalemployee.medicalemployee_lastname)
-	default:
-		panic(error)
-	}
-}
+// func sethospital_address(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Hospital
+// 	SET hospital_address = $2
+// 	WHERE hospital_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func setmedicalemployee_lastname(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Medical_Employee
-	SET medicalemployee_lastname = $2
-	WHERE medicalemployee_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
+// func gethospital_name(id int) {
+// 	sqlStatement_read := `
+// 	SELECT hospital_name FROM Hospital
+// 	WHERE hospital_id = $1;`
+// 	var hospital Hospital
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&hospital.hospital_name)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(hospital.hospital_name)
+// 	default:
+// 		panic(error)
+// 	}
+// }
 
-func getmedicalemployee_department(id int) {
-	sqlStatement_read := `
-	SELECT medicalemployee_department FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
-	var medicalemployee MedicalEmployee
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&medicalemployee.medicalemployee_department)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(medicalemployee.medicalemployee_department)
-	default:
-		panic(error)
-	}
-}
+// func sethospital_name(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Hospital
+// 	SET hospital_name = $2
+// 	WHERE hospital_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func setmedicalemployee_department(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Medical_Employee
-	SET medicalemployee_department = $2
-	WHERE medicalemployee_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
+// func makemedicalemployee(firstname, lastname, department, classification, supervisor string) {
+// 	sqlStatement_create := `
+// 	 INSERT INTO Medical_Employee (medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification, medicalemployee_supervisor)
+// 	 VALUES ($1, $2, $3, $4, $5)
+// 	 RETURNING medicalemployee_id`
 
-func getmedicalemployee_classification(id int) {
-	sqlStatement_read := `
-	SELECT medicalemployee_classification FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
-	var medicalemployee MedicalEmployee
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&medicalemployee.medicalemployee_classification)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(medicalemployee.medicalemployee_classification)
-	default:
-		panic(error)
-	}
-}
+// 	var id int64
+// 	err := db.QueryRow(sqlStatement_create, firstname, lastname, department, classification, supervisor).Scan(&id)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println("New record ID is: ", id)
+// }
 
-func setmedicalemployee_classification(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Medical_Employee
-	SET medicalemployee_classification = $2
-	WHERE medicalemployee_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
+// func deletemedicalemployee(id int) {
+// 	sqlStatement_delete := `
+// 	DELETE FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	res, err := db.Exec(sqlStatement_delete, id)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	count, err := res.RowsAffected()
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(count)
+// }
 
-func getmedicalemployee_supervisor(id int) {
-	sqlStatement_read := `
-	SELECT medicalemployee_supervisor FROM Medical_Employee
-	WHERE medicalemployee_id = $1;`
-	var medicalemployee MedicalEmployee
-	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&medicalemployee.medicalemployee_supervisor)
-	switch error {
-	case sql.ErrNoRows:
-		fmt.Println("No rows were returned!")
-	case nil:
-		fmt.Println(medicalemployee.medicalemployee_supervisor)
-	default:
-		panic(error)
-	}
-}
+// func getmedicalemployee_firstname(id int) {
+// 	sqlStatement_read := `
+// 	SELECT medicalemployee_firstname FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	var medicalemployee MedicalEmployee
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&medicalemployee.medicalemployee_firstname)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(medicalemployee.medicalemployee_firstname)
+// 	default:
+// 		panic(error)
+// 	}
+// }
 
-func setmedicalemployee_supervisor(id int, name string) {
-	sqlStatement_update := `
-	UPDATE Medical_Employee
-	SET medicalemployee_supervisor = $2
-	WHERE medicalemployee_id = $1;`
-	_, err := db.Exec(sqlStatement_update, id, name)
-	if err != nil {
-		panic(err)
-	}
-}
+// func setmmedicalemployee_firstname(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Medical_Employee
+// 	SET medicalemployee_firstname = $2
+// 	WHERE medicalemployee_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func makepatient_lbs(age, sex, weightlbs string) {
-	sqlStatement_create := `
-	 INSERT INTO patient (patient_age, patient_sex, patient_weightlbs)
-	 VALUES ($1, $2, $3)
-	 RETURNING patient_id`
+// func getmedicalemployee_lastname(id int) {
+// 	sqlStatement_read := `
+// 	SELECT medicalemployee_lastname FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	var medicalemployee MedicalEmployee
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&medicalemployee.medicalemployee_lastname)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(medicalemployee.medicalemployee_lastname)
+// 	default:
+// 		panic(error)
+// 	}
+// }
 
-	var id int64
-	err := db.QueryRow(sqlStatement_create, age, sex, weightlbs).Scan(&id)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("New record ID is: ", id)
-}
+// func setmedicalemployee_lastname(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Medical_Employee
+// 	SET medicalemployee_lastname = $2
+// 	WHERE medicalemployee_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func makepatient_kilo(age, sex, weightkilos string) {
-	sqlStatement_create := `
-	 INSERT INTO patient (patient_age, patient_sex, patient_weightkilos)
-	 VALUES ($1, $2, $3)
-	 RETURNING patient_id`
+// func getmedicalemployee_department(id int) {
+// 	sqlStatement_read := `
+// 	SELECT medicalemployee_department FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	var medicalemployee MedicalEmployee
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&medicalemployee.medicalemployee_department)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(medicalemployee.medicalemployee_department)
+// 	default:
+// 		panic(error)
+// 	}
+// }
 
-	var id int64
-	err := db.QueryRow(sqlStatement_create, age, sex, weightkilos).Scan(&id)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("New record ID is: ", id)
-}
+// func setmedicalemployee_department(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Medical_Employee
+// 	SET medicalemployee_department = $2
+// 	WHERE medicalemployee_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+// func getmedicalemployee_classification(id int) {
+// 	sqlStatement_read := `
+// 	SELECT medicalemployee_classification FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	var medicalemployee MedicalEmployee
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&medicalemployee.medicalemployee_classification)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(medicalemployee.medicalemployee_classification)
+// 	default:
+// 		panic(error)
+// 	}
+// }
+
+// func setmedicalemployee_classification(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Medical_Employee
+// 	SET medicalemployee_classification = $2
+// 	WHERE medicalemployee_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+// func getmedicalemployee_supervisor(id int) {
+// 	sqlStatement_read := `
+// 	SELECT medicalemployee_supervisor FROM Medical_Employee
+// 	WHERE medicalemployee_id = $1;`
+// 	var medicalemployee MedicalEmployee
+// 	row := db.QueryRow(sqlStatement_read, id)
+// 	error := row.Scan(&medicalemployee.medicalemployee_supervisor)
+// 	switch error {
+// 	case sql.ErrNoRows:
+// 		fmt.Println("No rows were returned!")
+// 	case nil:
+// 		fmt.Println(medicalemployee.medicalemployee_supervisor)
+// 	default:
+// 		panic(error)
+// 	}
+// }
+
+// func setmedicalemployee_supervisor(id int, name string) {
+// 	sqlStatement_update := `
+// 	UPDATE Medical_Employee
+// 	SET medicalemployee_supervisor = $2
+// 	WHERE medicalemployee_id = $1;`
+// 	_, err := db.Exec(sqlStatement_update, id, name)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+// func makepatient_lbs(age, sex, weightlbs string) {
+// 	sqlStatement_create := `
+// 	 INSERT INTO patient (patient_age, patient_sex, patient_weightlbs)
+// 	 VALUES ($1, $2, $3)
+// 	 RETURNING patient_id`
+
+// 	var id int64
+// 	err := db.QueryRow(sqlStatement_create, age, sex, weightlbs).Scan(&id)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println("New record ID is: ", id)
+// }
+
+// func makepatient_kilo(age, sex, weightkilos string) {
+// 	sqlStatement_create := `
+// 	 INSERT INTO patient (patient_age, patient_sex, patient_weightkilos)
+// 	 VALUES ($1, $2, $3)
+// 	 RETURNING patient_id`
+
+// 	var id int64
+// 	err := db.QueryRow(sqlStatement_create, age, sex, weightkilos).Scan(&id)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println("New record ID is: ", id)
+// }
 
 //Not sure if delete patient needed
 // func deletepatient(id int) {
