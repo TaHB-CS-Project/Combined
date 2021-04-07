@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,6 +23,7 @@ type user_entity struct {
 	// lockout               bool
 	// reset_password_stamp  string
 	// reset_password_date   string
+	test string
 }
 
 type correct struct {
@@ -36,6 +38,9 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	//allow for CORS
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	t, _ := template.ParseFiles("index.html")
+	t.Execute(w, nil)
 
 	switch r.Method {
 	case "POST":
@@ -106,10 +111,17 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// func newsAggHandler(w http.ResponseWriter, r *http.Request) {
+// 	p := NewsAggPage{Title: "Amazing News Aggregator", News: "Some News"}
+// 	t, _ := template.ParseFiles("index.html")
+// 	t.Execute(w, p)
+// }
+
 //used for testing
 func server() {
 	http.HandleFunc("/", signin)
 	// http.ListenAndServe(":8088", nil)
+	//http.HandleFunc("/agg", newsAggHandler)
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
 	if err := http.ListenAndServe(":8090", nil); err != nil {

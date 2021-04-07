@@ -31,7 +31,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
+func _main() {
 	http.HandleFunc("/", hello)
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
