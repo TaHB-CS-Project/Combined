@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -39,8 +38,8 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	t, _ := template.ParseFiles("index.html")
-	t.Execute(w, nil)
+	// t, _ := template.ParseFiles("index.html")
+	// t.Execute(w, nil)
 
 	switch r.Method {
 	case "POST":
