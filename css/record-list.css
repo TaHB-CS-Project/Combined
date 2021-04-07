@@ -1,0 +1,13 @@
+* {
+    box-sizing: border-box;
+  }
+
+  .record-list_search{
+    display:flex;
+    justify-content:space-between;
+  }
+
+  .record-list_right{
+      display:flex;
+  }
+  
