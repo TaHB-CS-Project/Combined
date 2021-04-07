@@ -23,7 +23,6 @@ type user_entity struct {
 	// lockout               bool
 	// reset_password_stamp  string
 	// reset_password_date   string
-	test string
 }
 
 /* type Cookie struct {
