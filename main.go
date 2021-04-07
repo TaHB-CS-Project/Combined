@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
+	"github.com/gorilla/context"
 	_ "github.com/lib/pq"
 )
 
@@ -18,11 +20,19 @@ const (
 // declare global db to use across other files
 var db *sql.DB
 
+/* var globalSessions *session.SessionManager */
+
 func main() {
 
 	//start database instance for use
 	initDB()
-	server()
+	http.HandleFunc("/", Home)
+	http.HandleFunc("/login", SessionLogin)
+	http.HandleFunc("/logout", SessionLogout)
+
+	http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
+
+	//server()
 	//client()
 	// http.HandleFunc("/signin", signin)
 	// err := http.ListenAndServe(":8080", nil)
@@ -35,6 +45,10 @@ func main() {
 	//gethospital_city(1)
 	//deletehospital(150)
 }
+
+/* func initSession() {
+	globalSessions = NewManager("memory", "gosessionid", 3000)
+} */
 
 //initalize connection to the DB
 func initDB() {
