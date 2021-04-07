@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -16,6 +17,7 @@ type Hospital struct {
 }
 
 type MedicalEmployee struct {
+	hospital_id                    string
 	medicalemployee_firstname      string
 	medicalemployee_lastname       string
 	medicalemployee_department     string
@@ -24,19 +26,38 @@ type MedicalEmployee struct {
 }
 
 type Patient struct {
+	patient_id                int
+	medicalemployee_id        int
+	hospital_id               int
 	patient_age               int
 	patient_ageclassification string
-	//patient_birthday string
-	patient_sex        string
-	patient_weightlbs  float32
-	patient_weightkilo float32
+	patient_birthday          time.Time
+	patient_sex               string
+	patient_weightlbs         float32
+	patient_weightkilo        float32
 }
 
 type Record struct {
-	//start_datetime string
-	//end_datetime string
-	//special_notes string
-	outcome string
+	record_id           int
+	hospital_id         int
+	medical_employee_id int
+	patient_id          int
+	procedure_id        int
+	diagnosis_id        int
+	start_datetime      time.Time
+	end_datetime        time.Time
+	special_notes       string
+	outcome             string
+}
+
+type Procedure struct {
+	procedure_id   int
+	procedure_name string
+}
+
+type Diagnosis struct {
+	diagnosis_id   int
+	diagnosis_name string
 }
 
 func makehospital(city, address, name string) {

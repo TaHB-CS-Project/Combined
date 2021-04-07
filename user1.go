@@ -22,7 +22,6 @@ type user_entity struct {
 	// lockout               bool
 	// reset_password_stamp  string
 	// reset_password_date   string
-	test string
 }
 
 type correct struct {
@@ -109,12 +108,6 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		w.Write(correctcredJson)
 	}
 }
-
-// func newsAggHandler(w http.ResponseWriter, r *http.Request) {
-// 	p := NewsAggPage{Title: "Amazing News Aggregator", News: "Some News"}
-// 	t, _ := template.ParseFiles("index.html")
-// 	t.Execute(w, p)
-// }
 
 //used for testing
 func server() {
