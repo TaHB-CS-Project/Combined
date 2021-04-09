@@ -29,3 +29,23 @@ func client() {
 	fmt.Println("Response: ", string(body))
 	resp.Body.Close()
 }
+
+func getstafflisttest() {
+	fmt.Printf("\nDo we get to getstafflisttest\n")
+	resp, err := http.Get("http://localhost:8090/staff_list")
+	resp.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Response: ", string(body))
+	resp.Body.Close()
+}
+
+func dbsetrecord() {
+	fmt.Printf("\nDo we get to dbsetrecord\n")
+}

@@ -3,9 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
 
-	"github.com/gorilla/context"
 	_ "github.com/lib/pq"
 )
 
@@ -26,14 +24,17 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	http.HandleFunc("/", Home)
-	http.HandleFunc("/login", SessionLogin)
-	http.HandleFunc("/logout", SessionLogout)
+	// http.HandleFunc("/", Home)
+	// http.HandleFunc("/login", SessionLogin)
+	// http.HandleFunc("/logout", SessionLogout)
+	// http.HandleFunc("/dbgettest", getstaff_list)
+	// fmt.Printf("Starting server for testing HTTP POST...\n")
+	// http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
 
-	http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
+	go server()
+	client()
+	getstafflisttest()
 
-	//server()
-	//client()
 	// http.HandleFunc("/signin", signin)
 	// err := http.ListenAndServe(":8080", nil)
 	// if err != nil {

@@ -17,8 +17,8 @@ type user_entity struct {
 	// email                 string
 	// email_confirmed       bool
 	// email_confirmed_token string
-	Username      string `json: email`
-	Password_hash string `json: password`
+	Username      string `json:email`
+	Password_hash string `json:password`
 	// salt                  string
 	// lockout               bool
 	// reset_password_stamp  string
@@ -155,11 +155,11 @@ func secret(w http.ResponseWriter, r *http.Request) {
 }
 
 type correct struct {
-	Correctcredentials bool `json: "correctcredentials"`
+	Correctcredentials bool `json:"correctcredentials"`
 }
 
 type incorrect struct {
-	Incorrectcredentials bool `json: "incorrectcredentials"`
+	Incorrectcredentials bool `json:"incorrectcredentials"`
 }
 
 func signin(w http.ResponseWriter, r *http.Request) {
@@ -244,10 +244,12 @@ func signin(w http.ResponseWriter, r *http.Request) {
 // 	t, _ := template.ParseFiles("index.html")
 // 	t.Execute(w, p)
 // }
-/*
+
 //used for testing
 func server() {
 	http.HandleFunc("/", signin)
+	http.HandleFunc("/staff_list", getstaff_list)
+	//http.HandleFunc("/stafflist", getstaff_list)
 	// http.ListenAndServe(":8088", nil)
 	//http.HandleFunc("/agg", newsAggHandler)
 
@@ -256,4 +258,3 @@ func server() {
 		log.Fatal(err)
 	}
 }
-*/

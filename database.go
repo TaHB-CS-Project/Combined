@@ -2,64 +2,58 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
 	_ "github.com/lib/pq"
 )
 
-//Need to figure out birthday (datetime) CRUD and if patient CRUD is even needed...
+//Need to figure out birthday (datetime) CRUD
 type Hospital struct {
-	hospital_id      int
-	hospital_city    string
-	hospital_address string
-	hospital_name    string
+	Hospital_id      int    `json:hospital_id`
+	Hospital_city    string `json:hospital_city`
+	Hospital_address string `json:hospital_address`
+	Hospital_name    string `json:hospital_name`
 }
 
 type MedicalEmployee struct {
-	medicalemployee_id             int
-	hospital_id                    int
-	medicalemployee_firstname      string
-	medicalemployee_lastname       string
-	medicalemployee_department     string
-	medicalemployee_classification string
-	medicalemployee_supervisor     string
-}
-
-type Patient struct {
-	patient_id                int
-	medicalemployee_id        int
-	hospital_id               int
-	patient_age               int
-	patient_ageclassification string
-	patient_birthday          time.Time
-	patient_sex               string
-	patient_weightlbs         float32
-	patient_weightkilo        float32
+	Medicalemployee_id             int            `json:staff_id`
+	Hospital_id                    int            `json:hospital_id`
+	Medicalemployee_firstname      string         `json:staff_name`
+	Medicalemployee_lastname       string         `json:staff_lastname`
+	Medicalemployee_department     string         `json:staff_department`
+	Medicalemployee_classification string         `json:staff_role`
+	Medicalemployee_supervisor     sql.NullString `json:supervisor`
 }
 
 type Record struct {
-	record_id           int
-	hospital_id         int
-	medical_employee_id int
-	patient_id          int
-	procedure_id        int
-	diagnosis_id        int
-	start_datetime      time.Time
-	end_datetime        time.Time
-	special_notes       string
-	outcome             string
-}
+	Record_id           int            `json:record_id`
+	Medical_employee_id int            `json:medicalemployee_id`
+	Start_datetime      time.Time      `json:starttime`
+	End_datetime        time.Time      `json:endtime`
+	Special_notes       sql.NullString `json:special_notes`
+	Outcome             string         `json:result`
 
-type Procedure struct {
-	procedure_id   int
-	procedure_name string
-}
+	Hospital_id      int    `json:hospital_id`
+	Hospital_city    string `json:hospital_city`
+	Hospital_address string `json:hospital_address`
+	Hospital_name    string `json:hospital_name`
 
-type Diagnosis struct {
-	diagnosis_id   int
-	diagnosis_name string
+	Patient_id        int       `json:patient_id`
+	Patient_age       int       `json:age`
+	Patient_birthday  time.Time `json:dob`
+	Patient_sex       string    `json:gender`
+	Patient_weightlbs float32   `json:weight`
+
+	Procedure_id   int    `json:procedure_id`
+	Procedure_name string `json:procedure_name`
+
+	Diagnosis_id   int    `json:diagnosis_id`
+	Diagnosis_name string `json:diagnosis_name`
 }
 
 func makehospital(city, address, name string) {
@@ -97,12 +91,12 @@ func gethospital_city(id int) {
 	WHERE hospital_id = $1;`
 	var hospital Hospital
 	row := db.QueryRow(sqlStatement_read, id)
-	error := row.Scan(&hospital.hospital_city)
+	error := row.Scan(&hospital.Hospital_city)
 	switch error {
 	case sql.ErrNoRows:
 		fmt.Println("No rows were returned!")
 	case nil:
-		fmt.Println(hospital.hospital_city)
+		fmt.Println(hospital.Hospital_city)
 	default:
 		panic(error)
 	}
@@ -120,23 +114,112 @@ func sethospital_city(id int, name string) {
 }
 
 func getstaff_list(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\nGot to getstaff_list\n")
+	w.Header().Set("Content-Type", "application/json")
 	sqlStatement_get := `
 		SELECT * FROM medical_employee 
 		ORDER BY medicalemployee_id DESC LIMIT 10`
-	var medicalemployee MedicalEmployee
+	medicalemployee := MedicalEmployee{}
 	row, _ := db.Query(sqlStatement_get)
 	defer row.Close()
 	for row.Next() {
 
-		err := row.Scan(&medicalemployee.medicalemployee_id, &medicalemployee.medicalemployee_firstname, &medicalemployee.medicalemployee_lastname,
-			&medicalemployee.medicalemployee_department, &medicalemployee.medicalemployee_department, &medicalemployee.medicalemployee_classification,
-			&medicalemployee.medicalemployee_supervisor)
+		err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
+			&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification,
+			&medicalemployee.Medicalemployee_supervisor)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(medicalemployee)
+		medicalemployee1 := MedicalEmployee{
+			Medicalemployee_id:             medicalemployee.Medicalemployee_id,
+			Medicalemployee_firstname:      medicalemployee.Medicalemployee_firstname,
+			Medicalemployee_lastname:       medicalemployee.Medicalemployee_lastname,
+			Medicalemployee_department:     medicalemployee.Medicalemployee_department,
+			Medicalemployee_classification: medicalemployee.Medicalemployee_classification,
+			Medicalemployee_supervisor:     medicalemployee.Medicalemployee_supervisor,
+		}
+		medicalemployeeJson, err := json.Marshal(medicalemployee1)
+		if err != nil {
+			fmt.Fprintf(w, "Error: %s", err)
+		}
+		fmt.Println(medicalemployee1)
+		w.Write(medicalemployeeJson)
 	}
 }
+
+func set_record(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\nGot to set_record\n")
+	w.Header().Set("Content-Type", "application/json")
+	record := Record{}
+
+	jsn, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal("Error reading the body", err)
+	}
+
+	//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+
+	err = json.Unmarshal(jsn, &record)
+	if err != nil {
+		log.Fatal("Decoding error: ", err)
+	}
+
+	//for testing
+	log.Printf("Received: %v\n", user)
+
+	sqlStatement_set := `
+	UPDATE Record
+	SET record_result = $2, Special_notes = $3, outcome = $4
+	WHERE record_id = $1;`
+	_, error := db.Exec(sqlStatement_set, record.Record_id, record.Special_notes, record.Outcome)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Printf("\nSuccessfully updated record\n")
+}
+
+// func create_record(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Printf("\nGot to create_record\n")
+// 	w.Header().Set("Content-Type", "application/json")
+// 	record := Record{}
+
+// 	jsn, err := ioutil.ReadAll(r.Body)
+// 	if err != nil {
+// 		log.Fatal("Error reading the body", err)
+// 	}
+
+// 	//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+
+// 	err = json.Unmarshal(jsn, &record)
+// 	if err != nil {
+// 		log.Fatal("Decoding error: ", err)
+// 	}
+
+// 	//for testing
+// 	log.Printf("Received: %v\n", user)
+
+// 	sqlStatement_create := `
+// 	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
+// 	VALUES ($1, $2, $3)
+// 	RETURNING patient_id`
+// 	var patientid int64
+// 	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
+// 	if error != nil {
+// 		panic(error)
+// 	}
+
+// 	sqlStatement_create := `
+// 	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
+// 	VALUES ($1, $2, $3)
+// 	RETURNING patient_id`
+// 	var patientid int64
+// 	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
+// 	if error != nil {
+// 		panic(error)
+// 	}
+
+// 	fmt.Printf("\nSuccessfully created record\n")
+// }
 
 // func gethospital_address(id int) {
 // 	sqlStatement_read := `
