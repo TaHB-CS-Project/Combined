@@ -120,29 +120,25 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 		SELECT * FROM medical_employee 
 		ORDER BY medicalemployee_id DESC LIMIT 10`
 	medicalemployee := MedicalEmployee{}
+	//medicalemployeearray := []MedicalEmployee{}
 	row, _ := db.Query(sqlStatement_get)
 	defer row.Close()
 	for row.Next() {
 
-		err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
-			&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification,
-			&medicalemployee.Medicalemployee_supervisor)
+		err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Hospital_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
+			&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification, &medicalemployee.Medicalemployee_supervisor)
 		if err != nil {
 			panic(err)
 		}
-		medicalemployee1 := MedicalEmployee{
-			Medicalemployee_id:             medicalemployee.Medicalemployee_id,
-			Medicalemployee_firstname:      medicalemployee.Medicalemployee_firstname,
-			Medicalemployee_lastname:       medicalemployee.Medicalemployee_lastname,
-			Medicalemployee_department:     medicalemployee.Medicalemployee_department,
-			Medicalemployee_classification: medicalemployee.Medicalemployee_classification,
-			Medicalemployee_supervisor:     medicalemployee.Medicalemployee_supervisor,
-		}
-		medicalemployeeJson, err := json.Marshal(medicalemployee1)
+		var medicalemployeearray []MedicalEmployee
+		medicalemployeearray = append(medicalemployeearray, MedicalEmployee{medicalemployee.Medicalemployee_id, medicalemployee.Hospital_id,
+			medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
+			medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
+		medicalemployeeJson, err := json.Marshal(medicalemployeearray)
 		if err != nil {
 			fmt.Fprintf(w, "Error: %s", err)
 		}
-		fmt.Println(medicalemployee1)
+		fmt.Println(medicalemployeearray)
 		w.Write(medicalemployeeJson)
 	}
 }
