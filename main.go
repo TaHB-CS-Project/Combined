@@ -25,7 +25,8 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	// http.HandleFunc("/", Index)
+	initstyle()
+	http.HandleFunc("/", Index)
 	// http.HandleFunc("/signin", Index)
 	http.HandleFunc("/signin", Login)
 	http.HandleFunc("/logout", Logout)
@@ -68,4 +69,14 @@ func initDB() {
 		panic(err)
 	}
 
+}
+
+func initstyle() {
+	http.Handle("/css/", //final url can be anything
+		http.StripPrefix("/css/",
+			http.FileServer(http.Dir("css"))))
+
+	http.Handle("/img/", //final url can be anything
+		http.StripPrefix("/img/",
+			http.FileServer(http.Dir("img"))))
 }
