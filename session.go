@@ -10,22 +10,22 @@ import (
 
 var store = sessions.NewCookieStore([]byte("session"))
 
-func Index(response http.ResponseWriter, request *http.Request) {
+// func Index(response http.ResponseWriter, request *http.Request) {
 
-	tmp, _ := template.ParseFiles("/index.html")
-	tmp.Execute(response, nil)
+// 	tmp, _ := template.ParseFiles("Template/index.html")
+// 	tmp.Execute(response, nil)
 
-}
+// }
 
 func Login(response http.ResponseWriter, request *http.Request) {
 	//read in the data from the login page bar
 	request.ParseForm()
-	username := request.Form.Get("username")
+	username := request.Form.Get("email")
 	password := request.Form.Get("password")
-	fmt.Println("Username:", username)
-	fmt.Println("Password:", password)
+	fmt.Println("email:", username)
+	fmt.Println("password:", password)
 	//if the password and username matches from the database
-	if username == "" && password == "" {
+	if username == "doctor" && password == "password" {
 		sessions, _ := store.Get(request, "session")
 		sessions.Values["username"] = username
 
@@ -38,12 +38,16 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		data := map[string]interface{}{
 			"err": "Invalid Username or Password.",
 		}
-		tmp, _ := template.ParseFiles("/index.html")
+		tmp, _ := template.ParseFiles("Template/index.html")
+		http.Handle("/css/", //final url can be anything
+			http.StripPrefix("/css/",
+				http.FileServer(http.Dir("css"))))
+
+		http.Handle("/img/", //final url can be anything
+			http.StripPrefix("/img/",
+				http.FileServer(http.Dir("img"))))
 		tmp.Execute(response, data)
 	}
-
-	tmp, _ := template.ParseFiles("/login.html")
-	tmp.Execute(response, nil)
 }
 func Logout(response http.ResponseWriter, request *http.Request) {
 	//get the current session
@@ -53,9 +57,11 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	//save the new session
 	sessions.Save(request, response)
 	//redirect the session
-	http.Redirect(response, request, "/index", http.StatusSeeOther)
+	http.Redirect(response, request, "/signin", http.StatusSeeOther)
 }
 
 func Dashboard(response http.ResponseWriter, request *http.Request) {
-
+	//session, _ := store.Get(request, "session")
+	tmp, _ := template.ParseFiles("Template/dashboard.html")
+	tmp.Execute(response, nil)
 }

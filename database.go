@@ -174,48 +174,49 @@ func set_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nSuccessfully updated record\n")
 }
 
-// func create_record(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Printf("\nGot to create_record\n")
-// 	w.Header().Set("Content-Type", "application/json")
-// 	record := Record{}
+func create_record(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\nGot to create_record\n")
+	w.Header().Set("Content-Type", "application/json")
+	record := Record{}
 
-// 	jsn, err := ioutil.ReadAll(r.Body)
-// 	if err != nil {
-// 		log.Fatal("Error reading the body", err)
-// 	}
+	jsn, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal("Error reading the body", err)
+	}
 
-// 	//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+	//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
 
-// 	err = json.Unmarshal(jsn, &record)
-// 	if err != nil {
-// 		log.Fatal("Decoding error: ", err)
-// 	}
+	err = json.Unmarshal(jsn, &record)
+	if err != nil {
+		log.Fatal("Decoding error: ", err)
+	}
 
-// 	//for testing
-// 	log.Printf("Received: %v\n", user)
+	//for testing
+	log.Printf("Received: %v\n", user)
 
-// 	sqlStatement_create := `
-// 	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
-// 	VALUES ($1, $2, $3)
-// 	RETURNING patient_id`
-// 	var patientid int64
-// 	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
-// 	if error != nil {
-// 		panic(error)
-// 	}
+	sqlStatement_create := `
+	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
+	VALUES ($1, $2, $3)
+	RETURNING patient_id`
+	var patientid int64
+	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
+	if error != nil {
+		panic(error)
+	}
 
-// 	sqlStatement_create := `
-// 	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
-// 	VALUES ($1, $2, $3)
-// 	RETURNING patient_id`
-// 	var patientid int64
-// 	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
-// 	if error != nil {
-// 		panic(error)
-// 	}
+	sqlStatement_create2 := `
+	INSERT INTO record (start_datetime, end_datetime, special_notes, outcome)
+	VALUES ($1, $2, $3, $4)
+	RETURNING record_id`
+	var recordid int64
+	error1 := db.QueryRow(sqlStatement_create2, record.Start_datetime, record.End_datetime, record.Special_notes).Scan(&recordid)
+	if error1 != nil {
+		panic(error1)
+	}
+	fmt.Println("New record ID is: ", recordid)
 
-// 	fmt.Printf("\nSuccessfully created record\n")
-// }
+	fmt.Printf("\nSuccessfully created record\n")
+}
 
 // func gethospital_address(id int) {
 // 	sqlStatement_read := `

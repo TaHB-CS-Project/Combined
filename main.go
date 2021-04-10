@@ -25,10 +25,11 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	http.HandleFunc("/", Index)
-	http.HandleFunc("/index", Index)
-	http.HandleFunc("/login", Login)
+	// http.HandleFunc("/", Index)
+	// http.HandleFunc("/signin", Index)
+	http.HandleFunc("/signin", Login)
 	http.HandleFunc("/logout", Logout)
+	http.HandleFunc("/dashboard", Dashboard)
 	http.ListenAndServe(":8090", nil)
 	// http.HandleFunc("/login", SessionLogin)
 	// http.HandleFunc("/logout", SessionLogout)
@@ -36,9 +37,9 @@ func main() {
 	// fmt.Printf("Starting server for testing HTTP POST...\n")
 	//http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
 
-	go server()
-	client()
-	getstafflisttest()
+	// server()
+	// client()
+	// getstafflisttest()
 
 	// http.HandleFunc("/signin", signin)
 	// err := http.ListenAndServe(":8080", nil)
