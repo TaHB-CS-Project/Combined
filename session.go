@@ -10,12 +10,15 @@ import (
 
 var store = sessions.NewCookieStore([]byte("session"))
 
-func Index(response http.ResponseWriter, request *http.Request) {
-	tmp, _ := template.ParseFiles("Template/index.html")
-	tmp.Execute(response, nil)
-}
+// func Index(response http.ResponseWriter, request *http.Request) {
+
+// 	tmp, _ := template.ParseFiles("Template/index.html")
+// 	tmp.Execute(response, nil)
+
+// }
 
 func Login(response http.ResponseWriter, request *http.Request) {
+	//read in the data from the login page bar
 	request.ParseForm()
 	username := request.Form.Get("email")
 	password := request.Form.Get("password")
@@ -36,6 +39,13 @@ func Login(response http.ResponseWriter, request *http.Request) {
 			"err": "Invalid Username or Password.",
 		}
 		tmp, _ := template.ParseFiles("Template/index.html")
+		http.Handle("/css/", //final url can be anything
+			http.StripPrefix("/css/",
+				http.FileServer(http.Dir("css"))))
+
+		http.Handle("/img/", //final url can be anything
+			http.StripPrefix("/img/",
+				http.FileServer(http.Dir("img"))))
 		tmp.Execute(response, data)
 	}
 }
@@ -54,11 +64,4 @@ func Dashboard(response http.ResponseWriter, request *http.Request) {
 	//session, _ := store.Get(request, "session")
 	tmp, _ := template.ParseFiles("Template/dashboard.html")
 	tmp.Execute(response, nil)
-
-	// sessions, _ := store.Get(request, "session")
-	// //set the sessions time
-	// sessions.Options.MaxAge = 5
-	// sessions.Save(request, response)
-
-	// http.Redirect(response, request, "/signin", http.StatusSeeOther)
 }
