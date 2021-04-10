@@ -25,11 +25,19 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	// http.HandleFunc("/", Index)
+	http.HandleFunc("/", Index)
 	// http.HandleFunc("/signin", Index)
 	http.HandleFunc("/signin", Login)
 	http.HandleFunc("/logout", Logout)
 	http.HandleFunc("/dashboard", Dashboard)
+	// http.Handle("/css/", //final url can be anything
+	// 	http.StripPrefix("/css/",
+	// 		http.FileServer(http.Dir("css"))))
+
+	// http.Handle("/img/", //final url can be anything
+	// 	http.StripPrefix("/img/",
+	// 		http.FileServer(http.Dir("img"))))
+	// //read in the data from the login page bar
 	http.ListenAndServe(":8090", nil)
 	// http.HandleFunc("/login", SessionLogin)
 	// http.HandleFunc("/logout", SessionLogout)
