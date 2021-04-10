@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -24,12 +25,16 @@ func main() {
 
 	//start database instance for use
 	initDB()
-	// http.HandleFunc("/", Home)
+	http.HandleFunc("/", Index)
+	http.HandleFunc("/index", Index)
+	http.HandleFunc("/login", Login)
+	http.HandleFunc("/logout", Logout)
+	http.ListenAndServe(":8090", nil)
 	// http.HandleFunc("/login", SessionLogin)
 	// http.HandleFunc("/logout", SessionLogout)
 	// http.HandleFunc("/dbgettest", getstaff_list)
 	// fmt.Printf("Starting server for testing HTTP POST...\n")
-	// http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
+	//http.ListenAndServe(":8090", context.ClearHandler(http.DefaultServeMux))
 
 	go server()
 	client()

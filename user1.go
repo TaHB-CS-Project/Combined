@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 )
 
@@ -102,7 +101,7 @@ OR
         fmt.Fprint(w, cookie.Name)
     }
 */
-var store = sessions.NewCookieStore([]byte("secret-password"))
+/* var store = sessions.NewCookieStore([]byte("secret-password"))
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	//returns a session for the given name after adding it to registry
@@ -126,7 +125,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	   	if err != nil {
 	   		http.Error(w, err.Error(), http.StatusInternalServerError)
 	   		return
-	   	} */
+	   	}
 }
 
 func SessionLogin(w http.ResponseWriter, r *http.Request) {
@@ -147,13 +146,9 @@ func SessionLogout(w http.ResponseWriter, r *http.Request) {
 
 	// Revoke users authentication
 	session.Values["authenticated"] = false
-	session.Save(r, w)
+	se ssion.Save(r, w)
 }
-
-func secret(w http.ResponseWriter, r *http.Request) {
-
-}
-
+*/
 type correct struct {
 	Correctcredentials bool `json:"correctcredentials"`
 }
