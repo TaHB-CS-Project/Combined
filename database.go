@@ -121,6 +121,7 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 		ORDER BY medicalemployee_id DESC LIMIT 10`
 	medicalemployee := MedicalEmployee{}
 	//medicalemployeearray := []MedicalEmployee{}
+	var medicalemployeearray []MedicalEmployee
 	row, _ := db.Query(sqlStatement_get)
 	defer row.Close()
 	for row.Next() {
@@ -130,19 +131,17 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		var medicalemployeearray []MedicalEmployee
 		medicalemployeearray = append(medicalemployeearray, MedicalEmployee{medicalemployee.Medicalemployee_id, medicalemployee.Hospital_id,
 			medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
 			medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
-		medicalemployeeJson, err := json.Marshal(medicalemployeearray)
-		if err != nil {
-			fmt.Fprintf(w, "Error: %s", err)
-		}
 		//fmt.Println(medicalemployeearray)
-		w.Write(medicalemployeeJson)
-
-		fmt.Printf("%v", medicalemployeearray)
 	}
+	medicalemployeeJson, err := json.Marshal(medicalemployeearray)
+	if err != nil {
+		fmt.Fprintf(w, "Error: %s", err)
+	}
+	fmt.Printf("%v", medicalemployeearray)
+	w.Write(medicalemployeeJson)
 }
 
 func set_record(w http.ResponseWriter, r *http.Request) {
