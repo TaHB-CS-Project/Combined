@@ -83,9 +83,6 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 }
 
 func Dashboard(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "session")
-	session.Options.MaxAge = 20
-	sessions.Save(request, response)
 	tmp, _ := template.ParseFiles("Template/dashboard.html")
 	tmp.Execute(response, nil)
 }

@@ -38,13 +38,9 @@ type Record struct {
 	Special_notes       sql.NullString `json:special_notes`
 	Outcome             string         `json:result`
 
-	Hospital_id      int    `json:hospital_id`
-	Hospital_city    string `json:hospital_city`
-	Hospital_address string `json:hospital_address`
-	Hospital_name    string `json:hospital_name`
+	Hospital_id   int    `json:hospital_id`
+	Hospital_name string `json:hospital_name`
 
-	Patient_id        int       `json:patient_id`
-	Patient_age       int       `json:age`
 	Patient_birthday  time.Time `json:dob`
 	Patient_sex       string    `json:gender`
 	Patient_weightlbs float32   `json:weight`
@@ -178,43 +174,93 @@ func set_record(w http.ResponseWriter, r *http.Request) {
 func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nGot to create_record\n")
 	w.Header().Set("Content-Type", "application/json")
-	record := Record{}
 
-	jsn, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal("Error reading the body", err)
-	}
+	//hospital := Hospital{}
+	//record := Record{}
+	r.ParseForm()
 
-	//fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
-
-	err = json.Unmarshal(jsn, &record)
-	if err != nil {
-		log.Fatal("Decoding error: ", err)
-	}
-
+	Hospital_name := r.Form.Get("hospital")
+	Start_datetime := r.Form.Get("date")
+	Patient_sex := r.Form.Get("gender")
+	Patient_weightlbs := r.Form.Get("weight")
+	Patient_birthday := r.Form.Get("dob_date")
+	Diagnosis_name := r.Form.Get("diagnosis")
+	Procedure_name := r.Form.Get("procedure")
+	Outcome := r.Form.Get("result")
+	Special_notes := r.Form.Get("special_notes")
 	//for testing
 	log.Printf("Received: %v\n", user)
 
+	//the data names is the DATABASES name
 	sqlStatement_create := `
-	INSERT INTO patient (patient_age, birthday, sex, weight_lbs)
+	INSERT INTO patient (patient_birthday, patient_sex, patient_weightlbs)
 	VALUES ($1, $2, $3)
 	RETURNING patient_id`
-	var patientid int64
-	error := db.QueryRow(sqlStatement_create, record.Patient_age, record.Patient_birthday, record.Patient_sex, record.Patient_weightlbs).Scan(&patientid)
+	var patient_id int64
+	//the names for the record.query is the STRUCT names
+	error := db.QueryRow(sqlStatement_create, Patient_birthday, Patient_sex, Patient_weightlbs).Scan(&patient_id)
 	if error != nil {
 		panic(error)
 	}
 
+	sqlStatement_create3 := `
+	SELECT FROM hospital 
+	WHERE hospital_name = $1
+	RETURNING hospital_id`
+	var hospital_id int64
+	error = db.QueryRow(sqlStatement_create3, Hospital_name).Scan(&hospital_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New hospital ID is: ", hospital_id)
+
+	sqlStatement_create4 := `
+	SELECT FROM diagnosis 
+	WHERE diagonsis_name = $1
+	RETURNING diagnosis_id`
+	var diagnosis_id int64
+	error = db.QueryRow(sqlStatement_create4, Diagnosis_name).Scan(&diagnosis_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New diagnosis ID is: ", diagnosis_id)
+
+	sqlStatement_create5 := `
+	SELECT FROM procedure 
+	WHERE procedure_name = $1
+	RETURNING procedure_id`
+	var procedure_id int64
+	error = db.QueryRow(sqlStatement_create5, Procedure_name).Scan(&procedure_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New procedure ID is: ", procedure_id)
+
+	sqlStatement_create6 := `
+	SELECT FROM user_entity
+	WHERE username = $1
+	RETURNING medicalemployee_id`
+
+	var Medical_employee_id int64
+	sessions, _ := store.Get(r, "session")
+
+	error = db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+
+	//final statement to make record with all the foreign keys available
 	sqlStatement_create2 := `
-	INSERT INTO record (start_datetime, end_datetime, special_notes, outcome)
-	VALUES ($1, $2, $3, $4)
+	INSERT INTO record (medicalemployee_id, procedure_id, hospital_id, diagnosis_id, patient_id, start_datetime, special_notes, outcome)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 	RETURNING record_id`
-	var recordid int64
-	error1 := db.QueryRow(sqlStatement_create2, record.Start_datetime, record.End_datetime, record.Special_notes).Scan(&recordid)
+	var record_id int64
+	error1 := db.QueryRow(sqlStatement_create2, Medical_employee_id, procedure_id, hospital_id, diagnosis_id, patient_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
 	if error1 != nil {
 		panic(error1)
 	}
-	fmt.Println("New record ID is: ", recordid)
+	fmt.Println("New record ID is: ", record_id)
 
 	fmt.Printf("\nSuccessfully created record\n")
 }
