@@ -88,9 +88,11 @@ func Dashboard(response http.ResponseWriter, request *http.Request) {
 }
 
 func Staff_list(response http.ResponseWriter, request *http.Request) {
-	getstaff_list(response, request)
 	tmp, _ := template.ParseFiles("Template/staff-list.html")
 	tmp.Execute(response, nil)
+
+	//calls getstaff returning json array
+	//getstaff_list(response, request)
 }
 
 func Add_record(response http.ResponseWriter, request *http.Request) {
