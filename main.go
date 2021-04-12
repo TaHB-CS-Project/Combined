@@ -30,7 +30,7 @@ func main() {
 	// http.HandleFunc("/signin", Index)
 	http.HandleFunc("/signin", Login)
 	http.HandleFunc("/logout", Logout)
-	http.HandleFunc("/dashboard", Dashboard)
+	http.HandleFunc("/dashboard.html", Dashboard)
 	http.HandleFunc("/staff-list.html", Staff_list)
 	http.HandleFunc("/add-record.html", Add_record)
 	http.HandleFunc("/record-draft.html", Record_draft)
@@ -50,17 +50,6 @@ func main() {
 	//server()
 	// client()
 	// getstafflisttest()
-
-	// http.HandleFunc("/signin", signin)
-	// err := http.ListenAndServe(":8080", nil)
-	// if err != nil {
-	// 	log.Fatal("ListenAndServe: ", err)
-	// }
-	//http.HandleFunc("/signup", Signup)
-	//makehospital("Dallas", "Westheimer Rd", "Freedom Hospital")
-	//sethospital_city(1, "Test City for Testing")
-	//gethospital_city(1)
-	//deletehospital(150)
 }
 
 /* func initSession() {

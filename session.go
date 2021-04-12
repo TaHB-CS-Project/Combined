@@ -60,7 +60,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		sessions.Save(request, response)
 		//if their username and password matches then redirect them to the dashboard(?) or whatever is the
 		//main page of a succesful login
-		http.Redirect(response, request, "/dashboard", http.StatusSeeOther)
+		http.Redirect(response, request, "/dashboard.html", http.StatusSeeOther)
 	}
 	if !check { //username and password doesn't match
 		data := map[string]interface{}{
@@ -97,6 +97,7 @@ func Staff_list(response http.ResponseWriter, request *http.Request) {
 }
 
 func Add_record(response http.ResponseWriter, request *http.Request) {
+	//create_record(response, request)
 	tmp, _ := template.ParseFiles("Template/add-record.html")
 	tmp.Execute(response, nil)
 }
