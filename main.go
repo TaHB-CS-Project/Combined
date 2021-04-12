@@ -38,6 +38,7 @@ func main() {
 	http.HandleFunc("/create-account_registerd.html", Create_account_registered)
 	http.HandleFunc("/create-account.html", Create_account)
 	http.HandleFunc("/diagnosis.html", Diagnosis)
+	http.HandleFunc("/procedure.html", Procedure)
 	http.HandleFunc("/forgot-password-submit.html", Forgot_password_submit)
 	http.HandleFunc("/forgot-password.html", Forgot_password)
 	http.ListenAndServe(":8090", nil)
