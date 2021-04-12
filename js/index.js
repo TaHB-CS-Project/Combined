@@ -21,7 +21,7 @@ $(document).ready(function() {
                                     title: 'Welcome!',
                                 });
                              
-                                window.location = "dashboard.html";                     
+                                //window.location = "dashboard.html";                     
                             }
                         else if(login == '{"Incorrectcredentials":false}'){
                             login_result.innerHTML = "<p>Your username or password is incorrect!\nPlease try again</p>"

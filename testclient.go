@@ -11,6 +11,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
+func server() {
+	http.HandleFunc("/", getstaff_list)
+	// http.ListenAndServe(":8088", nil)
+	//http.HandleFunc("/agg", newsAggHandler)
+
+	fmt.Printf("Starting server for testing HTTP POST...\n")
+	if err := http.ListenAndServe(":8090", nil); err != nil {
+		log.Fatal(err)
+	}
+}
+
 //used for testing
 func client() {
 	usernameinput := "doctor"

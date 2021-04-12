@@ -83,7 +83,60 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 }
 
 func Dashboard(response http.ResponseWriter, request *http.Request) {
-	//session, _ := store.Get(request, "session")
+	session, _ := store.Get(request, "session")
+	session.Options.MaxAge = 20
+	sessions.Save(request, response)
 	tmp, _ := template.ParseFiles("Template/dashboard.html")
+	tmp.Execute(response, nil)
+}
+
+func Staff_list(response http.ResponseWriter, request *http.Request) {
+	getstaff_list(response, request)
+	tmp, _ := template.ParseFiles("Template/staff-list.html")
+	tmp.Execute(response, nil)
+}
+
+func Add_record(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/add-record.html")
+	tmp.Execute(response, nil)
+}
+
+func Create_account_registered(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/create-account_registerd.html")
+	tmp.Execute(response, nil)
+}
+
+func Create_account(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/create-account.html")
+	tmp.Execute(response, nil)
+}
+
+func Diagnosis(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/diagnosis.html")
+	tmp.Execute(response, nil)
+}
+
+func Forgot_password_submit(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/forgot-password-submit.html")
+	tmp.Execute(response, nil)
+}
+
+func Forgot_password(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/forgot-password.html")
+	tmp.Execute(response, nil)
+}
+
+func Procedure(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/procedure.html")
+	tmp.Execute(response, nil)
+}
+
+func Record_draft(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/record-draft.html")
+	tmp.Execute(response, nil)
+}
+
+func Record_list(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/record-list.html")
 	tmp.Execute(response, nil)
 }

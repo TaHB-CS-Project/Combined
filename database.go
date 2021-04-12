@@ -138,8 +138,10 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "Error: %s", err)
 		}
-		fmt.Println(medicalemployeearray)
+		//fmt.Println(medicalemployeearray)
 		w.Write(medicalemployeeJson)
+
+		fmt.Printf("%v", medicalemployeearray)
 	}
 }
 
