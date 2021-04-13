@@ -37,6 +37,7 @@ func main() {
 	http.HandleFunc("/record-list.html", Record_list)
 	http.HandleFunc("/create-account_registerd.html", Create_account_registered)
 	http.HandleFunc("/create-account.html", Create_account)
+	http.HandleFunc("/procedure.html", Procedure)
 	http.HandleFunc("/diagnosis.html", Diagnosis)
 	http.HandleFunc("/forgot-password-submit.html", Forgot_password_submit)
 	http.HandleFunc("/forgot-password.html", Forgot_password)
