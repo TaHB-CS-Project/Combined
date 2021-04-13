@@ -140,7 +140,6 @@ func Record_list(response http.ResponseWriter, request *http.Request) {
 }
 
 func Staff_test(response http.ResponseWriter, request *http.Request) {
-	getstaff_list(response, request)
 	tmp, _ := template.ParseFiles("Template/staff-test.html")
 	tmp.Execute(response, nil)
 }

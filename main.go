@@ -83,4 +83,5 @@ func initstyle() {
 	http.Handle("/js/", //final url can be anything
 		http.StripPrefix("/js/",
 			http.FileServer(http.Dir("js"))))
+
 }
