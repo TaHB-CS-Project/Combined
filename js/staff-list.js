@@ -31,8 +31,16 @@ $.getJSON("staff-list.json",
         info += '<td>' + 
             value.Medicalemployee_classification + '</td>';
             
-        info += '<td>' + 
-        value.Medicalemployee_supervisor + '</td>';
+        if(value.Medicalemployee_supervisor.Valid == false){
+            info += '<td> None </td>';  
+        }
+        else if(value.Medicalemployee_supervisor.Valid == true){
+            info += '<td>' +
+            value.Medicalemployee_supervisor.String + '</td>';
+        }
+        else{
+            info += '<td> Error </td>';
+        }
 
         info += '</tr>';
     
