@@ -41,6 +41,7 @@ func main() {
 	http.HandleFunc("/diagnosis.html", Diagnosis)
 	http.HandleFunc("/forgot-password-submit.html", Forgot_password_submit)
 	http.HandleFunc("/forgot-password.html", Forgot_password)
+	http.HandleFunc("/staff-test.html", Staff_test)
 	http.ListenAndServe(":8090", nil)
 	// http.HandleFunc("/login", SessionLogin)
 	// http.HandleFunc("/logout", SessionLogout)

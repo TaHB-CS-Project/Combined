@@ -138,3 +138,9 @@ func Record_list(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/record-list.html")
 	tmp.Execute(response, nil)
 }
+
+func Staff_test(response http.ResponseWriter, request *http.Request) {
+	getstaff_list(response, request)
+	tmp, _ := template.ParseFiles("Template/staff-test.html")
+	tmp.Execute(response, nil)
+}
