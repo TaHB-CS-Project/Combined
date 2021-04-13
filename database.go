@@ -132,12 +132,13 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 			medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
 		//fmt.Println(medicalemployeearray)
 	}
-	medicalemployeeJson, err := json.Marshal(medicalemployeearray)
-	if err != nil {
-		fmt.Fprintf(w, "Error: %s", err)
-	}
+	// medicalemployeeJson, err := json.Marshal(medicalemployeearray)
+	// if err != nil {
+	// 	fmt.Fprintf(w, "Error: %s", err)
+	// }
 	fmt.Printf("%v", medicalemployeearray)
-	w.Write(medicalemployeeJson)
+	file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
+	_ = ioutil.WriteFile("staff-list.json", file, 0644)
 }
 
 func set_record(w http.ResponseWriter, r *http.Request) {

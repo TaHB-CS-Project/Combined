@@ -77,4 +77,8 @@ func initstyle() {
 	http.Handle("/img/", //final url can be anything
 		http.StripPrefix("/img/",
 			http.FileServer(http.Dir("img"))))
+
+	http.Handle("/js/", //final url can be anything
+		http.StripPrefix("/js/",
+			http.FileServer(http.Dir("js"))))
 }
