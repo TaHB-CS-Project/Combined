@@ -1,42 +1,122 @@
-{
-  "draw": 1,
-  "recordsTotal": 57,
-  "recordsFiltered": 57,
-  "data": [
-    [
-      "01752",
-      "Ivor Thompson",
-      "Cardiology",
-      "Doctor",
-      "None"
-    ],
-    [
-      "05452",
-      "Oliver Diaz",
-      "Cardiology",
-      "Nurse",
-      "None"
-    ],
-    [
-      "06552",
-      "Randy Tyler",
-      "Cardiology",
-      "Trainee",
-      "Ivor Thompson"
-    ],
-    [
-      "03452",
-      "Kelly Allen",
-      "Cardiology",
-      "Doctor",
-      "None"
-    ],
-    [
-      "02113",
-      "William Brown",
-      "Dermatology",
-      "Nurse",
-      "None"
-    ]
-  ]
-}
+[
+ {
+  "Medicalemployee_id": 150,
+  "Hospital_id": 90,
+  "Medicalemployee_firstname": "Park",
+  "Medicalemployee_lastname": "Mason",
+  "Medicalemployee_department": "Books",
+  "Medicalemployee_classification": "Developer III",
+  "Medicalemployee_supervisor": {
+   "String": "Park Mason",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 149,
+  "Hospital_id": 72,
+  "Medicalemployee_firstname": "Brandtr",
+  "Medicalemployee_lastname": "Campanelli",
+  "Medicalemployee_department": "Toys",
+  "Medicalemployee_classification": "Staff Accountant I",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 148,
+  "Hospital_id": 54,
+  "Medicalemployee_firstname": "Hali",
+  "Medicalemployee_lastname": "Lack",
+  "Medicalemployee_department": "Sports",
+  "Medicalemployee_classification": "Statistician II",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 147,
+  "Hospital_id": 90,
+  "Medicalemployee_firstname": "Elana",
+  "Medicalemployee_lastname": "MacKay",
+  "Medicalemployee_department": "Electronics",
+  "Medicalemployee_classification": "Computer Systems Analyst III",
+  "Medicalemployee_supervisor": {
+   "String": "Elana MacKay",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 146,
+  "Hospital_id": 148,
+  "Medicalemployee_firstname": "Babette",
+  "Medicalemployee_lastname": "Mickelwright",
+  "Medicalemployee_department": "Electronics",
+  "Medicalemployee_classification": "Legal Assistant",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 145,
+  "Hospital_id": 91,
+  "Medicalemployee_firstname": "Dew",
+  "Medicalemployee_lastname": "Roubert",
+  "Medicalemployee_department": "Industrial",
+  "Medicalemployee_classification": "Senior Quality Engineer",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 144,
+  "Hospital_id": 3,
+  "Medicalemployee_firstname": "Rivalee",
+  "Medicalemployee_lastname": "Furniss",
+  "Medicalemployee_department": "Jewelery",
+  "Medicalemployee_classification": "Internal Auditor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 143,
+  "Hospital_id": 4,
+  "Medicalemployee_firstname": "Evered",
+  "Medicalemployee_lastname": "Prestie",
+  "Medicalemployee_department": "Kids",
+  "Medicalemployee_classification": "Marketing Assistant",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 142,
+  "Hospital_id": 146,
+  "Medicalemployee_firstname": "Felicity",
+  "Medicalemployee_lastname": "Kellet",
+  "Medicalemployee_department": "Music",
+  "Medicalemployee_classification": "Software Test Engineer IV",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 141,
+  "Hospital_id": 74,
+  "Medicalemployee_firstname": "Sanford",
+  "Medicalemployee_lastname": "Jeppensen",
+  "Medicalemployee_department": "Books",
+  "Medicalemployee_classification": "Research Assistant III",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ }
+]
