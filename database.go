@@ -111,7 +111,8 @@ func sethospital_city(id int, name string) {
 
 func getstaff_list(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nGot to getstaff_list\n")
-	w.Header().Set("Content-Type", "application/json")
+	//w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	sqlStatement_get := `
 		SELECT * FROM medical_employee 
 		ORDER BY medicalemployee_id DESC LIMIT 10`
@@ -138,7 +139,7 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 	// }
 	fmt.Printf("%v", medicalemployeearray)
 	file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
-	_ = ioutil.WriteFile("staff-list.json", file, 0644)
+	_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
 }
 
 func set_record(w http.ResponseWriter, r *http.Request) {
