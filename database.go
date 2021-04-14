@@ -67,6 +67,16 @@ type Recordlist struct {
 	Outcome                   string    `json:result`
 }
 
+type Diagnosis struct {
+	Diagnosis_id   int    `json:diagnosis_id`
+	Diagnosis_name string `json:diagnosis_name`
+}
+
+type Procedure struct {
+	Procedure_id   int    `json:procedure_id`
+	Procedure_name string `json:procedure_name`
+}
+
 func makehospital(city, address, name string) {
 	sqlStatement_create := `
 	 INSERT INTO hospital3 ( hospital_city, hospital_address, hospital_name)
@@ -123,6 +133,44 @@ func sethospital_city(id int, name string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func getdiagnosis(w http.Response, r *http.Request) {
+	sqlStatement_get := `
+	SELECT * FROM diagnosis`
+	diagnosis := Diagnosis{}
+	var diagnosisarray []Diagnosis
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&diagnosis.Diagnosis_id, &diagnosis.Diagnosis_name)
+		if err != nil {
+			panic(err)
+		}
+		diagnosisarray = append(diagnosisarray, Diagnosis{diagnosis.Diagnosis_id, diagnosis.Diagnosis_name})
+	}
+	fmt.Printf("%v", diagnosisarray)
+	file, _ := json.MarshalIndent(diagnosisarray, "", " ")
+	_ = ioutil.WriteFile("js/diagnosis.json", file, 0644)
+}
+
+func getprocedure(w http.Response, r *http.Request) {
+	sqlStatement_get := `
+	SELECT * FROM procedure`
+	procedure := Procedure{}
+	var procedurearray []Procedure
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&procedure.Procedure_id, &procedure.Procedure_name)
+		if err != nil {
+			panic(err)
+		}
+		procedurearray = append(procedurearray, Procedure{procedure.Procedure_id, procedure.Procedure_name})
+	}
+	fmt.Printf("%v", procedurearray)
+	file, _ := json.MarshalIndent(procedurearray, "", " ")
+	_ = ioutil.WriteFile("js/procedure.json", file, 0644)
 }
 
 func getrecord_list(w http.ResponseWriter, r *http.Request) {
