@@ -2,7 +2,7 @@
 $(document).ready(function() { 
     $("#searchData").on("keyup", function() { 
         var value = $(this).val().toLowerCase(); 
-        $("#staffData tr").filter(function() { 
+        $("#staff_list_data tr").filter(function() { 
             $(this).toggle($(this).text() 
             .toLowerCase().indexOf(value) > -1) 
         }); 
