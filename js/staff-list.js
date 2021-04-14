@@ -46,7 +46,7 @@ $.getJSON("js/staff-list.json",
     
 
      });
-     $('#datatables-ajax').append(info);
+     $('#staff_list_datatable').append(info);
     });
 
    

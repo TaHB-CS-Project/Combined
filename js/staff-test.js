@@ -10,7 +10,7 @@ $(document).ready(function() {
   }); 
   
 
-$.getJSON("staff-list.json", 
+$.getJSON("js/staff-list.json", 
     function (data) {
     var info = '';
     $.each(data, function (key, value) {
