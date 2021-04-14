@@ -1,4 +1,4 @@
-$(document).ready(function(){
+/*$(document).ready(function(){
     var maxField = 10; 
     var add_diagnosis_button = $('.add_diagnosis_button'); 
     var diagnosis_wrapper = $('.diagnosis_wrapper'); 
@@ -43,3 +43,4 @@ $(document).ready(function(){
         y--; 
     });
 });
+*/
