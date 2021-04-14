@@ -135,6 +135,7 @@ func Record_draft(response http.ResponseWriter, request *http.Request) {
 }
 
 func Record_list(response http.ResponseWriter, request *http.Request) {
+	getrecord_list(response, request)
 	tmp, _ := template.ParseFiles("Template/record-list.html")
 	tmp.Execute(response, nil)
 }
