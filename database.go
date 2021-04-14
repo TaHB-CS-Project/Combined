@@ -41,6 +41,10 @@ type Record struct {
 	Hospital_id   int    `json:hospital_id`
 	Hospital_name string `json:hospital_name`
 
+	Medicalemployee_firstname string `json:staff_name`
+	Medicalemployee_lastname  string `json:staff_lastname`
+
+	Patient_id        int       `json:patient_id`
 	Patient_birthday  time.Time `json:dob`
 	Patient_sex       string    `json:gender`
 	Patient_weightlbs float32   `json:weight`
@@ -50,6 +54,27 @@ type Record struct {
 
 	Diagnosis_id   int    `json:diagnosis_id`
 	Diagnosis_name string `json:diagnosis_name`
+}
+
+type Recordlist struct {
+	Record_id                 int       `json:record_id`
+	Hospital_name             string    `json:hospital_name`
+	Start_datetime            time.Time `json:starttime`
+	Medicalemployee_firstname string    `json:staff_name`
+	Medicalemployee_lastname  string    `json:staff_lastname`
+	Procedure_name            string    `json:procedure_name`
+	Diagnosis_name            string    `json:diagnosis_name`
+	Outcome                   string    `json:result`
+}
+
+type Diagnosis struct {
+	Diagnosis_id   int    `json:diagnosis_id`
+	Diagnosis_name string `json:diagnosis_name`
+}
+
+type Procedure struct {
+	Procedure_id   int    `json:procedure_id`
+	Procedure_name string `json:procedure_name`
 }
 
 func makehospital(city, address, name string) {
@@ -83,7 +108,8 @@ func deletehospital(id int) {
 
 func gethospital_city(id int) {
 	sqlStatement_read := `
-	SELECT hospital_city FROM Hospital
+	SELECT hospital_city 
+	FROM Hospital
 	WHERE hospital_id = $1;`
 	var hospital Hospital
 	row := db.QueryRow(sqlStatement_read, id)
@@ -109,15 +135,120 @@ func sethospital_city(id int, name string) {
 	}
 }
 
+func getdiagnosis(w http.Response, r *http.Request) {
+	sqlStatement_get := `
+	SELECT * FROM diagnosis`
+	diagnosis := Diagnosis{}
+	var diagnosisarray []Diagnosis
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&diagnosis.Diagnosis_id, &diagnosis.Diagnosis_name)
+		if err != nil {
+			panic(err)
+		}
+		diagnosisarray = append(diagnosisarray, Diagnosis{diagnosis.Diagnosis_id, diagnosis.Diagnosis_name})
+	}
+	fmt.Printf("%v", diagnosisarray)
+	file, _ := json.MarshalIndent(diagnosisarray, "", " ")
+	_ = ioutil.WriteFile("js/diagnosis.json", file, 0644)
+}
+
+func getprocedure(w http.Response, r *http.Request) {
+	sqlStatement_get := `
+	SELECT * FROM procedure`
+	procedure := Procedure{}
+	var procedurearray []Procedure
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&procedure.Procedure_id, &procedure.Procedure_name)
+		if err != nil {
+			panic(err)
+		}
+		procedurearray = append(procedurearray, Procedure{procedure.Procedure_id, procedure.Procedure_name})
+	}
+	fmt.Printf("%v", procedurearray)
+	file, _ := json.MarshalIndent(procedurearray, "", " ")
+	_ = ioutil.WriteFile("js/procedure.json", file, 0644)
+}
+
+func getrecord_list(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\nGot to getrecord_list\n")
+	sqlStatement_get := `
+		SELECT * FROM record 
+		ORDER BY record_id DESC LIMIT 10`
+	record := Record{}
+	var recordarray []Recordlist
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&record.Record_id, &record.Hospital_id, &record.Medical_employee_id, &record.Patient_id, &record.Procedure_id, &record.Diagnosis_id,
+			&record.Start_datetime, &record.End_datetime, &record.Special_notes, &record.Outcome)
+		if err != nil {
+			panic(err)
+		}
+
+		sqlStatement_get0 := `
+		SELECT hospital_name
+		FROM hospital 
+		WHERE hospital_id = $1`
+		//var hospital_name string
+		error := db.QueryRow(sqlStatement_get0, record.Hospital_id).Scan(&record.Hospital_name)
+		if error != nil {
+			panic(error)
+		}
+
+		sqlStatement_get1 := `
+		SELECT medicalemployee_firstname
+		FROM medical_employee 
+		WHERE medicalemployee_id = $1`
+		error1 := db.QueryRow(sqlStatement_get1, record.Hospital_id).Scan(&record.Medicalemployee_firstname)
+		if error1 != nil {
+			panic(error1)
+		}
+
+		sqlStatement_get2 := `
+		SELECT medicalemployee_lastname
+		FROM medical_employee 
+		WHERE medicalemployee_id = $1`
+		error2 := db.QueryRow(sqlStatement_get2, record.Hospital_id).Scan(&record.Medicalemployee_lastname)
+		if error2 != nil {
+			panic(error2)
+		}
+
+		sqlStatement_get3 := `
+		SELECT diagnosis_name
+		FROM diagnosis
+		WHERE diagnosis_id = $1`
+		error3 := db.QueryRow(sqlStatement_get3, record.Diagnosis_id).Scan(&record.Diagnosis_name)
+		if error3 != nil {
+			panic(error3)
+		}
+
+		sqlStatement_get4 := `
+		SELECT procedure_name
+		FROM procedure
+		WHERE procedure_id = $1`
+		error4 := db.QueryRow(sqlStatement_get4, record.Procedure_id).Scan(&record.Procedure_name)
+		if error4 != nil {
+			panic(error4)
+		}
+
+		recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
+			record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome})
+	}
+	fmt.Printf("%v", recordarray)
+	file, _ := json.MarshalIndent(recordarray, "", " ")
+	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
+}
+
 func getstaff_list(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("\nGot to getstaff_list\n")
-	//w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	sqlStatement_get := `
 		SELECT * FROM medical_employee 
 		ORDER BY medicalemployee_id DESC LIMIT 10`
 	medicalemployee := MedicalEmployee{}
-	//medicalemployeearray := []MedicalEmployee{}
 	var medicalemployeearray []MedicalEmployee
 	row, _ := db.Query(sqlStatement_get)
 	defer row.Close()
@@ -133,11 +264,7 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 			medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
 		//fmt.Println(medicalemployeearray)
 	}
-	// medicalemployeeJson, err := json.Marshal(medicalemployeearray)
-	// if err != nil {
-	// 	fmt.Fprintf(w, "Error: %s", err)
-	// }
-	fmt.Printf("%v", medicalemployeearray)
+	//fmt.Printf("%v", medicalemployeearray)
 	file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
 	_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
 }

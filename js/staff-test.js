@@ -2,15 +2,15 @@
 $(document).ready(function() { 
     $("#searchData").on("keyup", function() { 
         var value = $(this).val().toLowerCase(); 
-        $("#staff_list_data tr").filter(function() { 
+        $("#staffData tr").filter(function() { 
             $(this).toggle($(this).text() 
             .toLowerCase().indexOf(value) > -1) 
         }); 
     }); 
   }); 
   
-$.getJSON("js/staff-list.json", 
 
+$.getJSON("js/staff-list.json", 
     function (data) {
     var info = '';
     $.each(data, function (key, value) {
@@ -43,10 +43,9 @@ $.getJSON("js/staff-list.json",
         }
 
         info += '</tr>';
-    
 
      });
-     $('#staff_list_datatable').append(info);
+     $('#datatables-ajax').append(info);
     });
 
    
