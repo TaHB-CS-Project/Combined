@@ -9,8 +9,8 @@ $(document).ready(function() {
     }); 
   }); 
   
-
 $.getJSON("js/staff-list.json", 
+
     function (data) {
     var info = '';
     $.each(data, function (key, value) {
