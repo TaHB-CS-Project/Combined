@@ -109,7 +109,7 @@ func Create_account(response http.ResponseWriter, request *http.Request) {
 	tmp.Execute(response, nil)
 }
 
-func Diagnosis(response http.ResponseWriter, request *http.Request) {
+func Diagnosislist(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/diagnosis.html")
 	tmp.Execute(response, nil)
 }
@@ -124,7 +124,7 @@ func Forgot_password(response http.ResponseWriter, request *http.Request) {
 	tmp.Execute(response, nil)
 }
 
-func Procedure(response http.ResponseWriter, request *http.Request) {
+func Procedurelist(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/procedure.html")
 	tmp.Execute(response, nil)
 }
