@@ -184,6 +184,7 @@ func Create_account(response http.ResponseWriter, request *http.Request) {
 }
 
 func Diagnosislist(response http.ResponseWriter, request *http.Request) {
+	getdiagnosis(response, request)
 	tmp, _ := template.ParseFiles("Template/diagnosis.html")
 	tmp.Execute(response, nil)
 }
@@ -199,6 +200,7 @@ func Forgot_password(response http.ResponseWriter, request *http.Request) {
 }
 
 func Procedurelist(response http.ResponseWriter, request *http.Request) {
+	getprocedure(response, request)
 	tmp, _ := template.ParseFiles("Template/procedure.html")
 	tmp.Execute(response, nil)
 }

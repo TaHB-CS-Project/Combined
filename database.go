@@ -135,7 +135,7 @@ func sethospital_city(id int, name string) {
 	}
 }
 
-func getdiagnosis(w http.Response, r *http.Request) {
+func getdiagnosis(w http.ResponseWriter, r *http.Request) {
 	sqlStatement_get := `
 	SELECT * FROM diagnosis`
 	diagnosis := Diagnosis{}
@@ -154,7 +154,7 @@ func getdiagnosis(w http.Response, r *http.Request) {
 	_ = ioutil.WriteFile("js/diagnosis.json", file, 0644)
 }
 
-func getprocedure(w http.Response, r *http.Request) {
+func getprocedure(w http.ResponseWriter, r *http.Request) {
 	sqlStatement_get := `
 	SELECT * FROM procedure`
 	procedure := Procedure{}

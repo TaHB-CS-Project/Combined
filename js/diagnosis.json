@@ -1,0 +1,58 @@
+[
+ {
+  "Diagnosis_id": 1,
+  "Diagnosis_name": "RDS"
+ },
+ {
+  "Diagnosis_id": 2,
+  "Diagnosis_name": "TTN"
+ },
+ {
+  "Diagnosis_id": 3,
+  "Diagnosis_name": "HIE"
+ },
+ {
+  "Diagnosis_id": 4,
+  "Diagnosis_name": "Perinatal Asphyxia"
+ },
+ {
+  "Diagnosis_id": 5,
+  "Diagnosis_name": "Sepsis"
+ },
+ {
+  "Diagnosis_id": 6,
+  "Diagnosis_name": "Meningitis"
+ },
+ {
+  "Diagnosis_id": 7,
+  "Diagnosis_name": "Jaundice"
+ },
+ {
+  "Diagnosis_id": 8,
+  "Diagnosis_name": "Hypoglycemia"
+ },
+ {
+  "Diagnosis_id": 9,
+  "Diagnosis_name": "Anemia"
+ },
+ {
+  "Diagnosis_id": 10,
+  "Diagnosis_name": "Metabolic Disorder"
+ },
+ {
+  "Diagnosis_id": 11,
+  "Diagnosis_name": "IUGR"
+ },
+ {
+  "Diagnosis_id": 12,
+  "Diagnosis_name": "Congenital Heart Disease"
+ },
+ {
+  "Diagnosis_id": 13,
+  "Diagnosis_name": "NEC"
+ },
+ {
+  "Diagnosis_id": 14,
+  "Diagnosis_name": "Surgical Anomaly"
+ }
+]
