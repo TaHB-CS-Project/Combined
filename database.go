@@ -238,7 +238,6 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
 			record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome})
 	}
-	fmt.Printf("%v", recordarray)
 	file, _ := json.MarshalIndent(recordarray, "", " ")
 	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
 }
