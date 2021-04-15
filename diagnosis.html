@@ -118,87 +118,28 @@
 
 		<div class="diagnosis_table">
 			<div class="diagnosis_table_left table-responsive-sm">
-				<table class="symtpom_table table table-bordered">
-					<thead>
-					  <tr>
-						<th scope="col" class="text-center">Name</th>
-						<th scope="col" class="text-center">Action</th>
-					  </tr>
-					</thead>
-					<tbody id="diagnosisData">
-					  <tr>			
-						<td id="diagnosis">headache</td>
-						<td class="text-center"><button type="button" id="newDiagnosis" class="btn btn-primary">
-							edit
-						  </button></td>
-					  </tr>
-					  <tr>			
-						<td>stomachache</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>fevers</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>fatigue</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>sore throat</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>muscle pain</td>
-						<td class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-							edit
-						  </button></td>
-					  </tr>
-					  
-					</tbody>
-				  </table>
-				</div>
-		
-		
-		<div class="diagnosis_table_right table-responsive-sm">
-				  <table class="symtpom_table table table-bordered ">
-					<thead>
-					  <tr>
-						<th scope="col" class="text-center">Name</th>
-						<th scope="col"class="text-center">Action</th>
-					  </tr>
-					</thead>
-					<tbody id="diagnosisData">
-					  <tr>			
-						<td id="diagnosis">anxiety</td>
-						<td class="text-center"><button type="button" class="btn btn-primary" id="newDiagnosis">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>ear pain</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>breast pain</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>nausea</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>cough</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>neck pain</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  
-					</tbody>
-				  </table>
+				<table id="diagnosis_list_datatable" class="table table-striped" style="width:100%">
+                    <thead>
+                            <tr>
+							  <th scope="col" class="text-center">No.</th>
+                              <th scope="col" class="text-center">Diagnosis</th>
+                              <th scope="col"class="text-center">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody id="diagnosis_list_data">
+                            <tr>			
+						      <td id="diagnosis_id"></td>
+                              <td id="diagnosis"> </td>
+                              <td id="action"></td>
+                            </tr>
+          		           
+                          </tbody>
+                        </table>
 				</div>
 			</div>
-
+		
+		
+	
 
 
 	
@@ -224,6 +165,8 @@
 	  </div>
 
 
+
+
 	  <div class="modal fade" id="newdiagnosis" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 		  <div class="modal-content">
@@ -246,16 +189,8 @@
 		</div>
 	  </div>
 
-
-
-
-
-
-
 	<br><br><br><br><br>
-	<div class="page_indicator_bottom">
-		<a class="float-right next_page" href="diagnosis.html">Next Page <i class="fas fa-arrow-right"></i></a>
-	  </div>
+
 
 
 </main>

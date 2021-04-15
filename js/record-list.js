@@ -38,4 +38,5 @@ $.getJSON("js/record-list.json",
      $('#record_list_datatable').append(info);
     });
 
+    
    
