@@ -15,6 +15,7 @@
 
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 	<link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+    	<link class="stylesheet" href="css/style.css" rel="stylesheet">
 	<script src="js/settings.js"></script>
 	<!-- END SETTINGS -->
 </head>
@@ -57,7 +58,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="classification"><b>Classification</b></label>
-                                                <select class="form-control form-control-lg" id="classification" required >
+                                                <select class="form-control form-control-lg" name="classification" id="classification" required >
                                                     <option>Choose One</option>
                                                     <option>----------</option>
                                                     <option value="Doctor">Doctor</option>
@@ -92,9 +93,9 @@
                                                   </select>
                                             </div>
                                             <br>
-											<div class="text-center mt-3">
-												<a href="index.html" class="btn btn-lg btn-secondary">Back</a>
-                                                <div class="text-center mt-3">
+											<div class="back_register text-center mt-3">
+												<div><a href="index.html" id="btn_back" class="btn btn-lg btn-secondary">Back</a></div>
+                                                <div class="text-center">
                                                     <button type="submit" id="btn_register" class="btn btn-lg btn-primary">Register</button>
                                                 </div>
 											</div>
