@@ -43,12 +43,7 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	department := request.Form.Get("department")
 	supervisor := request.Form.Get("supervisor")
 
-	checkrepassword := password == repassword
-	if !checkrepassword {
-		fmt.Printf("Passwords do not match")
-	}
-
-	passwordhash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	passwordhash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		panic(err)
 	}
@@ -97,17 +92,24 @@ func Login(response http.ResponseWriter, request *http.Request) {
 
 	user := user_entity{}
 
+	//create a bcrypt hash to compare with the database stored hash
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		// TODO: Properly handle error
+		panic(err)
+	}
+
 	sqlStatement := `
 	SELECT password_hash 
 	FROM user_entity 
 	WHERE username=$1`
 	result := db.QueryRow(sqlStatement, username)
-	err := result.Scan(&user.Password_hash)
+	err = result.Scan(&user.Password_hash)
 	if err != nil {
 		fmt.Println("User/Pass was invalid")
 	}
 	//compare the two hashes
-	if check := bcrypt.CompareHashAndPassword([]byte(user.Password_hash), []byte(password)); check != nil {
+	if check := bcrypt.CompareHashAndPassword([]byte(user.Password_hash), []byte(hash)); check != nil {
 		data := map[string]interface{}{
 			"err": "Invalid Username or Password.",
 		}
