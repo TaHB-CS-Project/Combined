@@ -122,82 +122,30 @@
 
 		<div class="procedure_table">
 			<div class="procedure_table_left table-responsive-sm">
-				<table class=" table table-bordered">
-					<thead>
-					  <tr>
-						<th scope="col" class="text-center">Name</th>
-						<th scope="col" class="text-center">Action</th>
-					  </tr>
-					</thead>
-					<tbody id="procedureData">
-					  <tr>			
-						<td id="procedure">appendectomy</td>
-						<td class="text-center"><button type="button" id="newProcedure"class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>catarac surgery</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>c-section</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>ct scan</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>echocardiogram</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>heart bypass surgery</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  
-		
-					</tbody>
-				  </table>
+				<table id="procedure_list_datatable" class="table table-striped" style="width:100%">
+                    <thead>
+                            <tr>
+							  <th scope="col" class="text-center">No.</th>
+                              <th scope="col" class="text-center">Procedure</th>
+                              <th scope="col"class="text-center">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody id="procedure_list_data">
+                            <tr>			
+						      <td id="procedure_id"></td>
+                              <td id="procedure"> </td>
+                              <td id="action"></td>
+                            </tr>
+          		           
+                          </tbody>
+                        </table>
+
+
+
 				</div>
 		
 		
-		<div class="procedure_table_right table-responsive-sm">
-				  <table class="table table-bordered">
-					<thead>
-					  <tr>
-						<th scope="col" class="text-center">Name</th>
-						<th scope="col"class="text-center">Action</th>
-					  </tr>
-					</thead>
-					<tbody id="procedureData">
-					  <tr>			
-						<td>MRI</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>X-Ray</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>ultrasound</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EKG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EMG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EEG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  
-					</tbody>
-				  </table>
-				</div>
+		
 				
 			</div>
 

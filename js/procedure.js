@@ -3,25 +3,6 @@ $('#myModal').on('shown.bs.modal', function () {
   })
   
 
-  var procedure1;
-document.getElementById("newProcedure").onclick=editProcedure;
-
-
-function editProcedure(){
-  procedure1 = prompt("Edit the procedure: ");
-  if(procedure===null){
-   console.log(document.getElementById("procedure").innerHTML);
-  }
-  else{
-  updateProcedure();
-  }
-}
-
-function updateProcedure() {
-  document.getElementById("procedure").innerHTML = procedure1;
-}
-
-
 $(document).ready(function() { 
   $("#searchData").on("keyup", function() { 
       var value = $(this).val().toLowerCase(); 
@@ -31,3 +12,24 @@ $(document).ready(function() {
       }); 
   }); 
 }); 
+
+$.getJSON("js/procedure.json", 
+    function (data) {
+    var info = '';
+    $.each(data, function (key, value) {
+  
+        info += '<tr>';
+        
+        info += '<td>' + 
+            value.Procedure_id+ '</td>';
+
+        info += '<td>' + 
+            value.Procedure_name + '</td>';
+
+        info += '<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>';
+
+        info += '</tr>';
+
+     });
+     $('#procedure_list_datatable').append(info);
+    });
