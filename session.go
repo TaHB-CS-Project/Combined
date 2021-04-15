@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -43,19 +44,30 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	department := request.Form.Get("department")
 	supervisor := request.Form.Get("supervisor")
 
-	passwordhash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	checkrepassword := password == repassword
+	if !checkrepassword {
+		fmt.Printf("Passwords do not match")
+	}
+
+	passwordhash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		panic(err)
 	}
 
 	sqlStatementHospital := `
-	SELECT FROM hospital
+	SELECT hospital_id
+	FROM hospital
 	WHERE hospital_name = $1
-	RETURNING hospital_id
 	`
-	var hospital_id int64
-	error := db.QueryRow(sqlStatementHospital, hospital).Scan(&hospital_id)
-	if error != nil {
+	var hospitalstruct Hospital
+	rows := db.QueryRow(sqlStatementHospital, hospital)
+	error := rows.Scan(&hospitalstruct.Hospital_id)
+	switch error {
+	case sql.ErrNoRows:
+		fmt.Println("No rows were returned!")
+	case nil:
+		fmt.Println(hospitalstruct.Hospital_id)
+	default:
 		panic(error)
 	}
 
@@ -65,21 +77,27 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	RETURNING medicalemployee_id
 	`
 	var medicalemployee_id int64
-	error = db.QueryRow(sqlStatementEmployee, hospital_id, firstname, lastname, department, classification, supervisor).Scan(&medicalemployee_id)
+	error = db.QueryRow(sqlStatementEmployee, hospitalstruct.Hospital_id, firstname, lastname, department, classification, supervisor).Scan(&medicalemployee_id)
 	if error != nil {
 		panic(error)
 	}
 
 	sqlStatementUser := `
-	INSERT INTO user_entity (medicalemployee_id, username, password_hash)
-	VALUES ($1, $2, $3)
+	INSERT INTO user_entity (medicalemployee_id, username, password_hash, role)
+	VALUES ($1, $2, $3, $4)
 	`
 	//	var user_id int64
-	_, error = db.Exec(sqlStatementUser, medicalemployee_id, username, passwordhash)
+	_, error = db.Exec(sqlStatementUser, medicalemployee_id, username, passwordhash, 2)
 	//	error = db.QueryRow(sqlStatementUser,medicalemployee_id, username, passwordhash).Scan(&user_id)
 	if error != nil {
 		panic(error)
 	}
+
+	fmt.Println("Created Account")
+	fmt.Println("Created email:", username)
+	fmt.Println("Created password:", password)
+	http.Redirect(response, request, "/index.html", http.StatusSeeOther)
+
 }
 
 func Login(response http.ResponseWriter, request *http.Request) {
@@ -91,30 +109,30 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	fmt.Println("password:", password)
 
 	user := user_entity{}
-
 	//create a bcrypt hash to compare with the database stored hash
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		// TODO: Properly handle error
-		panic(err)
-	}
+	// hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	// if err != nil {
+	// 	// TODO: Properly handle error
+	// 	panic(err)
+	// }
 
 	sqlStatement := `
 	SELECT password_hash 
 	FROM user_entity 
 	WHERE username=$1`
 	result := db.QueryRow(sqlStatement, username)
-	err = result.Scan(&user.Password_hash)
+	err := result.Scan(&user.Password_hash)
 	if err != nil {
 		fmt.Println("User/Pass was invalid")
 	}
 	//compare the two hashes
-	if check := bcrypt.CompareHashAndPassword([]byte(user.Password_hash), []byte(hash)); check != nil {
-		data := map[string]interface{}{
-			"err": "Invalid Username or Password.",
-		}
+	if check := bcrypt.CompareHashAndPassword([]byte(user.Password_hash), []byte(password)); check != nil {
+		fmt.Println("Invalid Username or Password.")
+		// fmt.Println("Password Hash", []byte(user.Password_hash))
+		// fmt.Println("Hash", []byte(user.Password_hash))
+
 		tmp, _ := template.ParseFiles("Template/index.html")
-		tmp.Execute(response, data)
+		tmp.Execute(response, nil)
 	} else {
 		sessions, _ := store.Get(request, "session")
 		sessions.Values["username"] = username
@@ -155,14 +173,13 @@ func Add_record(response http.ResponseWriter, request *http.Request) {
 	tmp.Execute(response, nil)
 }
 
-func Create_account_registered(response http.ResponseWriter, request *http.Request) {
+func Create_account_registerd(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/create-account_registerd.html")
 	tmp.Execute(response, nil)
 }
 
 func Create_account(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/create-account.html")
-	SignUp(response, request)
 	tmp.Execute(response, nil)
 }
 
