@@ -119,42 +119,22 @@
 	</div>
 		</div>
 
-
 		<div class="procedure_table">
 			<div class="procedure_table_left table-responsive-sm">
-				<table class=" table table-bordered">
+				<table id="procedure_datatable_1" class="table table-bordered">
 					<thead>
 					  <tr>
+						<th scope="col" class="text-center">ID</th>						  
 						<th scope="col" class="text-center">Name</th>
 						<th scope="col" class="text-center">Action</th>
 					  </tr>
 					</thead>
 					<tbody id="procedureData">
 					  <tr>			
-						<td id="procedure">appendectomy</td>
-						<td class="text-center"><button type="button" id="newProcedure"class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>catarac surgery</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>c-section</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>ct scan</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>echocardiogram</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>heart bypass surgery</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  
+						<td id="procedure_id"></td>
+						<td id="procedure_name"></td>
+						<td id="action"></td>
+					  </tr>					  
 		
 					</tbody>
 				  </table>
@@ -162,46 +142,56 @@
 		
 		
 		<div class="procedure_table_right table-responsive-sm">
-				  <table class="table table-bordered">
+				  <table id="procedure_datatable_2" class="table table-bordered">
 					<thead>
 					  <tr>
+						<th scope="col" class="text-center">ID</th>
 						<th scope="col" class="text-center">Name</th>
 						<th scope="col"class="text-center">Action</th>
 					  </tr>
 					</thead>
 					<tbody id="procedureData">
 					  <tr>			
-						<td>MRI</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
+						<td id="procedure_id"></td>
+						<td id="procedure_name"></td>
+						<td id="action"></td>
 					  </tr>
-					  <tr>			
-						<td>X-Ray</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>ultrasound</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EKG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EMG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  <tr>			
-						<td>EEG</td>
-						<td class="text-center"><button type="button" class="btn btn-primary">edit</button></td>
-					  </tr>
-					  
 					</tbody>
 				  </table>
 				</div>
 				
 			</div>
 
+<!--		<div class="procedure_table">
+			<div class="procedure_table_left table-responsive-sm">
+				<table id="procedure_list_datatable" class="table table-striped" style="width:100%">
+                    <thead>
+                            <tr>
+							  <th scope="col" class="text-center">No.</th>
+                              <th scope="col" class="text-center">Procedure</th>
+                              <th scope="col"class="text-center">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody id="procedure_list_data">
+                            <tr>			
+						      <td id="procedure_id"></td>
+                              <td id="procedure"> </td>
+                              <td id="action"></td>
+                            </tr>
+          		           
+                          </tbody>
+                        </table>
 
+
+
+				</div>
+		
+		
+		
+				
+			</div>
+
+-->
 
 			<div class="modal fade" id="newprocedure" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
@@ -214,7 +204,7 @@
 					</div>
 		
 					<div class="modal-body">
-						<input type="diagnosis" class="form-control" placeholder="Enter procedure">
+						<input type="procedure" class="form-control" placeholder="Enter procedure">
 					</div>
 					
 					<div class="modal-footer">
@@ -228,7 +218,7 @@
 
 	<br><br><br><br><br>
     <div class="page_indicator_bottom">
-		<a class="float-right next_page" href="diagnosis.html">Next Page <i class="fas fa-arrow-right"></i></a>
+		<a class="float-right next_page" href="procedure.html">Next Page <i class="fas fa-arrow-right"></i></a>
 	  </div>
 
 
