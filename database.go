@@ -333,9 +333,9 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement_create3 := `
-	SELECT FROM hospital 
-	WHERE hospital_name = $1
-	RETURNING hospital_id`
+	SELECT hospital_id
+	FROM hospital 
+	WHERE hospital_name = $1`
 	var hospital_id int64
 	error = db.QueryRow(sqlStatement_create3, Hospital_name).Scan(&hospital_id)
 	if error != nil {
@@ -344,9 +344,9 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New hospital ID is: ", hospital_id)
 
 	sqlStatement_create4 := `
-	SELECT FROM diagnosis 
-	WHERE diagonsis_name = $1
-	RETURNING diagnosis_id`
+	SELECT diagnosis_id
+	FROM diagnosis 
+	WHERE diagonsis_name = $1`
 	var diagnosis_id int64
 	error = db.QueryRow(sqlStatement_create4, Diagnosis_name).Scan(&diagnosis_id)
 	if error != nil {
@@ -355,9 +355,9 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New diagnosis ID is: ", diagnosis_id)
 
 	sqlStatement_create5 := `
-	SELECT FROM procedure 
-	WHERE procedure_name = $1
-	RETURNING procedure_id`
+	SELECT procedure_id
+	FROM procedure 
+	WHERE procedure_name = $1`
 	var procedure_id int64
 	error = db.QueryRow(sqlStatement_create5, Procedure_name).Scan(&procedure_id)
 	if error != nil {
@@ -366,10 +366,9 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New procedure ID is: ", procedure_id)
 
 	sqlStatement_create6 := `
-	SELECT FROM user_entity
-	WHERE username = $1
-	RETURNING medicalemployee_id`
-
+	SELECT medicalemployee_id
+	FROM user_entity
+	WHERE username = $1`
 	var Medical_employee_id int64
 	sessions, _ := store.Get(r, "session")
 
