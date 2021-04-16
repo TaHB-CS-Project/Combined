@@ -179,6 +179,7 @@ func Create_account_registerd(response http.ResponseWriter, request *http.Reques
 }
 
 func Create_account(response http.ResponseWriter, request *http.Request) {
+	gethospital_list(response, request)
 	tmp, _ := template.ParseFiles("Template/create-account.html")
 	tmp.Execute(response, nil)
 }

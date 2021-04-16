@@ -20,6 +20,10 @@ type Hospital struct {
 	Hospital_name    string `json:hospital_name`
 }
 
+type Hospitallist struct {
+	Hospital_name string `json:hospital_name`
+}
+
 type MedicalEmployee struct {
 	Medicalemployee_id             int            `json:staff_id`
 	Hospital_id                    int            `json:hospital_id`
@@ -241,6 +245,26 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%v", recordarray)
 	file, _ := json.MarshalIndent(recordarray, "", " ")
 	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
+}
+
+func gethospital_list(w http.ResponseWriter, r *http.Request) {
+	sqlStatement_get := `
+	SELECT hospital_name 
+	FROM hospital`
+	hospital := Hospitallist{}
+	var hospitalarray []Hospitallist
+	row, _ := db.Query(sqlStatement_get)
+	defer row.Close()
+	for row.Next() {
+		err := row.Scan(&hospital.Hospital_name)
+		if err != nil {
+			panic(err)
+		}
+		hospitalarray = append(hospitalarray, Hospitallist{hospital.Hospital_name})
+	}
+	fmt.Printf("%v", hospitalarray)
+	file, _ := json.MarshalIndent(hospitalarray, "", " ")
+	_ = ioutil.WriteFile("js/hospitalnamelist.json", file, 0644)
 }
 
 func getstaff_list(w http.ResponseWriter, r *http.Request) {
