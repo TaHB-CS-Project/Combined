@@ -206,7 +206,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		SELECT medicalemployee_firstname
 		FROM medical_employee 
 		WHERE medicalemployee_id = $1`
-		error1 := db.QueryRow(sqlStatement_get1, record.Hospital_id).Scan(&record.Medicalemployee_firstname)
+		error1 := db.QueryRow(sqlStatement_get1, record.Medical_employee_id).Scan(&record.Medicalemployee_firstname)
 		if error1 != nil {
 			panic(error1)
 		}
@@ -215,7 +215,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		SELECT medicalemployee_lastname
 		FROM medical_employee 
 		WHERE medicalemployee_id = $1`
-		error2 := db.QueryRow(sqlStatement_get2, record.Hospital_id).Scan(&record.Medicalemployee_lastname)
+		error2 := db.QueryRow(sqlStatement_get2, record.Medical_employee_id).Scan(&record.Medicalemployee_lastname)
 		if error2 != nil {
 			panic(error2)
 		}
