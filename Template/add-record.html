@@ -104,7 +104,7 @@
 <br>
 <br>
 
-<form>
+<form action="/create_record" method="POST" id="create_record_form">
     <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Hospital</label>
         <div class="col-sm-10">
@@ -297,6 +297,7 @@
   <script>
       $( document ).ready(function() {
         var value = $("#record_date input").datepicker("getDate");
+        console.log(typeof value);
           $("#record_date").datepicker({ 
               autoclose : true
           });
