@@ -418,6 +418,8 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New record ID is: ", record_id)
 
 	fmt.Printf("\nSuccessfully created record\n")
+
+	http.Redirect(w, r, "/dashboard.html", http.StatusSeeOther)
 }
 
 // func gethospital_address(id int) {
