@@ -347,28 +347,41 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nStart Date: %v\n", Start_datetime)
 	fmt.Printf("\nBirthday Date: %v\n", Patient_birthday)
 
-	//the data names is the DATABASES name
-	sqlStatement_create := `
-	INSERT INTO patient (patient_birthday, patient_sex, patient_weightlbs)
-	VALUES ($1, $2, $3)
-	RETURNING patient_id`
-	var patient_id int64
-	//the names for the record.query is the STRUCT names
-	error := db.QueryRow(sqlStatement_create, Patient_birthday, Patient_sex, Patient_weightlbs).Scan(&patient_id)
-	if error != nil {
-		panic(error)
-	}
-
 	sqlStatement_create3 := `
 	SELECT hospital_id
 	FROM hospital 
 	WHERE hospital_name = $1`
 	var hospital_id int64
-	error = db.QueryRow(sqlStatement_create3, Hospital_name).Scan(&hospital_id)
+	error := db.QueryRow(sqlStatement_create3, Hospital_name).Scan(&hospital_id)
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New hospital ID is: ", hospital_id)
+	//fmt.Println("New hospital ID is: ", hospital_id)
+
+	sqlStatement_create6 := `
+	SELECT medicalemployee_id
+	FROM user_entity
+	WHERE username = $1`
+	var Medical_employee_id int64
+	sessions, _ := store.Get(r, "session")
+
+	error = db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+
+	//the data names is the DATABASES name
+	sqlStatement_create := `
+	INSERT INTO patient (hospital_id, medicalemployee_id, patient_birthday, patient_sex, patient_weightlbs)
+	VALUES ($1, $2, $3, $4, $5)
+	RETURNING patient_id`
+	var patient_id int64
+	//the names for the record.query is the STRUCT names
+	error = db.QueryRow(sqlStatement_create, hospital_id, Medical_employee_id, Patient_birthday, Patient_sex, Patient_weightlbs).Scan(&patient_id)
+	if error != nil {
+		panic(error)
+	}
 
 	sqlStatement_create4 := `
 	SELECT diagnosis_id
@@ -392,23 +405,10 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("New procedure ID is: ", procedure_id)
 
-	sqlStatement_create6 := `
-	SELECT medicalemployee_id
-	FROM user_entity
-	WHERE username = $1`
-	var Medical_employee_id int64
-	sessions, _ := store.Get(r, "session")
-
-	error = db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
-	if error != nil {
-		panic(error)
-	}
-	fmt.Println("New medical employee ID is: ", Medical_employee_id)
-
 	//final statement to make record with all the foreign keys available
 	sqlStatement_create2 := `
 	INSERT INTO record (medicalemployee_id, procedure_id, hospital_id, diagnosis_id, patient_id, start_datetime, special_notes, outcome)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 	RETURNING record_id`
 	var record_id int64
 	error1 := db.QueryRow(sqlStatement_create2, Medical_employee_id, procedure_id, hospital_id, diagnosis_id, patient_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
