@@ -38,7 +38,6 @@ type Record struct {
 	Record_id           int            `json:record_id`
 	Medical_employee_id int            `json:medicalemployee_id`
 	Start_datetime      time.Time      `json:starttime`
-	End_datetime        time.Time      `json:endtime`
 	Special_notes       sql.NullString `json:special_notes`
 	Outcome             string         `json:result`
 
@@ -188,7 +187,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	defer row.Close()
 	for row.Next() {
 		err := row.Scan(&record.Record_id, &record.Hospital_id, &record.Medical_employee_id, &record.Patient_id, &record.Procedure_id, &record.Diagnosis_id,
-			&record.Start_datetime, &record.End_datetime, &record.Special_notes, &record.Outcome)
+			&record.Start_datetime, &record.Special_notes, &record.Outcome)
 		if err != nil {
 			panic(err)
 		}
