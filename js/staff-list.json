@@ -1,5 +1,17 @@
 [
  {
+  "Medicalemployee_id": 17,
+  "Hospital_id": 10,
+  "Medicalemployee_firstname": "Tester",
+  "Medicalemployee_lastname": "Test",
+  "Medicalemployee_department": "Department 2",
+  "Medicalemployee_classification": "Trainee",
+  "Medicalemployee_supervisor": {
+   "String": "Test Supervisor",
+   "Valid": true
+  }
+ },
+ {
   "Medicalemployee_id": 16,
   "Hospital_id": 4,
   "Medicalemployee_firstname": "anna",
@@ -101,18 +113,6 @@
   "Medicalemployee_firstname": "Stephen",
   "Medicalemployee_lastname": "Olsen",
   "Medicalemployee_department": "Obstetrics",
-  "Medicalemployee_classification": "Surgeon",
-  "Medicalemployee_supervisor": {
-   "String": "",
-   "Valid": false
-  }
- },
- {
-  "Medicalemployee_id": 5,
-  "Hospital_id": 1,
-  "Medicalemployee_firstname": "Joe",
-  "Medicalemployee_lastname": "Hunt",
-  "Medicalemployee_department": "Cancer Center",
   "Medicalemployee_classification": "Surgeon",
   "Medicalemployee_supervisor": {
    "String": "",
