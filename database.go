@@ -206,7 +206,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		SELECT medicalemployee_firstname
 		FROM medical_employee 
 		WHERE medicalemployee_id = $1`
-		error1 := db.QueryRow(sqlStatement_get1, record.Hospital_id).Scan(&record.Medicalemployee_firstname)
+		error1 := db.QueryRow(sqlStatement_get1, record.Medical_employee_id).Scan(&record.Medicalemployee_firstname)
 		if error1 != nil {
 			panic(error1)
 		}
@@ -215,7 +215,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		SELECT medicalemployee_lastname
 		FROM medical_employee 
 		WHERE medicalemployee_id = $1`
-		error2 := db.QueryRow(sqlStatement_get2, record.Hospital_id).Scan(&record.Medicalemployee_lastname)
+		error2 := db.QueryRow(sqlStatement_get2, record.Medical_employee_id).Scan(&record.Medicalemployee_lastname)
 		if error2 != nil {
 			panic(error2)
 		}
@@ -341,10 +341,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	Outcome := r.Form.Get("result")
 	Special_notes := r.Form.Get("special_notes")
 	//for testing
-	log.Printf("Received: %v\n", user)
-
-	fmt.Printf("\nStart Date: %v\n", Start_datetime)
-	fmt.Printf("\nBirthday Date: %v\n", Patient_birthday)
+	//log.Printf("Received: %v\n", user)
 
 	sqlStatement_create3 := `
 	SELECT hospital_id
@@ -368,7 +365,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+	fmt.Println("Medical employee ID is: ", Medical_employee_id)
 
 	//the data names is the DATABASES name
 	sqlStatement_create := `
@@ -391,7 +388,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New diagnosis ID is: ", diagnosis_id)
+	fmt.Println("Diagnosis ID is: ", diagnosis_id)
 
 	sqlStatement_create5 := `
 	SELECT procedure_id
@@ -402,7 +399,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New procedure ID is: ", procedure_id)
+	fmt.Println("Procedure ID is: ", procedure_id)
 
 	//final statement to make record with all the foreign keys available
 	sqlStatement_create2 := `
@@ -414,7 +411,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	if error1 != nil {
 		panic(error1)
 	}
-	fmt.Println("New record ID is: ", record_id)
+	fmt.Println("Record ID is: ", record_id)
 
 	fmt.Printf("\nSuccessfully created record\n")
 
