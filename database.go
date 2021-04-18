@@ -153,7 +153,7 @@ func getdiagnosis(w http.ResponseWriter, r *http.Request) {
 		}
 		diagnosisarray = append(diagnosisarray, Diagnosis{diagnosis.Diagnosis_id, diagnosis.Diagnosis_name})
 	}
-	fmt.Printf("%v", diagnosisarray)
+	//fmt.Printf("%v", diagnosisarray)
 	file, _ := json.MarshalIndent(diagnosisarray, "", " ")
 	_ = ioutil.WriteFile("js/diagnosis.json", file, 0644)
 }
@@ -172,7 +172,7 @@ func getprocedure(w http.ResponseWriter, r *http.Request) {
 		}
 		procedurearray = append(procedurearray, Procedure{procedure.Procedure_id, procedure.Procedure_name})
 	}
-	fmt.Printf("%v", procedurearray)
+	//fmt.Printf("%v", procedurearray)
 	file, _ := json.MarshalIndent(procedurearray, "", " ")
 	_ = ioutil.WriteFile("js/procedure.json", file, 0644)
 }
@@ -262,7 +262,7 @@ func gethospital_list(w http.ResponseWriter, r *http.Request) {
 		}
 		hospitalarray = append(hospitalarray, Hospitallist{hospital.Hospital_name})
 	}
-	fmt.Printf("%v", hospitalarray)
+	//fmt.Printf("%v", hospitalarray)
 	file, _ := json.MarshalIndent(hospitalarray, "", " ")
 	_ = ioutil.WriteFile("js/hospitalnamelist.json", file, 0644)
 }
@@ -333,16 +333,19 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	Hospital_name := r.Form.Get("hospital")
-	Start_datetime := r.Form.Get("date")
+	Start_datetime := r.Form.Get("record_date")
 	Patient_sex := r.Form.Get("gender")
 	Patient_weightlbs := r.Form.Get("weight")
-	Patient_birthday := r.Form.Get("dob_date")
+	Patient_birthday := r.Form.Get("record_birthday")
 	Diagnosis_name := r.Form.Get("diagnosis")
 	Procedure_name := r.Form.Get("procedure")
 	Outcome := r.Form.Get("result")
 	Special_notes := r.Form.Get("special_notes")
 	//for testing
 	log.Printf("Received: %v\n", user)
+
+	fmt.Printf("\nStart Date: %v\n", Start_datetime)
+	fmt.Printf("\nBirthday Date: %v\n", Patient_birthday)
 
 	//the data names is the DATABASES name
 	sqlStatement_create := `

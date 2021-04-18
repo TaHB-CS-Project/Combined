@@ -168,7 +168,9 @@ func Staff_list(response http.ResponseWriter, request *http.Request) {
 }
 
 func Add_record(response http.ResponseWriter, request *http.Request) {
-	//create_record(response, request)
+	gethospital_list(response, request)
+	getdiagnosis(response, request)
+	getprocedure(response, request)
 	tmp, _ := template.ParseFiles("Template/add-record.html")
 	tmp.Execute(response, nil)
 }

@@ -33,6 +33,7 @@ func main() {
 	http.HandleFunc("/dashboard.html", Dashboard)
 	http.HandleFunc("/staff-list.html", Staff_list)
 	http.HandleFunc("/add-record.html", Add_record)
+	http.HandleFunc("/create_record", create_record)
 	http.HandleFunc("/record-draft.html", Record_draft)
 	http.HandleFunc("/record-list.html", Record_list)
 	http.HandleFunc("/create-account_registerd.html", Create_account_registerd)
