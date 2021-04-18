@@ -22,4 +22,3 @@ function (data) {
     $("#procedure").append("<option value='" + value.Procedure_id + "'>" + value.Procedure_name + "</option>");
     });
 });
-
