@@ -1,5 +1,17 @@
 [
  {
+  "Medicalemployee_id": 16,
+  "Hospital_id": 4,
+  "Medicalemployee_firstname": "anna",
+  "Medicalemployee_lastname": "lee",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "Doctor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": true
+  }
+ },
+ {
   "Medicalemployee_id": 15,
   "Hospital_id": 11,
   "Medicalemployee_firstname": "Jaewon",
@@ -102,18 +114,6 @@
   "Medicalemployee_lastname": "Hunt",
   "Medicalemployee_department": "Cancer Center",
   "Medicalemployee_classification": "Surgeon",
-  "Medicalemployee_supervisor": {
-   "String": "",
-   "Valid": false
-  }
- },
- {
-  "Medicalemployee_id": 4,
-  "Hospital_id": 2,
-  "Medicalemployee_firstname": "Ann",
-  "Medicalemployee_lastname": "Young",
-  "Medicalemployee_department": "Neurology",
-  "Medicalemployee_classification": "Medical Assistant",
   "Medicalemployee_supervisor": {
    "String": "",
    "Valid": false

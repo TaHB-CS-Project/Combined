@@ -373,7 +373,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	sqlStatement_create4 := `
 	SELECT diagnosis_id
 	FROM diagnosis 
-	WHERE diagonsis_name = $1`
+	WHERE diagnosis_name = $1`
 	var diagnosis_id int64
 	error = db.QueryRow(sqlStatement_create4, Diagnosis_name).Scan(&diagnosis_id)
 	if error != nil {
