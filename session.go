@@ -186,6 +186,11 @@ func Create_account(response http.ResponseWriter, request *http.Request) {
 	tmp.Execute(response, nil)
 }
 
+func Create_account_second(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/create-account-second.html")
+	tmp.Execute(response, nil)
+}
+
 func Diagnosislist(response http.ResponseWriter, request *http.Request) {
 	getdiagnosis(response, request)
 	tmp, _ := template.ParseFiles("Template/diagnosis.html")
