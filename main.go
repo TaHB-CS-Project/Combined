@@ -45,7 +45,7 @@ func main() {
 	http.HandleFunc("/record-draft.html", Record_draft)
 	http.HandleFunc("/record-list.html", Record_list)
 	http.HandleFunc("/create-account-second.html", Create_account_second)
-	http.HandleFunc("/create-account-second", Hospitaladmin_signup)
+	http.HandleFunc("/create_account_second", Hospitaladmin_signup)
 
 	http.ListenAndServe(":8090", nil)
 	// http.HandleFunc("/login", SessionLogin)
