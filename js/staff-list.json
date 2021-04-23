@@ -1,5 +1,41 @@
 [
  {
+  "Medicalemployee_id": 1,
+  "Hospital_id": 5,
+  "Medicalemployee_firstname": "Stephana",
+  "Medicalemployee_lastname": "Elston",
+  "Medicalemployee_department": "Cardiology",
+  "Medicalemployee_classification": "Doctor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 2,
+  "Hospital_id": 5,
+  "Medicalemployee_firstname": "Mike",
+  "Medicalemployee_lastname": "Zhao",
+  "Medicalemployee_department": "Coronary Care",
+  "Medicalemployee_classification": "Nurse",
+  "Medicalemployee_supervisor": {
+   "String": "Han Solo",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 3,
+  "Hospital_id": 3,
+  "Medicalemployee_firstname": "Danny",
+  "Medicalemployee_lastname": "Yoo",
+  "Medicalemployee_department": "Intensive Care",
+  "Medicalemployee_classification": "Nurse",
+  "Medicalemployee_supervisor": {
+   "String": "MF Doom",
+   "Valid": true
+  }
+ },
+ {
   "Medicalemployee_id": 4,
   "Hospital_id": 2,
   "Medicalemployee_firstname": "Ann",
@@ -9,6 +45,150 @@
   "Medicalemployee_supervisor": {
    "String": "",
    "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 5,
+  "Hospital_id": 1,
+  "Medicalemployee_firstname": "Joe",
+  "Medicalemployee_lastname": "Hunt",
+  "Medicalemployee_department": "Cancer Center",
+  "Medicalemployee_classification": "Surgeon",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 6,
+  "Hospital_id": 6,
+  "Medicalemployee_firstname": "Stephen",
+  "Medicalemployee_lastname": "Olsen",
+  "Medicalemployee_department": "Obstetrics",
+  "Medicalemployee_classification": "Surgeon",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 7,
+  "Hospital_id": 7,
+  "Medicalemployee_firstname": "Herman",
+  "Medicalemployee_lastname": "Mill",
+  "Medicalemployee_department": "Urology",
+  "Medicalemployee_classification": "Physician",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 8,
+  "Hospital_id": 8,
+  "Medicalemployee_firstname": "Alex",
+  "Medicalemployee_lastname": "Maker",
+  "Medicalemployee_department": "Gastroenterology",
+  "Medicalemployee_classification": "Physician",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": false
+  }
+ },
+ {
+  "Medicalemployee_id": 9,
+  "Hospital_id": 9,
+  "Medicalemployee_firstname": "Blake",
+  "Medicalemployee_lastname": "Even",
+  "Medicalemployee_department": "Dermatology",
+  "Medicalemployee_classification": "Medical Intern",
+  "Medicalemployee_supervisor": {
+   "String": "Jesus Chavez",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 10,
+  "Hospital_id": 10,
+  "Medicalemployee_firstname": "Organa",
+  "Medicalemployee_lastname": "Leia",
+  "Medicalemployee_department": "Family Medicine",
+  "Medicalemployee_classification": "Medical Intern",
+  "Medicalemployee_supervisor": {
+   "String": "Alex Larsky",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 13,
+  "Hospital_id": 11,
+  "Medicalemployee_firstname": "Daniel",
+  "Medicalemployee_lastname": "Yoo",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "",
+  "Medicalemployee_supervisor": {
+   "String": "Joy Han",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 14,
+  "Hospital_id": 11,
+  "Medicalemployee_firstname": "Anna",
+  "Medicalemployee_lastname": "Lee",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "",
+  "Medicalemployee_supervisor": {
+   "String": "Anna",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 15,
+  "Hospital_id": 11,
+  "Medicalemployee_firstname": "Jaewon",
+  "Medicalemployee_lastname": "han",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "Doctor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 16,
+  "Hospital_id": 4,
+  "Medicalemployee_firstname": "anna",
+  "Medicalemployee_lastname": "lee",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "Doctor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 17,
+  "Hospital_id": 10,
+  "Medicalemployee_firstname": "Tester",
+  "Medicalemployee_lastname": "Test",
+  "Medicalemployee_department": "Department 2",
+  "Medicalemployee_classification": "Trainee",
+  "Medicalemployee_supervisor": {
+   "String": "Test Supervisor",
+   "Valid": true
+  }
+ },
+ {
+  "Medicalemployee_id": 18,
+  "Hospital_id": 11,
+  "Medicalemployee_firstname": "Prakash",
+  "Medicalemployee_lastname": "Kabbur",
+  "Medicalemployee_department": "Department 1",
+  "Medicalemployee_classification": "Doctor",
+  "Medicalemployee_supervisor": {
+   "String": "",
+   "Valid": true
   }
  },
  {

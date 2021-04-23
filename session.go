@@ -212,6 +212,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		}
 
 		sessions.Values["role"] = user.Role
+		sessions.Save(request, response)
 
 		if sessions.Values["role"] == 0 {
 			fmt.Println("Got to dashboard with role 0")
