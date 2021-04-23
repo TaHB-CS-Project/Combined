@@ -180,7 +180,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nGot to getrecord_list\n")
 	sqlStatement_get := `
 		SELECT * FROM record 
-		ORDER BY record_id DESC LIMIT 10`
+		ORDER BY record_id`
 	record := Record{}
 	var recordarray []Recordlist
 	row, _ := db.Query(sqlStatement_get)
@@ -241,7 +241,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
 			record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome})
 	}
-	fmt.Printf("%v", recordarray)
+	//fmt.Printf("%v", recordarray)
 	file, _ := json.MarshalIndent(recordarray, "", " ")
 	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
 }
@@ -268,25 +268,49 @@ func gethospital_list(w http.ResponseWriter, r *http.Request) {
 
 func getstaff_list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	sqlStatement_get := `
-		SELECT * FROM medical_employee 
-		ORDER BY medicalemployee_id DESC LIMIT 10`
+	sessions, _ := store.Get(r, "session")
+
 	medicalemployee := MedicalEmployee{}
 	var medicalemployeearray []MedicalEmployee
-	row, _ := db.Query(sqlStatement_get)
-	defer row.Close()
-	for row.Next() {
+	if sessions.Values["role"] == 0 {
+		sqlStatement_get := `
+		SELECT * FROM medical_employee 
+		ORDER BY medicalemployee_id`
+		row, _ := db.Query(sqlStatement_get)
+		defer row.Close()
+		for row.Next() {
 
-		err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Hospital_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
-			&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification, &medicalemployee.Medicalemployee_supervisor)
-		if err != nil {
-			panic(err)
+			err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Hospital_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
+				&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification, &medicalemployee.Medicalemployee_supervisor)
+			if err != nil {
+				panic(err)
+			}
+			medicalemployeearray = append(medicalemployeearray, MedicalEmployee{medicalemployee.Medicalemployee_id, medicalemployee.Hospital_id,
+				medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
+				medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
+			//fmt.Println(medicalemployeearray)
 		}
-		medicalemployeearray = append(medicalemployeearray, MedicalEmployee{medicalemployee.Medicalemployee_id, medicalemployee.Hospital_id,
-			medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
-			medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
-		//fmt.Println(medicalemployeearray)
+	} else {
+		sqlStatement_get := `
+		SELECT * FROM medical_employee 
+		ORDER BY medicalemployee_id
+		WHERE hospital_id = $1`
+		row, _ := db.Query(sqlStatement_get, medicalemployee.Hospital_id)
+		defer row.Close()
+		for row.Next() {
+
+			err := row.Scan(&medicalemployee.Medicalemployee_id, &medicalemployee.Hospital_id, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname,
+				&medicalemployee.Medicalemployee_department, &medicalemployee.Medicalemployee_classification, &medicalemployee.Medicalemployee_supervisor)
+			if err != nil {
+				panic(err)
+			}
+			medicalemployeearray = append(medicalemployeearray, MedicalEmployee{medicalemployee.Medicalemployee_id, medicalemployee.Hospital_id,
+				medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
+				medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
+			//fmt.Println(medicalemployeearray)
+		}
 	}
+
 	//fmt.Printf("%v", medicalemployeearray)
 	file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
 	_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
