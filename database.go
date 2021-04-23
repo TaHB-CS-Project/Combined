@@ -270,9 +270,9 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	sessions, _ := store.Get(r, "session")
 
-	medicalemployee := MedicalEmployee{}
-	var medicalemployeearray []MedicalEmployee
 	if sessions.Values["role"] == 0 {
+		medicalemployee := MedicalEmployee{}
+		var medicalemployeearray []MedicalEmployee
 		sqlStatement_get := `
 		SELECT * FROM medical_employee 
 		ORDER BY medicalemployee_id`
@@ -289,13 +289,40 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 				medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
 				medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
 			//fmt.Println(medicalemployeearray)
+			//fmt.Printf("%v", medicalemployeearray)
+			file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
+			_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
 		}
 	} else {
+		sqlStatement_create6 := `
+		SELECT medicalemployee_id
+		FROM user_entity
+		WHERE username = $1`
+		var Medical_employee_id int64
+		sessions, _ := store.Get(r, "session")
+
+		error := db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
+		if error != nil {
+			panic(error)
+		}
+
+		medicalemployee := MedicalEmployee{}
+		var medicalemployeearray []MedicalEmployee
+
+		sqlStatement_gethospital := `
+		SELECT hospital_id
+		FROM medical_employee
+		WHERE medicalemployee_id = $1`
+		var hospital_id int64
+		error = db.QueryRow(sqlStatement_gethospital, Medical_employee_id).Scan(&hospital_id)
+		if error != nil {
+			panic(error)
+		}
+
 		sqlStatement_get := `
-		SELECT * FROM medical_employee 
-		ORDER BY medicalemployee_id
+		SELECT * FROM medical_employee
 		WHERE hospital_id = $1`
-		row, _ := db.Query(sqlStatement_get, medicalemployee.Hospital_id)
+		row, _ := db.Query(sqlStatement_get, hospital_id)
 		defer row.Close()
 		for row.Next() {
 
@@ -308,12 +335,12 @@ func getstaff_list(w http.ResponseWriter, r *http.Request) {
 				medicalemployee.Medicalemployee_firstname, medicalemployee.Medicalemployee_lastname, medicalemployee.Medicalemployee_department,
 				medicalemployee.Medicalemployee_classification, medicalemployee.Medicalemployee_supervisor})
 			//fmt.Println(medicalemployeearray)
+			//fmt.Printf("%v", medicalemployeearray)
+			file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
+			_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
 		}
 	}
 
-	//fmt.Printf("%v", medicalemployeearray)
-	file, _ := json.MarshalIndent(medicalemployeearray, "", " ")
-	_ = ioutil.WriteFile("js/staff-list.json", file, 0644)
 }
 
 func set_record(w http.ResponseWriter, r *http.Request) {
