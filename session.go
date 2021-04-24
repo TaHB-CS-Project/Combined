@@ -26,10 +26,8 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	repassword := request.Form.Get("psw-repeat")
 	firstname := request.Form.Get("fname")
 	lastname := request.Form.Get("lname")
-	classification := request.Form.Get("classification")
 	hospital := request.Form.Get("hospital")
 	department := request.Form.Get("department")
-	supervisor := request.Form.Get("supervisor")
 
 	checkrepassword := password == repassword
 	if !checkrepassword {
@@ -59,7 +57,7 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	}
 
 	sqlStatementEmployee := `
-	INSERT INTO medical_employee (hospital_id, medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification, medicalemployee_supervisor)
+	INSERT INTO medical_employee (hospital_id, medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification)
 	VALUES ($1, $2, $3, $4, $5)
 	RETURNING medicalemployee_id
 	`
