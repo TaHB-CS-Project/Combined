@@ -18,13 +18,6 @@ type user_entity struct {
 
 var store = sessions.NewCookieStore([]byte("session"))
 
-func Index(response http.ResponseWriter, request *http.Request) {
-
-	tmp, _ := template.ParseFiles("Template/index.html")
-	tmp.Execute(response, nil)
-
-}
-
 func SignUp(response http.ResponseWriter, request *http.Request) {
 	request.ParseForm()
 	username := request.Form.Get("email")
@@ -216,13 +209,13 @@ func Login(response http.ResponseWriter, request *http.Request) {
 
 		if sessions.Values["role"] == 0 {
 			fmt.Println("Got to dashboard with role 0")
-			http.Redirect(response, request, "/dashboard.html", http.StatusSeeOther)
+			http.Redirect(response, request, "/admin_dashboard.html", http.StatusSeeOther)
 		} else if sessions.Values["role"] == 1 {
 			fmt.Println("Got to dashboard with role 1")
-			http.Redirect(response, request, "/dashboard.html", http.StatusSeeOther)
+			http.Redirect(response, request, "/hospital_admin_dashboard.html", http.StatusSeeOther)
 		} else {
 			fmt.Println("Got to dashboard with role 2")
-			http.Redirect(response, request, "/dashboard.html", http.StatusSeeOther)
+			http.Redirect(response, request, "/user_dashboard.html", http.StatusSeeOther)
 		}
 	}
 }
@@ -234,8 +227,16 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	sessions.Options.MaxAge = -1
 	//save the new session
 	sessions.Save(request, response)
+	response.Header().Set("Cache-Control", "no-cache, private, max-age=0")
+	response.Header().Set("Pragma", "no-cache")
+	response.Header().Set("X-Accel-Expires", "0")
 	//redirect the session
 	http.Redirect(response, request, "/signin", http.StatusSeeOther)
+}
+
+func Index(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/index.html")
+	tmp.Execute(response, nil)
 }
 
 func Dashboard(response http.ResponseWriter, request *http.Request) {
@@ -304,4 +305,152 @@ func Record_list(response http.ResponseWriter, request *http.Request) {
 	getrecord_list(response, request)
 	tmp, _ := template.ParseFiles("Template/record-list.html")
 	tmp.Execute(response, nil)
+}
+
+//User Pages
+///////////////////////////////////////////////////////////////////////////////////////
+
+func user_add_record(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		tmp, _ := template.ParseFiles("Template/user_add-record.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func user_dashboard(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		tmp, _ := template.ParseFiles("Template/user_dashboard.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func user_diagnosis(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		getdiagnosis(response, request)
+		tmp, _ := template.ParseFiles("Template/user_diagnosis.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func user_procedure(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		getprocedure(response, request)
+		tmp, _ := template.ParseFiles("Template/user_procedure.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func user_record_draft(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		tmp, _ := template.ParseFiles("Template/user_record-draft.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func user_record_list(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 2 {
+		getrecord_list(response, request)
+		tmp, _ := template.ParseFiles("Template/user_record-list.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+//Hospital Admin Pages
+///////////////////////////////////////////////////////////////////////////////////////
+
+func hospital_admin_dashboard(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 1 {
+		tmp, _ := template.ParseFiles("Template/hospital_admin_dashboard.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func hospital_admin_diagnosis(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 1 {
+		getdiagnosis(response, request)
+		tmp, _ := template.ParseFiles("Template/hospital_admin_diagnosis.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func hospital_admin_procedure(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 1 {
+		getprocedure(response, request)
+		tmp, _ := template.ParseFiles("Template/hospital_admin_procedure.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func hospital_admin_record_list(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 1 {
+		getrecord_list(response, request)
+		tmp, _ := template.ParseFiles("Template/hospital_admin_record-list.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func hospital_admin_staff_list(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 1 {
+		getstaff_list(response, request)
+		tmp, _ := template.ParseFiles("Template/hospital_admin_staff-list.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+//Admin Pages
+///////////////////////////////////////////////////////////////////////////////////////
+
+func admin_dashboard(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 0 {
+		tmp, _ := template.ParseFiles("Template/admin_dashboard.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func admin_diagnosis(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 0 {
+		getdiagnosis(response, request)
+		tmp, _ := template.ParseFiles("Template/admin_diagnosis.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func admin_procedure(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 0 {
+		getprocedure(response, request)
+		tmp, _ := template.ParseFiles("Template/admin_procedure.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func admin_record_list(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 0 {
+		getrecord_list(response, request)
+		tmp, _ := template.ParseFiles("Template/admin_record-list.html")
+		tmp.Execute(response, nil)
+	}
+}
+
+func admin_staff_list(response http.ResponseWriter, request *http.Request) {
+	sessions, _ := store.Get(request, "session")
+	if sessions.Values["role"] == 0 {
+		getstaff_list(response, request)
+		tmp, _ := template.ParseFiles("Template/admin_staff-list.html")
+		tmp.Execute(response, nil)
+	}
 }
