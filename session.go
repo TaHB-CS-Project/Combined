@@ -60,11 +60,11 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 
 	sqlStatementEmployee := `
 	INSERT INTO medical_employee (hospital_id, medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification, medicalemployee_supervisor)
-	VALUES ($1, $2, $3, $4, $5, $6)
+	VALUES ($1, $2, $3, $4, $5)
 	RETURNING medicalemployee_id
 	`
 	var medicalemployee_id int64
-	error = db.QueryRow(sqlStatementEmployee, hospitalstruct.Hospital_id, firstname, lastname, department, classification, supervisor).Scan(&medicalemployee_id)
+	error = db.QueryRow(sqlStatementEmployee, hospitalstruct.Hospital_id, firstname, lastname, department, "Admin").Scan(&medicalemployee_id)
 	if error != nil {
 		panic(error)
 	}
