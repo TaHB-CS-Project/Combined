@@ -25,10 +25,8 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	repassword := request.Form.Get("psw-repeat")
 	firstname := request.Form.Get("fname")
 	lastname := request.Form.Get("lname")
-	//classification := request.Form.Get("classification")
 	hospital := request.Form.Get("hospital")
 	department := request.Form.Get("department")
-	//supervisor := request.Form.Get("supervisor")
 
 	checkrepassword := password == repassword
 	if !checkrepassword {
