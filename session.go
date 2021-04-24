@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
@@ -26,15 +25,17 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	repassword := request.Form.Get("psw-repeat")
 	firstname := request.Form.Get("fname")
 	lastname := request.Form.Get("lname")
-	classification := request.Form.Get("classification")
+	//classification := request.Form.Get("classification")
 	hospital := request.Form.Get("hospital")
 	department := request.Form.Get("department")
-	supervisor := request.Form.Get("supervisor")
+	//supervisor := request.Form.Get("supervisor")
 
 	checkrepassword := password == repassword
 	if !checkrepassword {
 		fmt.Printf("Passwords do not match")
 	}
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
 
 	passwordhash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -59,7 +60,7 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 	}
 
 	sqlStatementEmployee := `
-	INSERT INTO medical_employee (hospital_id, medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification, medicalemployee_supervisor)
+	INSERT INTO medical_employee (hospital_id, medicalemployee_firstname, medicalemployee_lastname, medicalemployee_department, medicalemployee_classification)
 	VALUES ($1, $2, $3, $4, $5)
 	RETURNING medicalemployee_id
 	`
@@ -108,6 +109,8 @@ func Hospitaladmin_signup(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
 
 	sqlStatementHospital := `
 	SELECT hospital_id
@@ -180,6 +183,8 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		fmt.Println("User/Pass was invalid")
 	}
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
 	//compare the two hashes
 	if check := bcrypt.CompareHashAndPassword([]byte(user.Password_hash), []byte(password)); check != nil {
 		fmt.Println("Invalid Username or Password.")
@@ -208,13 +213,13 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		sessions.Values["role"] = user.Role
 		sessions.Save(request, response)
 
-		if sessions.Values["role"] == 0 {
+		if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 			fmt.Println("Got to dashboard with role 0")
 			http.Redirect(response, request, "/admin_dashboard.html", http.StatusSeeOther)
-		} else if sessions.Values["role"] == 1 {
+		} else if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 			fmt.Println("Got to dashboard with role 1")
 			http.Redirect(response, request, "/hospital_admin_dashboard.html", http.StatusSeeOther)
-		} else {
+		} else if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 			fmt.Println("Got to dashboard with role 2")
 			http.Redirect(response, request, "/user_dashboard.html", http.StatusSeeOther)
 		}
@@ -223,17 +228,23 @@ func Login(response http.ResponseWriter, request *http.Request) {
 
 func Logout(response http.ResponseWriter, request *http.Request) {
 	//get the current session
-	// sessions, _ := store.Get(request, "session")
-	// //set the sessions time
-	// sessions.Options.MaxAge = -1
-	// //save the new session
-	// sessions.Save(request, response)
-	//redirect the session
+	sessions, _ := store.Get(request, "session")
 
-	response.Header().Set("Cache-Control", "no-cache, private, max-age=0")
-	response.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
-	response.Header().Set("Pragma", "no-cache")
-	response.Header().Set("X-Accel-Expires", "0")
+	// //set the sessions time
+	sessions.Options.MaxAge = -1
+	sessions.Values["username"] = ""
+	// //save the new session
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	sessions.Save(request, response)
+	//redirect the session
+	/*
+		response.Header().Set("Cache-Control", "no-cache, private, max-age=0")
+		response.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
+		response.Header().Set("Pragma", "no-cache")
+		response.Header().Set("X-Accel-Expires", "0") */
+
+	// Proxies.
 	http.Redirect(response, request, "/signin", http.StatusSeeOther)
 }
 
@@ -268,52 +279,76 @@ func Forgot_password(response http.ResponseWriter, request *http.Request) {
 
 func user_add_record(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		tmp, _ := template.ParseFiles("Template/user_add-record.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func user_dashboard(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		tmp, _ := template.ParseFiles("Template/user_dashboard.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func user_diagnosis(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		getdiagnosis(response, request)
 		tmp, _ := template.ParseFiles("Template/user_diagnosis.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func user_procedure(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		getprocedure(response, request)
 		tmp, _ := template.ParseFiles("Template/user_procedure.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func user_record_draft(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		tmp, _ := template.ParseFiles("Template/user_record-draft.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func user_record_list(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 2 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
 		getrecord_list(response, request)
 		tmp, _ := template.ParseFiles("Template/user_record-list.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
@@ -322,45 +357,65 @@ func user_record_list(response http.ResponseWriter, request *http.Request) {
 
 func hospital_admin_dashboard(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 1 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 		tmp, _ := template.ParseFiles("Template/hospital_admin_dashboard.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func hospital_admin_diagnosis(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 1 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 		getdiagnosis(response, request)
 		tmp, _ := template.ParseFiles("Template/hospital_admin_diagnosis.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func hospital_admin_procedure(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 1 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 		getprocedure(response, request)
 		tmp, _ := template.ParseFiles("Template/hospital_admin_procedure.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func hospital_admin_record_list(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 1 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 		getrecord_list(response, request)
 		tmp, _ := template.ParseFiles("Template/hospital_admin_record-list.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func hospital_admin_staff_list(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 1 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 1 && sessions.Values["username"] != "" {
 		getstaff_list(response, request)
 		tmp, _ := template.ParseFiles("Template/hospital_admin_staff-list.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
@@ -374,44 +429,64 @@ func admin_create_account_second(response http.ResponseWriter, request *http.Req
 
 func admin_dashboard(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 0 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 		tmp, _ := template.ParseFiles("Template/admin_dashboard.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func admin_diagnosis(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 0 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 		getdiagnosis(response, request)
 		tmp, _ := template.ParseFiles("Template/admin_diagnosis.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func admin_procedure(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 0 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 		getprocedure(response, request)
 		tmp, _ := template.ParseFiles("Template/admin_procedure.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func admin_record_list(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 0 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 		getrecord_list(response, request)
 		tmp, _ := template.ParseFiles("Template/admin_record-list.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
 
 func admin_staff_list(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
-	if sessions.Values["role"] == 0 {
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.Header().Set("Expires", "0")
+	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
 		getstaff_list(response, request)
 		tmp, _ := template.ParseFiles("Template/admin_staff-list.html")
 		tmp.Execute(response, nil)
+	} else {
+		http.Redirect(response, request, "/signin", http.StatusSeeOther)
 	}
 }
