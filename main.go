@@ -55,7 +55,7 @@ func main() {
 	http.HandleFunc("/admin_procedure.html", admin_procedure)
 	http.HandleFunc("/admin_record-list.html", admin_record_list)
 	http.HandleFunc("/admin_staff-list.html", admin_staff_list)
-	http.HandleFunc("/create-account-second.html", Create_account_second)
+	http.HandleFunc("/admin_create-account-second.html", admin_create_account_second)
 	http.HandleFunc("/create_account_second", Hospitaladmin_signup)
 
 	// http.HandleFunc("/dashboard.html", Dashboard)

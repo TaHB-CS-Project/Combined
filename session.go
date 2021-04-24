@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
@@ -150,7 +151,7 @@ func Hospitaladmin_signup(response http.ResponseWriter, request *http.Request) {
 	fmt.Println("Created Hospital Admin Account")
 	fmt.Println("Created email:", username)
 	fmt.Println("Created password:", password)
-	http.Redirect(response, request, "/dashboard.html", http.StatusSeeOther)
+	http.Redirect(response, request, "/admin_dashboard.html", http.StatusSeeOther)
 
 }
 
@@ -222,39 +223,22 @@ func Login(response http.ResponseWriter, request *http.Request) {
 
 func Logout(response http.ResponseWriter, request *http.Request) {
 	//get the current session
-	sessions, _ := store.Get(request, "session")
-	//set the sessions time
-	sessions.Options.MaxAge = -1
-	//save the new session
-	sessions.Save(request, response)
+	// sessions, _ := store.Get(request, "session")
+	// //set the sessions time
+	// sessions.Options.MaxAge = -1
+	// //save the new session
+	// sessions.Save(request, response)
+	//redirect the session
+
 	response.Header().Set("Cache-Control", "no-cache, private, max-age=0")
+	response.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
 	response.Header().Set("Pragma", "no-cache")
 	response.Header().Set("X-Accel-Expires", "0")
-	//redirect the session
 	http.Redirect(response, request, "/signin", http.StatusSeeOther)
 }
 
 func Index(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/index.html")
-	tmp.Execute(response, nil)
-}
-
-func Dashboard(response http.ResponseWriter, request *http.Request) {
-	tmp, _ := template.ParseFiles("Template/dashboard.html")
-	tmp.Execute(response, nil)
-}
-
-func Staff_list(response http.ResponseWriter, request *http.Request) {
-	getstaff_list(response, request)
-	tmp, _ := template.ParseFiles("Template/staff-list.html")
-	tmp.Execute(response, nil)
-}
-
-func Add_record(response http.ResponseWriter, request *http.Request) {
-	gethospital_list(response, request)
-	getdiagnosis(response, request)
-	getprocedure(response, request)
-	tmp, _ := template.ParseFiles("Template/add-record.html")
 	tmp.Execute(response, nil)
 }
 
@@ -269,17 +253,6 @@ func Create_account(response http.ResponseWriter, request *http.Request) {
 	tmp.Execute(response, nil)
 }
 
-func Create_account_second(response http.ResponseWriter, request *http.Request) {
-	tmp, _ := template.ParseFiles("Template/create-account-second.html")
-	tmp.Execute(response, nil)
-}
-
-func Diagnosislist(response http.ResponseWriter, request *http.Request) {
-	getdiagnosis(response, request)
-	tmp, _ := template.ParseFiles("Template/diagnosis.html")
-	tmp.Execute(response, nil)
-}
-
 func Forgot_password_submit(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/forgot-password-submit.html")
 	tmp.Execute(response, nil)
@@ -287,23 +260,6 @@ func Forgot_password_submit(response http.ResponseWriter, request *http.Request)
 
 func Forgot_password(response http.ResponseWriter, request *http.Request) {
 	tmp, _ := template.ParseFiles("Template/forgot-password.html")
-	tmp.Execute(response, nil)
-}
-
-func Procedurelist(response http.ResponseWriter, request *http.Request) {
-	getprocedure(response, request)
-	tmp, _ := template.ParseFiles("Template/procedure.html")
-	tmp.Execute(response, nil)
-}
-
-func Record_draft(response http.ResponseWriter, request *http.Request) {
-	tmp, _ := template.ParseFiles("Template/record-draft.html")
-	tmp.Execute(response, nil)
-}
-
-func Record_list(response http.ResponseWriter, request *http.Request) {
-	getrecord_list(response, request)
-	tmp, _ := template.ParseFiles("Template/record-list.html")
 	tmp.Execute(response, nil)
 }
 
@@ -410,6 +366,11 @@ func hospital_admin_staff_list(response http.ResponseWriter, request *http.Reque
 
 //Admin Pages
 ///////////////////////////////////////////////////////////////////////////////////////
+
+func admin_create_account_second(response http.ResponseWriter, request *http.Request) {
+	tmp, _ := template.ParseFiles("Template/admin_create-account-second.html")
+	tmp.Execute(response, nil)
+}
 
 func admin_dashboard(response http.ResponseWriter, request *http.Request) {
 	sessions, _ := store.Get(request, "session")
