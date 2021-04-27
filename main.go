@@ -24,6 +24,7 @@ func main() {
 	//start database instance for use
 	initDB()
 	initstyle()
+	getrecord_list2()
 	http.HandleFunc("/", Index)
 	http.HandleFunc("/signin", Login)
 	http.HandleFunc("/logout", Logout)
