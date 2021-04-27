@@ -574,5 +574,5 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\nSuccessfully created record\n")
 
-	http.Redirect(w, r, "/dashboard.html", http.StatusSeeOther)
+	http.Redirect(w, r, "/user_dashboard.html", http.StatusSeeOther)
 }
