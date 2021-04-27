@@ -468,7 +468,7 @@ func admin_record_list(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	response.Header().Set("Expires", "0")
 	if sessions.Values["role"] == 0 && sessions.Values["username"] != "" {
-		getrecord_list(response, request)
+		getrecord_list2(response, request)
 		tmp, _ := template.ParseFiles("Template/admin_record-list.html")
 		tmp.Execute(response, nil)
 	} else {

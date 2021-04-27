@@ -68,6 +68,7 @@ type Recordlist struct {
 	Procedure_name            string    `json:procedure_name`
 	Diagnosis_name            string    `json:diagnosis_name`
 	Outcome                   string    `json:result`
+	//	Special_notes             sql.NullString `json:special_notes`
 }
 
 type Diagnosis struct {
@@ -117,7 +118,42 @@ func getprocedure(w http.ResponseWriter, r *http.Request) {
 	file, _ := json.MarshalIndent(procedurearray, "", " ")
 	_ = ioutil.WriteFile("js/procedure.json", file, 0644)
 }
+func getrecord_list2(w http.ResponseWriter, r *http.Request) {
+	sessions, _ := store.Get(r, "session")
+	record := Record{}
+	hospital := Hospital{}
+	medicalemployee := MedicalEmployee{}
+	procedure := Procedure{}
+	diagnosis := Diagnosis{}
+	var recordarray []Recordlist
+	if sessions.Values["role"] == 0 {
+		sqlStatement_get := `
+		SELECT record.record_id,record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes, 
+		FROM ((((record
+		INNER JOIN hospital ON record.hospital_id = hospital.hospital_id)
+		INNER JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
+		INNER JOIN diagnosis ON record.diagnosis_id = diagnosis.diagnosis_id)
+		INNER JOIN procedure ON record.procedure_id = procedure.procedure_id)
+		`
+		row, _ := db.Query(sqlStatement_get)
+		defer row.Close()
+		for row.Next() {
+			err := row.Scan(&record.Record_id, &hospital.Hospital_name, &medicalemployee.Medicalemployee_firstname, &medicalemployee.Medicalemployee_lastname, &procedure.Procedure_name, &diagnosis.Diagnosis_name,
+				&record.Start_datetime, &record.Special_notes, &record.Outcome)
+			if err != nil {
+				panic(err)
+			}
+			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
+				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome})
+		}
+	} else if sessions.Values["role"] == 1 {
+	} else {
 
+	}
+	file, _ := json.MarshalIndent(recordarray, "", " ")
+	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
+
+}
 func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	//fmt.Printf("\nGot to getrecord_list\n")
 	sessions, _ := store.Get(r, "session")
