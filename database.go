@@ -118,13 +118,9 @@ func getprocedure(w http.ResponseWriter, r *http.Request) {
 	file, _ := json.MarshalIndent(procedurearray, "", " ")
 	_ = ioutil.WriteFile("js/procedure.json", file, 0644)
 }
-func getrecord_list2(w http.ResponseWriter, r *http.Request) {
+func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	sessions, _ := store.Get(r, "session")
 	record := Recordlist{}
-	// hospital := Hospital{}
-	// medicalemployee := MedicalEmployee{}
-	// procedure := Procedure{}
-	// diagnosis := Diagnosis{}
 	var recordarray []Recordlist
 	if sessions.Values["role"] == 0 {
 		sqlStatement_get := `
@@ -191,16 +187,29 @@ func getrecord_list2(w http.ResponseWriter, r *http.Request) {
 				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes})
 		}
 	} else {
+		fmt.Println("Got to record list role 1")
+		sqlStatement_create1 := `
+		SELECT medicalemployee_id
+		FROM user_entity
+		WHERE username = $1`
+		var Medical_employee_id int64
+		sessions, _ := store.Get(r, "session")
+
+		error := db.QueryRow(sqlStatement_create1, sessions.Values["username"]).Scan(&Medical_employee_id)
+		if error != nil {
+			panic(error)
+		}
+
 		sqlStatement_get := `
 		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes
-		FROM user_entity,((((record
+		FROM ((((record
 		JOIN hospital ON record.hospital_id = hospital.hospital_id)
 		JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
 		JOIN diagnosis ON record.diagnosis_id = diagnosis.diagnosis_id)
 		JOIN procedure ON record.procedure_id = procedure.procedure_id)
-		WHERE user_entity.username = $1
+		WHERE medical_employee.medicalemployee_id = $1
 		`
-		row, _ := db.Query(sqlStatement_get, sessions.Values["username"])
+		row, _ := db.Query(sqlStatement_get, Medical_employee_id)
 		defer row.Close()
 		for row.Next() {
 			err := row.Scan(&record.Record_id, &record.Start_datetime, &record.Hospital_name, &record.Medicalemployee_firstname,
@@ -213,244 +222,8 @@ func getrecord_list2(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	file, _ := json.MarshalIndent(recordarray, "", " ")
-	_ = ioutil.WriteFile("js/record-test.json", file, 0644)
-
-}
-
-func getrecord_list(w http.ResponseWriter, r *http.Request) {
-	//fmt.Printf("\nGot to getrecord_list\n")
-	sessions, _ := store.Get(r, "session")
-	record := Record{}
-	var recordarray []Recordlist
-
-	if sessions.Values["role"] == 0 {
-		fmt.Println("Got to record list role 0")
-		sqlStatement_get := `
-		SELECT * FROM record 
-		ORDER BY record_id`
-		row, _ := db.Query(sqlStatement_get)
-		defer row.Close()
-		for row.Next() {
-			err := row.Scan(&record.Record_id, &record.Hospital_id, &record.Medical_employee_id, &record.Patient_id, &record.Procedure_id, &record.Diagnosis_id,
-				&record.Start_datetime, &record.Special_notes, &record.Outcome)
-			if err != nil {
-				panic(err)
-			}
-
-			sqlStatement_get0 := `
-		SELECT hospital_name
-		FROM hospital 
-		WHERE hospital_id = $1`
-			//var hospital_name string
-			error := db.QueryRow(sqlStatement_get0, record.Hospital_id).Scan(&record.Hospital_name)
-			if error != nil {
-				panic(error)
-			}
-
-			sqlStatement_get1 := `
-		SELECT medicalemployee_firstname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error1 := db.QueryRow(sqlStatement_get1, record.Medical_employee_id).Scan(&record.Medicalemployee_firstname)
-			if error1 != nil {
-				panic(error1)
-			}
-
-			sqlStatement_get2 := `
-		SELECT medicalemployee_lastname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error2 := db.QueryRow(sqlStatement_get2, record.Medical_employee_id).Scan(&record.Medicalemployee_lastname)
-			if error2 != nil {
-				panic(error2)
-			}
-
-			sqlStatement_get3 := `
-		SELECT diagnosis_name
-		FROM diagnosis
-		WHERE diagnosis_id = $1`
-			error3 := db.QueryRow(sqlStatement_get3, record.Diagnosis_id).Scan(&record.Diagnosis_name)
-			if error3 != nil {
-				panic(error3)
-			}
-
-			sqlStatement_get4 := `
-		SELECT procedure_name
-		FROM procedure
-		WHERE procedure_id = $1`
-			error4 := db.QueryRow(sqlStatement_get4, record.Procedure_id).Scan(&record.Procedure_name)
-			if error4 != nil {
-				panic(error4)
-			}
-
-			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes})
-		}
-	} else if sessions.Values["role"] == 1 {
-		fmt.Println("Got to record list role 1")
-		sqlStatement_create6 := `
-		SELECT medicalemployee_id
-		FROM user_entity
-		WHERE username = $1`
-		var Medical_employee_id int64
-		sessions, _ := store.Get(r, "session")
-
-		error := db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
-		if error != nil {
-			panic(error)
-		}
-
-		sqlStatement_gethospital := `
-		SELECT hospital_id
-		FROM medical_employee
-		WHERE medicalemployee_id = $1`
-		var hospital_id int64
-		error = db.QueryRow(sqlStatement_gethospital, Medical_employee_id).Scan(&hospital_id)
-		if error != nil {
-			panic(error)
-		}
-
-		sqlStatement_get := `
-		SELECT * FROM record 
-		WHERE hospital_id = $1`
-		row, _ := db.Query(sqlStatement_get, hospital_id)
-		defer row.Close()
-		for row.Next() {
-			err := row.Scan(&record.Record_id, &record.Hospital_id, &record.Medical_employee_id, &record.Patient_id, &record.Procedure_id, &record.Diagnosis_id,
-				&record.Start_datetime, &record.Special_notes, &record.Outcome)
-			if err != nil {
-				panic(err)
-			}
-
-			sqlStatement_get0 := `
-		SELECT hospital_name
-		FROM hospital 
-		WHERE hospital_id = $1`
-			//var hospital_name string
-			error := db.QueryRow(sqlStatement_get0, record.Hospital_id).Scan(&record.Hospital_name)
-			if error != nil {
-				panic(error)
-			}
-
-			sqlStatement_get1 := `
-		SELECT medicalemployee_firstname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error1 := db.QueryRow(sqlStatement_get1, record.Medical_employee_id).Scan(&record.Medicalemployee_firstname)
-			if error1 != nil {
-				panic(error1)
-			}
-
-			sqlStatement_get2 := `
-		SELECT medicalemployee_lastname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error2 := db.QueryRow(sqlStatement_get2, record.Medical_employee_id).Scan(&record.Medicalemployee_lastname)
-			if error2 != nil {
-				panic(error2)
-			}
-
-			sqlStatement_get3 := `
-		SELECT diagnosis_name
-		FROM diagnosis
-		WHERE diagnosis_id = $1`
-			error3 := db.QueryRow(sqlStatement_get3, record.Diagnosis_id).Scan(&record.Diagnosis_name)
-			if error3 != nil {
-				panic(error3)
-			}
-
-			sqlStatement_get4 := `
-		SELECT procedure_name
-		FROM procedure
-		WHERE procedure_id = $1`
-			error4 := db.QueryRow(sqlStatement_get4, record.Procedure_id).Scan(&record.Procedure_name)
-			if error4 != nil {
-				panic(error4)
-			}
-
-			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes})
-		}
-	} else {
-		fmt.Println("Got to record list role 2")
-		sqlStatement_create6 := `
-		SELECT medicalemployee_id
-		FROM user_entity
-		WHERE username = $1`
-		var Medical_employee_id int64
-		sessions, _ := store.Get(r, "session")
-
-		error := db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
-		if error != nil {
-			panic(error)
-		}
-
-		sqlStatement_get := `
-		SELECT * FROM record 
-		WHERE medicalemployee_id = $1`
-		row, _ := db.Query(sqlStatement_get, Medical_employee_id)
-		defer row.Close()
-		for row.Next() {
-			err := row.Scan(&record.Record_id, &record.Hospital_id, &record.Medical_employee_id, &record.Patient_id, &record.Procedure_id, &record.Diagnosis_id,
-				&record.Start_datetime, &record.Special_notes, &record.Outcome)
-			if err != nil {
-				panic(err)
-			}
-
-			sqlStatement_get0 := `
-		SELECT hospital_name
-		FROM hospital 
-		WHERE hospital_id = $1`
-			//var hospital_name string
-			error := db.QueryRow(sqlStatement_get0, record.Hospital_id).Scan(&record.Hospital_name)
-			if error != nil {
-				panic(error)
-			}
-
-			sqlStatement_get1 := `
-		SELECT medicalemployee_firstname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error1 := db.QueryRow(sqlStatement_get1, record.Medical_employee_id).Scan(&record.Medicalemployee_firstname)
-			if error1 != nil {
-				panic(error1)
-			}
-
-			sqlStatement_get2 := `
-		SELECT medicalemployee_lastname
-		FROM medical_employee 
-		WHERE medicalemployee_id = $1`
-			error2 := db.QueryRow(sqlStatement_get2, record.Medical_employee_id).Scan(&record.Medicalemployee_lastname)
-			if error2 != nil {
-				panic(error2)
-			}
-
-			sqlStatement_get3 := `
-		SELECT diagnosis_name
-		FROM diagnosis
-		WHERE diagnosis_id = $1`
-			error3 := db.QueryRow(sqlStatement_get3, record.Diagnosis_id).Scan(&record.Diagnosis_name)
-			if error3 != nil {
-				panic(error3)
-			}
-
-			sqlStatement_get4 := `
-		SELECT procedure_name
-		FROM procedure
-		WHERE procedure_id = $1`
-			error4 := db.QueryRow(sqlStatement_get4, record.Procedure_id).Scan(&record.Procedure_name)
-			if error4 != nil {
-				panic(error4)
-			}
-
-			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes})
-		}
-	}
-
-	//fmt.Printf("%v", recordarray)
-	file, _ := json.MarshalIndent(recordarray, "", " ")
 	_ = ioutil.WriteFile("js/record-list.json", file, 0644)
+
 }
 
 func gethospital_list(w http.ResponseWriter, r *http.Request) {
