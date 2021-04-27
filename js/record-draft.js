@@ -24,5 +24,5 @@ $.each(data, function (key, value) {
     info += '</tr>';
 
  });
- $('#record_list_datatable').append(info);
+ $('#record-draft_table').append(info);
 });
