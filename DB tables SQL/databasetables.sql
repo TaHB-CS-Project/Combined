@@ -56,6 +56,36 @@ CREATE TABLE Record (
 	FOREIGN KEY(patient_id) REFERENCES patient(patient_id)
 );
 
+CREATE TABLE Record_Draft (
+	record_id SERIAL PRIMARY KEY,
+	hospital_id SERIAL,
+	medicalemployee_id SERIAL,
+	patient_id SERIAL,
+	procedure_id SERIAL,
+	diagnosis_id SERIAL,
+	start_datetime TIMESTAMP,
+	special_notes TEXT,
+	outcome VARCHAR(20),
+	FOREIGN KEY(hospital_id) REFERENCES hospital(hospital_id),
+	FOREIGN KEY(medicalemployee_id) REFERENCES medical_employee(medicalemployee_id),
+	FOREIGN KEY(procedure_id) REFERENCES procedure(procedure_id),
+	FOREIGN KEY(diagnosis_id) REFERENCES diagnosis(diagnosis_id),
+	FOREIGN KEY(patient_id) REFERENCES patient(patient_id)
+);
+
+CREATE TABLE Patient_Draft (
+	patient_id SERIAL PRIMARY KEY,
+	hospital_id SERIAL,
+	medicalemployee_id SERIAL,
+	patient_age INT,
+	patient_ageclassification VARCHAR(10),
+	patient_birthday TIMESTAMP,
+	patient_sex VARCHAR(10),
+	patient_weightlbs DECIMAL,
+	FOREIGN KEY(hospital_id) REFERENCES hospital(hospital_id),
+	FOREIGN KEY(medicalemployee_id) REFERENCES medical_employee(medicalemployee_id)
+);
+
 CREATE TABLE User_Entity (
 	user_id SERIAL PRIMARY KEY,
 	medicalemployee_id SERIAL,
