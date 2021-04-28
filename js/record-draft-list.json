@@ -1,13 +1,44 @@
 [
  {
-  "Record_id": 4,
+  "Record_id": 1,
+  "Hospital_name": "Voon Hospital",
+  "Start_datetime": "2021-04-29T00:00:00Z",
+  "Medicalemployee_firstname": "Daniel",
+  "Medicalemployee_lastname": "Yoo",
+  "Procedure_name": "TTN",
+  "Diagnosis_name": "Intraosseous Cannula",
+  "Outcome": "Inconclusive",
+  "Special_notes": "",
+  "Patient_birthday": "2021-04-28T00:00:00Z",
+  "Patient_sex": "Male",
+  "Patient_weightlbs": 150
+ },
+ {
+  "Record_id": 2,
   "Hospital_name": "Voon Hospital",
   "Start_datetime": "2000-01-01T00:00:00Z",
-  "Medicalemployee_firstname": "Anna",
-  "Medicalemployee_lastname": "Lee",
+  "Medicalemployee_firstname": "Daniel",
+  "Medicalemployee_lastname": "Yoo",
   "Procedure_name": "RDS",
   "Diagnosis_name": "Intubation",
   "Outcome": "Choose one",
-  "Special_notes": "Empty"
+  "Special_notes": "Empty",
+  "Patient_birthday": "2000-01-01T00:00:00Z",
+  "Patient_sex": "Choose one",
+  "Patient_weightlbs": 0
+ },
+ {
+  "Record_id": 3,
+  "Hospital_name": "Voon Hospital",
+  "Start_datetime": "2000-01-01T00:00:00Z",
+  "Medicalemployee_firstname": "Daniel",
+  "Medicalemployee_lastname": "Yoo",
+  "Procedure_name": "RDS",
+  "Diagnosis_name": "Intubation",
+  "Outcome": "Choose one",
+  "Special_notes": "Empty",
+  "Patient_birthday": "2000-01-01T00:00:00Z",
+  "Patient_sex": "Choose one",
+  "Patient_weightlbs": 0
  }
 ]
