@@ -584,7 +584,7 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement_get := `
-		SELECT record_draft.record_id, record_draft.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes
+		SELECT record_draft.record_id, record_draft.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record_draft.outcome, record_draft.special_notes
 		FROM ((((record_draft
 		JOIN hospital ON record_draft.hospital_id = hospital.hospital_id)
 		JOIN medical_employee ON record_draft.medicalemployee_id = medical_employee.medicalemployee_id)
