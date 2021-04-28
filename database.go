@@ -369,7 +369,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	Outcome := r.Form.Get("result")
 	Special_notes := r.Form.Get("special_notes")
 	//for testing
-	log.Printf("Received: %v\n", user)
+	//log.Printf("Received: %v\n", user)
 
 	sqlStatement_create3 := `
 	SELECT hospital_id
@@ -456,15 +456,39 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 
 	Hospital_name := r.Form.Get("hospital")
 	Start_datetime := r.Form.Get("record_date")
+	if Start_datetime == "" {
+		Start_datetime = "2000-01-1T00:00:00Z"
+	}
 	Patient_sex := r.Form.Get("gender")
+	if Patient_sex == "" {
+		Patient_sex = "Empty"
+	}
 	Patient_weightlbs := r.Form.Get("weight")
+	if Patient_weightlbs == "" {
+		Patient_weightlbs = "0"
+	}
 	Patient_birthday := r.Form.Get("record_birthday")
+	if Patient_birthday == "" {
+		Patient_birthday = "2000-01-1T00:00:00Z"
+	}
 	Diagnosis_name := r.Form.Get("diagnosis")
+	if Diagnosis_name == "" {
+		Diagnosis_name = "Empty"
+	}
 	Procedure_name := r.Form.Get("procedure")
+	if Procedure_name == "" {
+		Procedure_name = "Empty"
+	}
 	Outcome := r.Form.Get("result")
+	if Outcome == "" {
+		Outcome = "Empty"
+	}
 	Special_notes := r.Form.Get("special_notes")
+	if Special_notes == "" {
+		Special_notes = "Empty"
+	}
 	//for testing
-	log.Printf("Received: %v\n", user)
+	//log.Printf("Received: %v\n", user)
 
 	sqlStatement_create3 := `
 	SELECT hospital_id
@@ -473,7 +497,8 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 	var hospital_id int64
 	error := db.QueryRow(sqlStatement_create3, Hospital_name).Scan(&hospital_id)
 	if error != nil {
-		panic(error)
+		hospital_id = 1
+		fmt.Println("Do I get here hospital id = 1")
 	}
 	//fmt.Println("New hospital ID is: ", hospital_id)
 
@@ -486,7 +511,7 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 
 	error = db.QueryRow(sqlStatement_create6, sessions.Values["username"]).Scan(&Medical_employee_id)
 	if error != nil {
-		panic(error)
+		Medical_employee_id = 1
 	}
 	fmt.Println("New medical employee ID is: ", Medical_employee_id)
 
@@ -509,7 +534,7 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 	var diagnosis_id int64
 	error = db.QueryRow(sqlStatement_create4, Diagnosis_name).Scan(&diagnosis_id)
 	if error != nil {
-		panic(error)
+		diagnosis_id = 1
 	}
 	fmt.Println("New diagnosis ID is: ", diagnosis_id)
 
@@ -520,7 +545,7 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 	var procedure_id int64
 	error = db.QueryRow(sqlStatement_create5, Procedure_name).Scan(&procedure_id)
 	if error != nil {
-		panic(error)
+		procedure_id = 1
 	}
 	fmt.Println("New procedure ID is: ", procedure_id)
 
