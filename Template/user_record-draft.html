@@ -97,21 +97,29 @@
 			
 				
 				<div class="record-draft_table table-responsive-sm">
-				<table class="table table-bordered justify-content-center" id="record-draft_table">
-					<thead>
-					  <tr>
-						<th scope="col" class="text-center" id="date_time">Saved Date & Time</th>
-						<th scope="col" class="text-center" id="gender">Gender</th>
-						<th scope="col" class="text-center" id="diagnosis">Diagnosis</th>
-						<th scope="col" class="text-center" id="procedure">Procedure</th>
-						<th scope="col"class="text-center" id="action">Action</th>
-
-					  </tr>
-					</thead>
-					<tbody id="record_list_draft">
-					 
-					</tbody>
-				  </table>
+					<div class="card-body">
+					  <table id="record_draft_datatable" class="table table-striped text-center" style="width:100%">
+						<thead>
+								<tr>
+								  <th scope="col">Record ID</th>
+								  <th scope="col">Hospital</th>
+								  <th scope="col">Date/Time</th>
+								  <th scope="col">Doctor Firstname</th>
+								  <th scope="col">Doctor Lastname</th>
+								  <th scope="col">Procedure</th>
+								  <th scope="col">Diagnosis</th>
+								  <th scope="col">Outcome</th>
+								  <th scope="col">Action</th>
+								</tr>
+							  </thead>
+							  <tbody id="record_draft_data">
+							   
+												  
+						</tbody>
+						</table>
+					  </div>  
+				  </div>
+			  </div>
 			
 
 
@@ -125,6 +133,7 @@
 
 			</div>
 	<script src="js/app.js"></script>
+	<script src="js/record-draft.js"></script>
 </body>
 
 </html>
