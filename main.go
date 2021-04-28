@@ -35,7 +35,8 @@ func main() {
 
 	//User
 	http.HandleFunc("/user_add-record.html", user_add_record)
-	http.HandleFunc("/create_record", create_record) //gotta check this one
+	http.HandleFunc("/create_record", create_record)
+	http.HandleFunc("/save_record", create_record_draft)
 	http.HandleFunc("/user_dashboard.html", user_dashboard)
 	http.HandleFunc("/user_diagnosis.html", user_diagnosis)
 	http.HandleFunc("/user_procedure.html", user_procedure)

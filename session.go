@@ -330,6 +330,7 @@ func user_record_draft(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	response.Header().Set("Expires", "0")
 	if sessions.Values["role"] == 2 && sessions.Values["username"] != "" {
+		getrecord_draft_list(response, request)
 		tmp, _ := template.ParseFiles("Template/user_record-draft.html")
 		tmp.Execute(response, nil)
 	} else {
