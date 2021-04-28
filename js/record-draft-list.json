@@ -1,13 +1,1 @@
-[
- {
-  "Record_id": 4,
-  "Hospital_name": "Voon Hospital",
-  "Start_datetime": "2000-01-01T00:00:00Z",
-  "Medicalemployee_firstname": "Anna",
-  "Medicalemployee_lastname": "Lee",
-  "Procedure_name": "RDS",
-  "Diagnosis_name": "Intubation",
-  "Outcome": "Choose one",
-  "Special_notes": "Empty"
- }
-]
+null
