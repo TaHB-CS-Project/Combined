@@ -35,30 +35,22 @@ $.getJSON("js/record-list.json",
         
 
         info += '<tr>';
-
         info += '<td>' + value.Record_id + '</td>';
-
         info += '<td id=' + value.Hospital_name + '>' + value.Hospital_name + '</td>';
-
         info += '<td id=' + value.Start_datetime + '>' + value.Start_datetime + '</td>';
-
 /*        info += '<td id=' + value.Medicalemployee_firstname + '>' + 
             value.Medicalemployee_firstname + '</td>';
 */           
         info += '<td id=' + value.Medicalemployee_lastname + '>' + value.Medicalemployee_lastname + '</td>';
-        
-        info += '<td id=' + value.Procedure_name + '>' + value.Procedure_name + '</td>';
-            
+        info += '<td id=' + value.Procedure_name + '>' + value.Procedure_name + '</td>';          
  /*       info += '<td id=' + value.Diagnosis_name + '>' + 
             value.Diagnosis_name + '</td>';
  */       
         info += '<td id=' + value.Outcome + '>' + value.Outcome + '</td>';
-
         info += `<td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name +`">More info</button>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name_edit +`">Edit</button>
                 </td>`;
-
         info += '</tr>'
 
         modal_moreinfo += `<div class="modal fade" ` + modalcreate_set_name + `=" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
