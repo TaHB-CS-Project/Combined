@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -70,7 +72,7 @@ func main() {
 	// http.HandleFunc("/create-account-second.html", Create_account_second)
 	// http.HandleFunc("/create_account_second", Hospitaladmin_signup)
 
-	http.ListenAndServe(":8090", nil)
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
 
 //initalize connection to the DB
