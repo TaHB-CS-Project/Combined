@@ -48,7 +48,7 @@ $.getJSON("js/record-list.json",
  */       
         info += '<td id=' + value.Outcome + '>' + value.Outcome + '</td>';
         info += `<td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name +`">More info</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name +`">Details</button>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name_edit +`">Edit</button>
                 </td>`;
         info += '</tr>'
