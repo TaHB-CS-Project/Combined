@@ -44,6 +44,7 @@ func main() {
 	http.HandleFunc("/user_procedure.html", user_procedure)
 	http.HandleFunc("/user_record-draft.html", user_record_draft)
 	http.HandleFunc("/user_record-list.html", user_record_list)
+	http.HandleFunc("/submit_record_draft", submit_record_draft)
 
 	//Hospital Admin
 	http.HandleFunc("/hospital_admin_dashboard.html", hospital_admin_dashboard)

@@ -33,7 +33,9 @@ type MedicalEmployee struct {
 	Medicalemployee_classification string         `json:staff_role`
 	Medicalemployee_supervisor     sql.NullString `json:supervisor`
 }
-
+type Record_draft_id struct {
+	Record_draft_id int `json:record_id`
+}
 type Record struct {
 	Record_id           int       `json:record_id`
 	Medical_employee_id int       `json:medicalemployee_id`
@@ -587,7 +589,6 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New record draft ID is: ", record_id)
 
 	fmt.Printf("\nSuccessfully created record draft\n")
-
 	http.Redirect(w, r, "/user_dashboard.html", http.StatusSeeOther)
 }
 
@@ -636,4 +637,112 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 	}
 	file, _ := json.MarshalIndent(recordarray, "", " ")
 	_ = ioutil.WriteFile("js/record-draft-list.json", file, 0644)
+}
+
+func submit_record_draft(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	r_id := &Record_draft_id{}
+	error := json.NewDecoder(r.Body).Decode(r_id)
+	if error != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	//hospital := Hospital{}
+	//record := Record{}
+	r.ParseForm()
+
+	Hospital_name := r.Form.Get("hospital")
+	Start_datetime := r.Form.Get("record_date")
+	Patient_sex := r.Form.Get("gender")
+	Patient_weightlbs := r.Form.Get("weight")
+	Patient_birthday := r.Form.Get("record_birthday")
+	Diagnosis_name := r.Form.Get("diagnosis")
+	Procedure_name := r.Form.Get("procedure")
+	Outcome := r.Form.Get("result")
+	Special_notes := r.Form.Get("special_notes")
+
+	sqlStatement_create_hospital := `
+	SELECT hospital_id
+	FROM hospital 
+	WHERE hospital_name = $1`
+	var hospital_id int64
+	error = db.QueryRow(sqlStatement_create_hospital, Hospital_name).Scan(&hospital_id)
+	if error != nil {
+		panic(error)
+	}
+	//fmt.Println("New hospital ID is: ", hospital_id)
+
+	sqlStatement_create_employee := `
+	SELECT medicalemployee_id
+	FROM user_entity
+	WHERE username = $1`
+	var Medical_employee_id int64
+	sessions, _ := store.Get(r, "session")
+
+	error = db.QueryRow(sqlStatement_create_employee, sessions.Values["username"]).Scan(&Medical_employee_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+
+	//the data names is the DATABASES name
+	sqlStatement_create := `
+	INSERT INTO patient (hospital_id, medicalemployee_id, patient_birthday, patient_sex, patient_weightlbs)
+	VALUES ($1, $2, $3, $4, $5)
+	RETURNING patient_id`
+	var patient_id int64
+	//the names for the record.query is the STRUCT names
+	error = db.QueryRow(sqlStatement_create, hospital_id, Medical_employee_id, Patient_birthday, Patient_sex, Patient_weightlbs).Scan(&patient_id)
+	if error != nil {
+		panic(error)
+	}
+
+	sqlStatement_create4 := `
+	SELECT diagnosis_id
+	FROM diagnosis 
+	WHERE diagnosis_name = $1`
+	var diagnosis_id int64
+	error = db.QueryRow(sqlStatement_create4, Diagnosis_name).Scan(&diagnosis_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New diagnosis ID is: ", diagnosis_id)
+
+	sqlStatement_create5 := `
+	SELECT procedure_id
+	FROM procedure 
+	WHERE procedure_name = $1`
+	var procedure_id int64
+	error = db.QueryRow(sqlStatement_create5, Procedure_name).Scan(&procedure_id)
+	if error != nil {
+		panic(error)
+	}
+	fmt.Println("New procedure ID is: ", procedure_id)
+
+	//final statement to make record with all the foreign keys available
+	sqlStatement_create2 := `
+	INSERT INTO record (medicalemployee_id, procedure_id, hospital_id, diagnosis_id, patient_id, start_datetime, special_notes, outcome)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+	RETURNING record_id`
+	var record_id int64
+	error1 := db.QueryRow(sqlStatement_create2, Medical_employee_id, procedure_id, hospital_id, diagnosis_id, patient_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
+	if error1 != nil {
+		panic(error1)
+	}
+	fmt.Println("New record ID is: ", record_id)
+
+	fmt.Printf("\nSuccessfully created record\n")
+
+	sqlStatement_delete := `
+		DELETE FROM patient_draft
+		WHERE record_id = $1
+		`
+	delete_error := db.QueryRow(sqlStatement_delete, r_id.Record_draft_id)
+	if delete_error != nil {
+		log.Fatal(delete_error)
+	}
+	fmt.Println("Succesfully deleted draft.")
+
+	http.Redirect(w, r, "/user_dashboard.html", http.StatusSeeOther)
 }
