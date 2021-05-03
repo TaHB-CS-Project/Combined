@@ -7,16 +7,17 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-// const (
-// 	host     = "ec2-3-21-100-78.us-east-2.compute.amazonaws.com"
-// 	port     = 5432
-// 	user     = "postgres"
-// 	password = "password"
-// 	dbname   = "postgres"
-// )
+var (
+	host     = goDotEnvVariable("DB_HOST")
+	port     = goDotEnvVariable("DB_PORT")
+	user     = goDotEnvVariable("DB_USERNAME")
+	password = goDotEnvVariable("DB_PASSWORD")
+	dbname   = goDotEnvVariable("DB_NAME")
+)
 
 // declare global db to use across other files
 var db *sql.DB
@@ -62,30 +63,24 @@ func main() {
 	http.HandleFunc("/admin_create-account-second.html", admin_create_account_second)
 	http.HandleFunc("/create_account_second", Hospitaladmin_signup)
 
-	// http.HandleFunc("/dashboard.html", Dashboard)
-	// http.HandleFunc("/procedure.html", Procedurelist)
-	// http.HandleFunc("/diagnosis.html", Diagnosislist)
-	// http.HandleFunc("/staff-list.html", Staff_list)
-	// http.HandleFunc("/add-record.html", Add_record)
-	// http.HandleFunc("/create_record", create_record)
-	// http.HandleFunc("/record-draft.html", Record_draft)
-	// http.HandleFunc("/record-list.html", Record_list)
-	// http.HandleFunc("/create-account-second.html", Create_account_second)
-	// http.HandleFunc("/create_account_second", Hospitaladmin_signup)
-
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
+}
+
+func goDotEnvVariable(key string) string {
+	// load .env file
+	err := godotenv.Load("db.env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
 }
 
 //initalize connection to the DB
 func initDB() {
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USERNAME")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-
 	var err error
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	db, err = sql.Open("postgres", psqlInfo)
