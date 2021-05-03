@@ -161,8 +161,6 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	request.ParseForm()
 	username := request.Form.Get("email")
 	password := request.Form.Get("password")
-	fmt.Println("email:", username)
-	fmt.Println("password:", password)
 
 	user := user_entity{}
 	//create a bcrypt hash to compare with the database stored hash
