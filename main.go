@@ -10,13 +10,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "ec2-3-21-100-78.us-east-2.compute.amazonaws.com"
-	port     = 5432
-	user     = "postgres"
-	password = "password"
-	dbname   = "postgres"
-)
+// const (
+// 	host     = "ec2-3-21-100-78.us-east-2.compute.amazonaws.com"
+// 	port     = 5432
+// 	user     = "postgres"
+// 	password = "password"
+// 	dbname   = "postgres"
+// )
 
 // declare global db to use across other files
 var db *sql.DB
@@ -78,6 +78,12 @@ func main() {
 
 //initalize connection to the DB
 func initDB() {
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
 	var err error
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
