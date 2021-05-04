@@ -1,18 +1,9 @@
 {
   "ipcMode": null,
   "executionRoleArn": "arn:aws:iam::663114772736:role/ecsTaskExecutionRole",
-  "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "secretsmanager:GetSecretValue"
-            ],
-            "Resource": [
-                "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDB*"
-            ]
-        }
-    ],
+  "Effect": "Allow",
+  "Action": "secretsmanager:GetSecretValue",
+  "Resource": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDB*",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
