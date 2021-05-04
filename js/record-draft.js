@@ -76,7 +76,7 @@ $.each(data, function (key, value) {
                             </div>
                             </div>`;
 
-    editinfo += `<form action="/create_record" method="POST">
+    editinfo += `<form action="/submit_record_draft" method="POST">
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
