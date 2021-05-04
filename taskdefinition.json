@@ -86,7 +86,7 @@
   ],
   "placementConstraints": [],
   "memory": "512",
-  "taskRoleArn": null,
+  "taskRoleArn": "arn:aws:iam::663114772736:role/Service-Role-SSM",
   "compatibilities": [
     "EC2",
     "FARGATE"
