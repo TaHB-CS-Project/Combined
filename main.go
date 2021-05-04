@@ -10,6 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//comment this out if you are testing locally
 var (
 	host     = os.Getenv("PostgresDBHost")
 	port     = os.Getenv("PostgresDBPort")
@@ -18,6 +19,7 @@ var (
 	dbname   = os.Getenv("PostgresDBUser")
 )
 
+//uncomment this if you are testing locally on port 8090
 // var (
 // 	host     = goDotEnvVariable("PostgresDBHost")
 // 	port     = goDotEnvVariable("PostgresDBPort")
@@ -25,6 +27,16 @@ var (
 // 	password = goDotEnvVariable("PostgresDBPassword")
 // 	dbname   = goDotEnvVariable("PostgresDBUser")
 // )
+// func goDotEnvVariable(key string) string {
+// 	// load .env file
+// 	err := godotenv.Load("db.env")
+
+// 	if err != nil {
+// 		log.Fatalf("Error loading .env file")
+// 	}
+
+// 	return os.Getenv(key)
+// }
 
 // declare global db to use across other files
 var db *sql.DB
@@ -72,17 +84,6 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
-
-// func goDotEnvVariable(key string) string {
-// 	// load .env file
-// 	err := godotenv.Load("db.env")
-
-// 	if err != nil {
-// 		log.Fatalf("Error loading .env file")
-// 	}
-
-// 	return os.Getenv(key)
-// }
 
 //initalize connection to the DB
 func initDB() {
