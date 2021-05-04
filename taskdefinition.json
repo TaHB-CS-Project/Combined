@@ -1,9 +1,6 @@
 {
   "ipcMode": null,
   "executionRoleArn": "arn:aws:iam::663114772736:role/ecsTaskExecutionRole",
-  "Effect": "Allow",
-  "Action": "secretsmanager:GetSecretValue",
-  "Resource": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDB*",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
