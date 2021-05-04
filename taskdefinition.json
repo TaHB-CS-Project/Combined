@@ -1,7 +1,6 @@
 {
   "ipcMode": null,
   "executionRoleArn": "arn:aws:iam::663114772736:role/Service-Role-SSM",
-  "taskRoleArn": null,
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
@@ -87,6 +86,7 @@
   ],
   "placementConstraints": [],
   "memory": "512",
+  "taskRoleArn": null,
   "compatibilities": [
     "EC2",
     "FARGATE"
