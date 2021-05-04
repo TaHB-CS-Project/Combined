@@ -79,9 +79,9 @@ func SignUp(response http.ResponseWriter, request *http.Request) {
 		panic(error)
 	}
 
-	fmt.Println("Created Account")
-	fmt.Println("Created email:", username)
-	fmt.Println("Created password:", password)
+	// fmt.Println("Created Account")
+	// fmt.Println("Created email:", username)
+	// fmt.Println("Created password:", password)
 	http.Redirect(response, request, "/index.html", http.StatusSeeOther)
 
 }
@@ -149,9 +149,9 @@ func Hospitaladmin_signup(response http.ResponseWriter, request *http.Request) {
 		panic(error)
 	}
 
-	fmt.Println("Created Hospital Admin Account")
-	fmt.Println("Created email:", username)
-	fmt.Println("Created password:", password)
+	// fmt.Println("Created Hospital Admin Account")
+	// fmt.Println("Created email:", username)
+	// fmt.Println("Created password:", password)
 	http.Redirect(response, request, "/admin_dashboard.html", http.StatusSeeOther)
 
 }

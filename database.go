@@ -142,7 +142,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 	var recordarray []Recordlist
 	if sessions.Values["role"] == 0 {
 		sqlStatement_get := `
-		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
+		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name , record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
 		FROM (((((record
 		JOIN hospital ON record.hospital_id = hospital.hospital_id)
 		JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
@@ -154,13 +154,13 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		defer row.Close()
 		for row.Next() {
 			err := row.Scan(&record.Record_id, &record.Start_datetime, &record.Hospital_name, &record.Medicalemployee_firstname,
-				&record.Medicalemployee_lastname, &record.Diagnosis_name, &record.Procedure_name, &record.Outcome, &record.Special_notes,
+				&record.Medicalemployee_lastname, &record.Procedure_name, &record.Diagnosis_name, &record.Outcome, &record.Special_notes,
 				&record.Patient_birthday, &record.Patient_sex, &record.Patient_weightlbs)
 			if err != nil {
 				log.Fatal(err)
 			}
 			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes, record.Patient_birthday,
+				record.Medicalemployee_lastname, record.Procedure_name, record.Diagnosis_name, record.Outcome, record.Special_notes, record.Patient_birthday,
 				record.Patient_sex, record.Patient_weightlbs})
 		}
 	} else if sessions.Values["role"] == 1 {
@@ -188,7 +188,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		}
 
 		sqlStatement_get := `
-		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
+		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name, record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
 		FROM (((((record
 		JOIN hospital ON record.hospital_id = hospital.hospital_id)
 		JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
@@ -201,13 +201,13 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		defer row.Close()
 		for row.Next() {
 			err := row.Scan(&record.Record_id, &record.Start_datetime, &record.Hospital_name, &record.Medicalemployee_firstname,
-				&record.Medicalemployee_lastname, &record.Diagnosis_name, &record.Procedure_name, &record.Outcome, &record.Special_notes,
+				&record.Medicalemployee_lastname, &record.Procedure_name, &record.Diagnosis_name, &record.Outcome, &record.Special_notes,
 				&record.Patient_birthday, &record.Patient_sex, &record.Patient_weightlbs)
 			if err != nil {
 				log.Fatal(err)
 			}
 			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes, record.Patient_birthday,
+				record.Medicalemployee_lastname, record.Procedure_name, record.Diagnosis_name, record.Outcome, record.Special_notes, record.Patient_birthday,
 				record.Patient_sex, record.Patient_weightlbs})
 		}
 	} else {
@@ -225,7 +225,7 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		}
 
 		sqlStatement_get := `
-		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
+		SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name , record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
 		FROM (((((record
 		JOIN hospital ON record.hospital_id = hospital.hospital_id)
 		JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
@@ -238,13 +238,13 @@ func getrecord_list(w http.ResponseWriter, r *http.Request) {
 		defer row.Close()
 		for row.Next() {
 			err := row.Scan(&record.Record_id, &record.Start_datetime, &record.Hospital_name, &record.Medicalemployee_firstname,
-				&record.Medicalemployee_lastname, &record.Diagnosis_name, &record.Procedure_name, &record.Outcome, &record.Special_notes,
+				&record.Medicalemployee_lastname, &record.Procedure_name, &record.Diagnosis_name, &record.Outcome, &record.Special_notes,
 				&record.Patient_birthday, &record.Patient_sex, &record.Patient_weightlbs)
 			if err != nil {
 				log.Fatal(err)
 			}
 			recordarray = append(recordarray, Recordlist{record.Record_id, record.Hospital_name, record.Start_datetime, record.Medicalemployee_firstname,
-				record.Medicalemployee_lastname, record.Diagnosis_name, record.Procedure_name, record.Outcome, record.Special_notes, record.Patient_birthday,
+				record.Medicalemployee_lastname, record.Procedure_name, record.Diagnosis_name, record.Outcome, record.Special_notes, record.Patient_birthday,
 				record.Patient_sex, record.Patient_weightlbs})
 		}
 	}
@@ -611,28 +611,26 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement_get := `
-	SELECT record_draft.record_id, record_draft.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, 
-	medical_employee.medicalemployee_lastname, diagnosis.diagnosis_name, procedure.procedure_name, record_draft.outcome, record_draft.special_notes, 
-	patient_draft.patient_birthday, patient_draft.patient_sex, patient_draft.patient_weightlbs
-			FROM (((((record_draft
-			JOIN hospital ON record_draft.hospital_id = hospital.hospital_id)
-			JOIN medical_employee ON record_draft.medicalemployee_id = medical_employee.medicalemployee_id)
-			JOIN diagnosis ON record_draft.diagnosis_id = diagnosis.diagnosis_id)
-			JOIN procedure ON record_draft.procedure_id = procedure.procedure_id)
-			JOIN patient_draft ON record_draft.patient_id = patient_draft.patient_id)
-			WHERE medical_employee.medicalemployee_id = $1
+	SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name , record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
+	FROM (((((record
+	JOIN hospital ON record.hospital_id = hospital.hospital_id)
+	JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
+	JOIN diagnosis ON record.diagnosis_id = diagnosis.diagnosis_id)
+	JOIN procedure ON record.procedure_id = procedure.procedure_id)
+	JOIN patient ON record.patient_id = patient.patient_id)
+	WHERE medical_employee.medicalemployee_id = $1
 		`
 	row, _ := db.Query(sqlStatement_get, Medical_employee_id)
 	defer row.Close()
 	for row.Next() {
 		err := row.Scan(&record_draft.Record_id, &record_draft.Start_datetime, &record_draft.Hospital_name, &record_draft.Medicalemployee_firstname,
-			&record_draft.Medicalemployee_lastname, &record_draft.Diagnosis_name, &record_draft.Procedure_name, &record_draft.Outcome, &record_draft.Special_notes,
+			&record_draft.Medicalemployee_lastname, &record_draft.Procedure_name, &record_draft.Diagnosis_name, &record_draft.Outcome, &record_draft.Special_notes,
 			&record_draft.Patient_birthday, &record_draft.Patient_sex, &record_draft.Patient_weightlbs)
 		if err != nil {
 			log.Fatal(err)
 		}
 		recordarray = append(recordarray, Recordlist{record_draft.Record_id, record_draft.Hospital_name, record_draft.Start_datetime, record_draft.Medicalemployee_firstname,
-			record_draft.Medicalemployee_lastname, record_draft.Diagnosis_name, record_draft.Procedure_name, record_draft.Outcome, record_draft.Special_notes, record_draft.Patient_birthday,
+			record_draft.Medicalemployee_lastname, record_draft.Procedure_name, record_draft.Diagnosis_name, record_draft.Outcome, record_draft.Special_notes, record_draft.Patient_birthday,
 			record_draft.Patient_sex, record_draft.Patient_weightlbs})
 	}
 	file, _ := json.MarshalIndent(recordarray, "", " ")
@@ -640,13 +638,23 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 }
 
 func submit_record_draft(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 	r_id := &Record_draft_id{}
-	error := json.NewDecoder(r.Body).Decode(r_id)
-	if error != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
+	// error := json.NewDecoder(r.Body).Decode(r_id)
+	// if error != nil {
+	// 	log.Fatal(error)
+	// 	return
+	// }
+	jsn, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal("Error reading the body", err)
+	}
+
+	fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+
+	err = json.Unmarshal(jsn, &r_id)
+	if err != nil {
+		log.Fatal("Decoding error: ", err)
 	}
 	//hospital := Hospital{}
 	//record := Record{}
@@ -667,7 +675,7 @@ func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 	FROM hospital 
 	WHERE hospital_name = $1`
 	var hospital_id int64
-	error = db.QueryRow(sqlStatement_create_hospital, Hospital_name).Scan(&hospital_id)
+	error := db.QueryRow(sqlStatement_create_hospital, Hospital_name).Scan(&hospital_id)
 	if error != nil {
 		panic(error)
 	}
@@ -684,7 +692,7 @@ func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+	fmt.Println("Medical employee ID is: ", Medical_employee_id)
 
 	//the data names is the DATABASES name
 	sqlStatement_create := `
