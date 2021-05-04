@@ -41,7 +41,24 @@
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
-      "secrets": null,
+      "secrets": [
+        {
+          "name": "PostgresDBHost",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDBHost-3ngS1I"
+        },
+        {
+          "name": "PostgresDBPort",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDBPort-TzWPgM"
+        },
+        {
+          "name": "PostgresDBUser",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDBUser-zhNZpl"
+        },
+        {
+          "name": "PostgresDBPassword",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:663114772736:secret:PostgresDBPassword-qOE3Od"
+        }
+      ],
       "dockerSecurityOptions": null,
       "memory": null,
       "memoryReservation": 512,

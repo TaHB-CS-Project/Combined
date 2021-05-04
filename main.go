@@ -7,16 +7,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 var (
-	host     = goDotEnvVariable("DB_HOST")
-	port     = goDotEnvVariable("DB_PORT")
-	user     = goDotEnvVariable("DB_USERNAME")
-	password = goDotEnvVariable("DB_PASSWORD")
-	dbname   = goDotEnvVariable("DB_NAME")
+	host     = os.Getenv("PostgresDBHost")
+	port     = os.Getenv("PostgresDBPort")
+	user     = os.Getenv("PostgresDBUser")
+	password = os.Getenv("PostgresDBPassword")
+	dbname   = os.Getenv("PostgresDBUser")
 )
 
 // declare global db to use across other files
@@ -66,16 +65,16 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
 
-func goDotEnvVariable(key string) string {
-	// load .env file
-	err := godotenv.Load("db.env")
+// func goDotEnvVariable(key string) string {
+// 	// load .env file
+// 	err := godotenv.Load("db.env")
 
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+// 	if err != nil {
+// 		log.Fatalf("Error loading .env file")
+// 	}
 
-	return os.Getenv(key)
-}
+// 	return os.Getenv(key)
+// }
 
 //initalize connection to the DB
 func initDB() {
