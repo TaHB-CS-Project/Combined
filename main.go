@@ -18,6 +18,14 @@ var (
 	dbname   = os.Getenv("PostgresDBUser")
 )
 
+// var (
+// 	host     = goDotEnvVariable("PostgresDBHost")
+// 	port     = goDotEnvVariable("PostgresDBPort")
+// 	user     = goDotEnvVariable("PostgresDBUser")
+// 	password = goDotEnvVariable("PostgresDBPassword")
+// 	dbname   = goDotEnvVariable("PostgresDBUser")
+// )
+
 // declare global db to use across other files
 var db *sql.DB
 
