@@ -41,6 +41,7 @@
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
+      "taskRoleArn": "arn:aws:iam::663114772736:role/Service-Role-SSM",
       "secrets": [
         {
           "name": "PostgresDBHost",
@@ -86,7 +87,6 @@
   ],
   "placementConstraints": [],
   "memory": "512",
-  "taskRoleArn": "arn:aws:iam::663114772736:role/Service-Role-SSM",
   "compatibilities": [
     "EC2",
     "FARGATE"
