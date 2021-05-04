@@ -365,7 +365,7 @@ func set_record(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//for testing
-	log.Printf("Received: %v\n", user)
+	//log.Printf("Received: %v\n", user)
 
 	sqlStatement_set := `
 	UPDATE Record
