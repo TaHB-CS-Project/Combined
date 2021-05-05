@@ -23,7 +23,8 @@ $.each(data, function (key, value) {
     var gender = 'id="gender' + value.Record_id + '"';
     var record_birthday = 'id="record_birthday' + value.Record_id + '"';
     var record_date = 'id="record_date' + value.Record_id + '"';
-    var record_id = 'id="record_id' + value.Record_id + '"';
+    var record_id = 'id="record_draft_id' + value.Record_id + '"';
+    var record_id_name = '#record_draft_id' + value.Record_id;
     var result = 'id="result' + value.Record_id + '"';
     var special_notes = 'id="special_notes' + value.Record_id + '"';
     var weight = 'id="weight' + value.Record_id + '"';
@@ -80,7 +81,7 @@ $.each(data, function (key, value) {
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
-                    <input type="text" class="form-control" `+ record_id +` id="record_draft_id" name="record_draft_id" value="`+ value.Record_id +`" disabled>
+                    <p class="form-control" `+ record_id +`>`+ value.Record_id +`" </p>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -203,7 +204,7 @@ $.each(data, function (key, value) {
 
         $('#draft_submit_delete').submit(function(event){
             event.preventDefault();
-            var record=$("#record_draft_id").val();
+            var record=$(record_id_name).val();
     
                 $.ajax(  
                     {
