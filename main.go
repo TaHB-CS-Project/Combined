@@ -7,36 +7,39 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 //comment this out if you are testing locally
-var (
+/*var (
 	host     = os.Getenv("PostgresDBHost")
 	port     = os.Getenv("PostgresDBPort")
 	user     = os.Getenv("PostgresDBUser")
 	password = os.Getenv("PostgresDBPassword")
 	dbname   = os.Getenv("PostgresDBUser")
 )
+*/
 
 //uncomment this if you are testing locally on port 8090
-// var (
-// 	host     = goDotEnvVariable("PostgresDBHost")
-// 	port     = goDotEnvVariable("PostgresDBPort")
-// 	user     = goDotEnvVariable("PostgresDBUser")
-// 	password = goDotEnvVariable("PostgresDBPassword")
-// 	dbname   = goDotEnvVariable("PostgresDBUser")
-// )
-// func goDotEnvVariable(key string) string {
-// 	// load .env file
-// 	err := godotenv.Load("db.env")
+var (
+	host     = goDotEnvVariable("PostgresDBHost")
+	port     = goDotEnvVariable("PostgresDBPort")
+	user     = goDotEnvVariable("PostgresDBUser")
+	password = goDotEnvVariable("PostgresDBPassword")
+	dbname   = goDotEnvVariable("PostgresDBUser")
+)
 
-// 	if err != nil {
-// 		log.Fatalf("Error loading .env file")
-// 	}
+func goDotEnvVariable(key string) string {
+	// load .env file
+	err := godotenv.Load("db.env")
 
-// 	return os.Getenv(key)
-// }
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
 
 // declare global db to use across other files
 var db *sql.DB
