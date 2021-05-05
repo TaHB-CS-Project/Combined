@@ -23,7 +23,8 @@ $.each(data, function (key, value) {
     var gender = 'id="gender' + value.Record_id + '"';
     var record_birthday = 'id="record_birthday' + value.Record_id + '"';
     var record_date = 'id="record_date' + value.Record_id + '"';
-    var record_id = 'id="record_id' + value.Record_id + '"';
+    var record_id = 'id="record_draft_id' + value.Record_id + '"';
+    var record_id_name = '#record_draft_id' + value.Record_id;
     var result = 'id="result' + value.Record_id + '"';
     var special_notes = 'id="special_notes' + value.Record_id + '"';
     var weight = 'id="weight' + value.Record_id + '"';
@@ -80,7 +81,7 @@ $.each(data, function (key, value) {
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
-                    <input type="text" class="form-control" `+ record_id +` name="record_id" value="`+ value.Record_id +`" readonly>
+                    <p class="form-control" `+ record_id +`>`+ value.Record_id +`</p>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -168,7 +169,7 @@ $.each(data, function (key, value) {
                 </div>
             </div>
             <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="draft_submit_delete" class="btn btn-primary">Submit</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
             </div>
@@ -200,6 +201,25 @@ $.each(data, function (key, value) {
 
         $('#modal_editinfo').append(modal_editinfo);
         $(modalbody_name_edit).append(editinfo);
+
+        $('#draft_submit_delete').submit(function(event){
+            event.preventDefault();
+            var record=$(record_id_name).val();
+    
+                $.ajax(  
+                    {
+                        url:'/submit_record_draft',    
+                        type:"POST",   
+                        dataType:"JSON", 
+                        data: JSON.stringify({"Record_draft_id": record}),
+                        success:function(){  
+                            alert("Successfully Submitted!");
+                            },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                        }
+                    });
+            });
 
  });
  $('#record_draft_datatable').append(info);
