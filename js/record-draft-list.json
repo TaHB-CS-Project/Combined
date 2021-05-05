@@ -1,44 +1,16 @@
 [
  {
-  "Record_id": 9,
+  "Record_id": 4,
   "Hospital_name": "Voon Hospital",
   "Start_datetime": "2000-01-01T00:00:00Z",
-  "Medicalemployee_firstname": "Daniel",
-  "Medicalemployee_lastname": "Yoo",
+  "Medicalemployee_firstname": "Anna",
+  "Medicalemployee_lastname": "Lee",
   "Procedure_name": "Intubation",
   "Diagnosis_name": "RDS",
   "Outcome": "Choose one",
   "Special_notes": "Empty",
-  "Patient_birthday": "2019-04-27T00:00:00Z",
+  "Patient_birthday": "1970-05-29T14:57:11Z",
   "Patient_sex": "M",
-  "Patient_weightlbs": 30
- },
- {
-  "Record_id": 3,
-  "Hospital_name": "Voon Hospital",
-  "Start_datetime": "2000-01-01T00:00:00Z",
-  "Medicalemployee_firstname": "Daniel",
-  "Medicalemployee_lastname": "Yoo",
-  "Procedure_name": "Intubation",
-  "Diagnosis_name": "RDS",
-  "Outcome": "Choose one",
-  "Special_notes": "Empty",
-  "Patient_birthday": "1985-12-26T23:16:19Z",
-  "Patient_sex": "F",
-  "Patient_weightlbs": 202.8
- },
- {
-  "Record_id": 2,
-  "Hospital_name": "Voon Hospital",
-  "Start_datetime": "2000-01-01T00:00:00Z",
-  "Medicalemployee_firstname": "Daniel",
-  "Medicalemployee_lastname": "Yoo",
-  "Procedure_name": "Intubation",
-  "Diagnosis_name": "RDS",
-  "Outcome": "Choose one",
-  "Special_notes": "Empty",
-  "Patient_birthday": "2001-04-08T02:52:24Z",
-  "Patient_sex": "M",
-  "Patient_weightlbs": 160
+  "Patient_weightlbs": 180
  }
 ]

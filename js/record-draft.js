@@ -81,7 +81,9 @@ $.each(data, function (key, value) {
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
-                    <input type="text" class="form-control" `+ record_id +` id="record_draft_id" name="record_draft_id" value="`+ value.Record_id +`"readonly>                </div>
+                    <input type="text" class="form-control" `+ record_id +` id="record_draft_id" name="record_draft_id" value="`+ value.Record_id +`"readonly>                
+                    </div>
+                    </div>
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Hospital</label>
                     <div class="col-sm-8">
@@ -199,25 +201,6 @@ $.each(data, function (key, value) {
 
         $('#modal_editinfo').append(modal_editinfo);
         $(modalbody_name_edit).append(editinfo);
-
-        $('#draft_submit_delete').submit(function(event){
-            event.preventDefault();
-            var record=$(record_id_name).val();
-    
-                $.ajax(  
-                    {
-                        url:'/submit_record_draft',    
-                        type:"POST",   
-                        dataType:"JSON", 
-                        data: JSON.stringify({"Record_draft_id": record}),
-                        success:function(){  
-                            alert("Successfully Submitted!");
-                            },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        }
-                    });
-            });
 
  });
  $('#record_draft_datatable').append(info);
