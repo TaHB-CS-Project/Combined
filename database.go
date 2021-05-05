@@ -611,13 +611,13 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement_get := `
-	SELECT record.record_id, record.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name , record.outcome, record.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
-	FROM (((((record
-	JOIN hospital ON record.hospital_id = hospital.hospital_id)
-	JOIN medical_employee ON record.medicalemployee_id = medical_employee.medicalemployee_id)
-	JOIN diagnosis ON record.diagnosis_id = diagnosis.diagnosis_id)
-	JOIN procedure ON record.procedure_id = procedure.procedure_id)
-	JOIN patient ON record.patient_id = patient.patient_id)
+	SELECT record_draft.record_id, record_draft.start_datetime, hospital.hospital_name, medical_employee.medicalemployee_firstname, medical_employee.medicalemployee_lastname, procedure.procedure_name, diagnosis.diagnosis_name , record_draft.outcome, record_draft.special_notes, patient.patient_birthday, patient.patient_sex, patient.patient_weightlbs
+	FROM (((((record_draft
+	JOIN hospital ON record_draft.hospital_id = hospital.hospital_id)
+	JOIN medical_employee ON record_draft.medicalemployee_id = medical_employee.medicalemployee_id)
+	JOIN diagnosis ON record_draft.diagnosis_id = diagnosis.diagnosis_id)
+	JOIN procedure ON record_draft.procedure_id = procedure.procedure_id)
+	JOIN patient ON record_draft.patient_id = patient.patient_id)
 	WHERE medical_employee.medicalemployee_id = $1
 		`
 	row, _ := db.Query(sqlStatement_get, Medical_employee_id)
@@ -660,7 +660,7 @@ func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 	//record := Record{}
 	r.ParseForm()
 
-	record_draft_id := r.Form.Get("record_draft_id")
+	Record_Draft_id := r.Form.Get("record_draft_id")
 	Hospital_name := r.Form.Get("hospital")
 	Start_datetime := r.Form.Get("record_date")
 	Patient_sex := r.Form.Get("gender")
@@ -744,12 +744,12 @@ func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nSuccessfully created record\n")
 
 	sqlStatement_delete := `
-		DELETE FROM patient_draft
+		DELETE FROM record_draft
 		WHERE record_id = $1
 		`
-	delete_error := db.QueryRow(sqlStatement_delete, r_id.Record_draft_id)
+	delete_error := db.QueryRow(sqlStatement_delete, Record_Draft_id)
 	if delete_error != nil {
-		log.Fatal(delete_error)
+		//log.Fatal(delete_error)
 	}
 	fmt.Println("Succesfully deleted draft.")
 
