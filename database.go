@@ -639,27 +639,28 @@ func getrecord_draft_list(w http.ResponseWriter, r *http.Request) {
 
 func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	r_id := &Record_draft_id{}
+	// r_id := &Record_draft_id{}
 	// error := json.NewDecoder(r.Body).Decode(r_id)
 	// if error != nil {
 	// 	log.Fatal(error)
 	// 	return
 	// }
-	jsn, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal("Error reading the body", err)
-	}
+	// jsn, err := ioutil.ReadAll(r.Body)
+	// if err != nil {
+	// 	log.Fatal("Error reading the body", err)
+	// }
 
-	fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+	// fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
 
-	err = json.Unmarshal(jsn, &r_id)
-	if err != nil {
-		log.Fatal("Decoding error: ", err)
-	}
+	// err = json.Unmarshal(jsn, &r_id)
+	// if err != nil {
+	// 	log.Fatal("Decoding error: ", err)
+	// }
 	//hospital := Hospital{}
 	//record := Record{}
 	r.ParseForm()
 
+	record_draft_id := r.Form.Get("record_draft_id")
 	Hospital_name := r.Form.Get("hospital")
 	Start_datetime := r.Form.Get("record_date")
 	Patient_sex := r.Form.Get("gender")
