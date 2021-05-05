@@ -81,9 +81,7 @@ $.each(data, function (key, value) {
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
-                    <p class="form-control" `+ record_id +`>`+ value.Record_id +`</p>
-                    </div>
-                </div>
+                    <input type="text" class="form-control" `+ record_id +` id="record_draft_id" name="record_draft_id" value="`+ value.Record_id +`"readonly>                </div>
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Hospital</label>
                     <div class="col-sm-8">
