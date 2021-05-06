@@ -12,22 +12,22 @@ import (
 )
 
 //for deployment
-// var (
-// 	host     = os.Getenv("PostgresDBHost")
-// 	port     = os.Getenv("PostgresDBPort")
-// 	user     = os.Getenv("PostgresDBUser")
-// 	password = os.Getenv("PostgresDBPassword")
-// 	dbname   = os.Getenv("PostgresDBUser")
-// )
+var (
+	host     = os.Getenv("PostgresDBHost")
+	port     = os.Getenv("PostgresDBPort")
+	user     = os.Getenv("PostgresDBUser")
+	password = os.Getenv("PostgresDBPassword")
+	dbname   = os.Getenv("PostgresDBUser")
+)
 
 // testing locally on port 8090
-var (
-	host     = goDotEnvVariable("PostgresDBHost")
-	port     = goDotEnvVariable("PostgresDBPort")
-	user     = goDotEnvVariable("PostgresDBUser")
-	password = goDotEnvVariable("PostgresDBPassword")
-	dbname   = goDotEnvVariable("PostgresDBUser")
-)
+// var (
+// 	host     = goDotEnvVariable("PostgresDBHost")
+// 	port     = goDotEnvVariable("PostgresDBPort")
+// 	user     = goDotEnvVariable("PostgresDBUser")
+// 	password = goDotEnvVariable("PostgresDBPassword")
+// 	dbname   = goDotEnvVariable("PostgresDBUser")
+// )
 
 func goDotEnvVariable(key string) string {
 	// load .env file
