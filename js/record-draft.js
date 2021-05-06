@@ -207,18 +207,18 @@ $.each(data, function (key, value) {
 
         $(document).ready(function() {
             $(delete_draft_name).click(function () {
-                console.log(value.Record_id);
+                //console.log(value.Record_id);
                 $.ajax(  
                     {
                         url:'/delete_record_draft',    
                         type:"POST",    
                         data: JSON.stringify({"Record_draft_id": value.Record_id}),
                         success:function(){  
-                            console.log("Successfully deleted!");
+                            //console.log("Successfully deleted!");
                             },
                         error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                            console.log("Status: " + textStatus); 
-                            console.log("Error: " + errorThrown); 
+                            //console.log("Status: " + textStatus); 
+                            //console.log("Error: " + errorThrown); 
                         }
                     });
             });
