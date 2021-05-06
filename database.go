@@ -755,3 +755,38 @@ func submit_record_draft(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/user_dashboard.html", http.StatusSeeOther)
 }
+
+func delete_record_draft(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	// r.ParseForm()
+	// Record_Draft_id := r.Form.Get("record_draft_id")
+
+	r_id := &Record_draft_id{}
+	// error := json.NewDecoder(r.Body).Decode(r_id)
+	// if error != nil {
+	// 	log.Fatal(error)
+	// 	return
+	// }
+	jsn, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal("Error reading the body", err)
+	}
+
+	fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+
+	err = json.Unmarshal(jsn, &r_id)
+	if err != nil {
+		log.Fatal("Decoding error: ", err)
+	}
+
+	sqlStatement_delete := `
+		DELETE FROM record_draft
+		WHERE record_id = $1`
+	error := db.QueryRow(sqlStatement_delete, r_id.Record_draft_id)
+	if error != nil {
+		//log.Fatal(delete_error)
+	}
+
+	http.Redirect(w, r, "/user_dashboard.html", http.StatusSeeOther)
+}

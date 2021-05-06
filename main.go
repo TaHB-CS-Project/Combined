@@ -11,24 +11,23 @@ import (
 	_ "github.com/lib/pq"
 )
 
-//comment this out if you are testing locally
-/*var (
+//for deployment
+var (
 	host     = os.Getenv("PostgresDBHost")
 	port     = os.Getenv("PostgresDBPort")
 	user     = os.Getenv("PostgresDBUser")
 	password = os.Getenv("PostgresDBPassword")
 	dbname   = os.Getenv("PostgresDBUser")
 )
-*/
 
-//uncomment this if you are testing locally on port 8090
-var (
-	host     = goDotEnvVariable("PostgresDBHost")
-	port     = goDotEnvVariable("PostgresDBPort")
-	user     = goDotEnvVariable("PostgresDBUser")
-	password = goDotEnvVariable("PostgresDBPassword")
-	dbname   = goDotEnvVariable("PostgresDBUser")
-)
+//testing locally on port 8090
+// var (
+// 	host     = goDotEnvVariable("PostgresDBHost")
+// 	port     = goDotEnvVariable("PostgresDBPort")
+// 	user     = goDotEnvVariable("PostgresDBUser")
+// 	password = goDotEnvVariable("PostgresDBPassword")
+// 	dbname   = goDotEnvVariable("PostgresDBUser")
+// )
 
 func goDotEnvVariable(key string) string {
 	// load .env file
@@ -68,6 +67,7 @@ func main() {
 	http.HandleFunc("/user_record-draft.html", user_record_draft)
 	http.HandleFunc("/user_record-list.html", user_record_list)
 	http.HandleFunc("/submit_record_draft", submit_record_draft)
+	http.HandleFunc("/delete_record_draft", delete_record_draft)
 
 	//Hospital Admin
 	http.HandleFunc("/hospital_admin_dashboard.html", hospital_admin_dashboard)
