@@ -420,7 +420,7 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 	if error != nil {
 		panic(error)
 	}
-	fmt.Println("New medical employee ID is: ", Medical_employee_id)
+	fmt.Println("Medical employee ID is: ", Medical_employee_id)
 
 	//the data names is the DATABASES name
 	sqlStatement_create := `
@@ -458,11 +458,11 @@ func create_record(w http.ResponseWriter, r *http.Request) {
 
 	//final statement to make record with all the foreign keys available
 	sqlStatement_create2 := `
-	INSERT INTO record (medicalemployee_id, procedure_id, hospital_id, diagnosis_id, patient_id, start_datetime, special_notes, outcome)
+	INSERT INTO record (hospital_id, medicalemployee_id, patient_id, procedure_id, diagnosis_id, start_datetime, special_notes, outcome)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 	RETURNING record_id`
 	var record_id int64
-	error1 := db.QueryRow(sqlStatement_create2, Medical_employee_id, procedure_id, hospital_id, diagnosis_id, patient_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
+	error1 := db.QueryRow(sqlStatement_create2, hospital_id, Medical_employee_id, patient_id, procedure_id, diagnosis_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
 	if error1 != nil {
 		panic(error1)
 	}
@@ -584,7 +584,7 @@ func create_record_draft(w http.ResponseWriter, r *http.Request) {
 	var record_id int64
 	error1 := db.QueryRow(sqlStatement_create2, Medical_employee_id, procedure_id, hospital_id, diagnosis_id, patient_id, Start_datetime, Special_notes, Outcome).Scan(&record_id)
 	if error1 != nil {
-		panic(error1)
+		log.Fatal(error1)
 	}
 	fmt.Println("New record draft ID is: ", record_id)
 
