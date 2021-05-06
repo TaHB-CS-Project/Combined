@@ -770,14 +770,15 @@ func delete_record_draft(w http.ResponseWriter, r *http.Request) {
 	// }
 	jsn, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal("Error reading the body", err)
+		//log.Fatal("Error reading the body", err)
 	}
 
-	fmt.Printf("ioutil.ReadAll Body: ", string(jsn))
+	fmt.Printf("Record id for deleted draft is: %v", r_id.Record_draft_id)
+	fmt.Printf("\nioutil.ReadAll Body: ", string(jsn))
 
 	err = json.Unmarshal(jsn, &r_id)
 	if err != nil {
-		log.Fatal("Decoding error: ", err)
+		//log.Fatal("Decoding error: ", err)
 	}
 
 	sqlStatement_delete := `
