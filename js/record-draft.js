@@ -5,6 +5,7 @@ var info = '';
 var modal_editinfo = '';
 
 $.each(data, function (key, value) {
+
     var editinfo = '';
  
     var modalcreate_set_name_edit = 'id="e' + value.Record_id + '"';
@@ -24,10 +25,11 @@ $.each(data, function (key, value) {
     var record_birthday = 'id="record_birthday' + value.Record_id + '"';
     var record_date = 'id="record_date' + value.Record_id + '"';
     var record_id = 'id="record_draft_id' + value.Record_id + '"';
-    var record_id_name = '#record_draft_id' + value.Record_id;
     var result = 'id="result' + value.Record_id + '"';
     var special_notes = 'id="special_notes' + value.Record_id + '"';
     var weight = 'id="weight' + value.Record_id + '"';
+    var delete_draft = 'id="delete_draft' + value.Record_id + '"';
+    var delete_draft_name = '#delete_draft' + value.Record_id;
 
     info += '<tr>';
 
@@ -57,7 +59,7 @@ $.each(data, function (key, value) {
 
     info += `<td>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name_edit +`">Edit</button>
-    <button type="button" class="btn btn-danger">Delete</button>
+    <input type="button" class="btn btn-danger" ` + delete_draft + ` value="Delete" onclick="delete_draft_func()">
     </td>`;
 
     info += '</tr>'
@@ -81,7 +83,7 @@ $.each(data, function (key, value) {
                     <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Record ID</label>
                     <div class="col-sm-8" >
-                    <input type="text" class="form-control" `+ record_id +` id="record_draft_id" name="record_draft_id" value="`+ value.Record_id +`"readonly>                
+                    <input type="text" class="form-control" `+ record_id +`name="record_draft_id" value="`+ value.Record_id +`" readonly>                
                     </div>
                     </div>
                 <div class="form-group row">
@@ -201,6 +203,24 @@ $.each(data, function (key, value) {
 
         $('#modal_editinfo').append(modal_editinfo);
         $(modalbody_name_edit).append(editinfo);
+
+        $(document).ready(function() {
+            $(delete_draft_name).click(function () {
+                $.ajax(  
+                    {
+                        url:'/delete_record_draft',    
+                        type:"POST",   
+                        dataType:"JSON", 
+                        data: JSON.stringify({"Record_draft_id": value.Record_id}),
+                        success:function(){  
+                            alert("Successfully deleted!");
+                            },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                        }
+                    });
+            });
+          });
 
  });
  $('#record_draft_datatable').append(info);
