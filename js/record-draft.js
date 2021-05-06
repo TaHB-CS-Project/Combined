@@ -25,6 +25,7 @@ $.each(data, function (key, value) {
     var record_birthday = 'id="record_birthday' + value.Record_id + '"';
     var record_date = 'id="record_date' + value.Record_id + '"';
     var record_id = 'id="record_draft_id' + value.Record_id + '"';
+    var record_id_name = '#record_draft_id' + value.Record_id;
     var result = 'id="result' + value.Record_id + '"';
     var special_notes = 'id="special_notes' + value.Record_id + '"';
     var weight = 'id="weight' + value.Record_id + '"';
@@ -59,7 +60,7 @@ $.each(data, function (key, value) {
 
     info += `<td>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="`+ modalcreate_name_edit +`">Edit</button>
-    <input type="button" class="btn btn-danger" ` + delete_draft + ` value="Delete" onclick="delete_draft_func()">
+    <input type="button" class="btn btn-danger" ` + delete_draft + ` value="Delete">
     </td>`;
 
     info += '</tr>'
@@ -206,17 +207,18 @@ $.each(data, function (key, value) {
 
         $(document).ready(function() {
             $(delete_draft_name).click(function () {
+                console.log(value.Record_id);
                 $.ajax(  
                     {
                         url:'/delete_record_draft',    
-                        type:"POST",   
-                        dataType:"JSON", 
+                        type:"POST",    
                         data: JSON.stringify({"Record_draft_id": value.Record_id}),
                         success:function(){  
-                            alert("Successfully deleted!");
+                            console.log("Successfully deleted!");
                             },
                         error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                            console.log("Status: " + textStatus); 
+                            console.log("Error: " + errorThrown); 
                         }
                     });
             });
