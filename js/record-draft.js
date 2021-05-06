@@ -208,19 +208,23 @@ $.each(data, function (key, value) {
         $(document).ready(function() {
             $(delete_draft_name).click(function () {
                 //console.log(value.Record_id);
-                $.ajax(  
-                    {
-                        url:'/delete_record_draft',    
-                        type:"POST",    
-                        data: JSON.stringify({"Record_draft_id": value.Record_id}),
-                        success:function(){  
-                            //console.log("Successfully deleted!");
-                            },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                            //console.log("Status: " + textStatus); 
-                            //console.log("Error: " + errorThrown); 
-                        }
-                    });
+                var check = confirm("Are you sure you want to delete?");
+                if(check){
+                    $.ajax(  
+                        {
+                            url:'/delete_record_draft',    
+                            type:"POST",    
+                            data: JSON.stringify({"Record_draft_id": value.Record_id}),
+                            success:function(){  
+                                //console.log("Successfully deleted!");
+                                location.reload();
+                                },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                                //console.log("Status: " + textStatus); 
+                                //console.log("Error: " + errorThrown); 
+                            }
+                        });
+                }
             });
           });
 

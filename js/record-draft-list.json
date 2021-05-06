@@ -1,16 +1,1 @@
-[
- {
-  "Record_id": 14,
-  "Hospital_name": "Daniel Hospital",
-  "Start_datetime": "2021-04-13T00:00:00Z",
-  "Medicalemployee_firstname": "Anna",
-  "Medicalemployee_lastname": "Lee",
-  "Procedure_name": "Ventricular Tap",
-  "Diagnosis_name": "Sepsis",
-  "Outcome": "Choose one",
-  "Special_notes": "Empty",
-  "Patient_birthday": "2021-03-01T00:00:00Z",
-  "Patient_sex": "Female",
-  "Patient_weightlbs": 12
- }
-]
+null
