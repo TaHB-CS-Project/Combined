@@ -233,14 +233,6 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	response.Header().Set("Expires", "0")
 	sessions.Save(request, response)
-	//redirect the session
-	/*
-		response.Header().Set("Cache-Control", "no-cache, private, max-age=0")
-		response.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
-		response.Header().Set("Pragma", "no-cache")
-		response.Header().Set("X-Accel-Expires", "0") */
-
-	// Proxies.
 	http.Redirect(response, request, "/signin", http.StatusSeeOther)
 }
 
