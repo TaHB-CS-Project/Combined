@@ -1,5 +1,6 @@
 # TaHB EMR Webapp
 This directory and its subdirectories contain the source code for a functioning base product for the use of creating and submitting EMR (Electronic Medical Records) onto a AWS EC2 hosted database.
+
 Built using Go for the backend it communicates to the hosted database created by PostgreSQL to a web application created with Javascript.
 
 ### Install required packages
